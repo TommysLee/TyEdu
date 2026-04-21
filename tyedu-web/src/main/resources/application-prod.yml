@@ -1,0 +1,52 @@
+#服务器配置（仅在SpringBoot内有效，外部Tomcat等容器无效）
+server:
+  #服务器HTTP端口
+  port: 80
+  #编码配置
+  servlet:
+    encoding:
+      charset: UTF-8
+
+#Spring配置
+spring:
+  #视图配置
+  thymeleaf:
+    #开发时，关闭thymeleaf缓存
+    cache: false
+  #i18N国际化配置
+  messages:
+    basename: i18n.language,i18n.messages
+    use-code-as-default-message: true
+  web:
+    locale: zh-CN #默认语言
+  #JSON配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: NON_EMPTY
+  servlet:
+    #文件上传配置（单文件大小限制与请求总大小限制）
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 25MB
+  #数据源配置
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: "jdbc:sqlite:${user.home}/sqlite_db/data.db"
+
+#MyBatis配置
+mybatis:
+  mapper-locations: classpath*:mybatis/mapper/*Mapper.xml
+  type-aliases-package: com.ty.api.model
+  configuration:
+    cache-enabled: true
+    jdbc-type-for-null: NULL
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    log-prefix: "MYBATIS_MAPPER."
+
+#MyBatis PageHelper分页插件
+pagehelper:
+  offset-as-page-num: true
+  row-bounds-with-count: true
+  helper-dialect: sqlite

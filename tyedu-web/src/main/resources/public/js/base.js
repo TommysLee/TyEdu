@@ -1,0 +1,149 @@
+// 定义页面刷新时间间隔常量
+const REFRESHTIME = {
+  one_second: 1 * 1000,
+  five_second: 5 * 1000,
+  ten_second: 10 * 1000,
+  fifteen_second: 15 * 1000,
+  thirty_second: 30 * 1000,
+  one_minute: 60 * 1000,
+  five_minute: 300 * 1000
+}
+
+/**
+ * 扩展Date对象：新增时间格式化函数 format
+ */
+Object.defineProperty(Date.prototype, 'format', {
+  enumerable: false,
+  value: function(format) {
+    const opt = {
+      'y+': this.getFullYear().toString(), // 年
+      'M+': (this.getMonth() + 1).toString(), // 月
+      'd+': this.getDate().toString(), // 日
+      'h+': this.getHours().toString(), // 时
+      'm+': this.getMinutes().toString(), // 分
+      's+': this.getSeconds().toString() // 秒
+    };
+
+    for (const k in opt) {
+      const ret = new RegExp('(' + k + ')').exec(format);
+      if (ret) {
+        if (/(y+)/.test(k)) {
+          format = format.replace(ret[1], opt[k].substring(4 - ret[1].length));
+        } else {
+          format = format.replace(ret[1], (ret[1].length === 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, '0')));
+        }
+      }
+    }
+    return format;
+  }
+});
+
+/**
+ * 扩展Date对象：新增interval函数：用于计算两个Date对象的时间间隔
+ * 时间单位支持：y、m、d、h，分别表示：年、月、日、时，默认为d
+ */
+Object.defineProperty(Date.prototype, 'interval', {
+  enumerable: false,
+  value: function(target, unit) {
+    let diff = 0;
+    if (target instanceof Date) {
+      diff = Math.abs(this.getTime() - target.getTime());
+      let divisor = 1000 * 60 * 60 * 24;
+      switch (unit) {
+        case 'y':
+          divisor *= 365;
+          break;
+        case 'm':
+          divisor *= 30;
+          break;
+        case 'h':
+          divisor /= 24;
+          break;
+      }
+      diff /= divisor;
+      diff = parseInt(diff * 10) / 10;
+    }
+    return diff;
+  }
+});
+
+/**
+ * 扩展Date对象：新增静态函数 of，将日期字符串转换为日期对象
+ */
+Date.of = function(dateText) {
+  let date = null;
+  if (typeof(dateText) === 'string') {
+    let regex = /^(\d{4})[-/](\d{1,2})([-/](\d{1,2}))?([T\s](\d{1,2}):(\d{1,2})(:(\d{1,2}))?)?$/
+    let results = dateText.match(regex);
+    if (null !== results) {
+      let y = parseInt(results[1]), m = parseInt(results[2]) - 1, d = parseInt(results[4]??1);
+      let h = parseInt(results[6]??0);
+      let mi = parseInt(results[7]??0);
+      let s = parseInt(results[9]??0);
+      date = new Date(y, m, d, h, mi, s);
+    }
+  }
+  return date;
+};
+
+/**
+ * 扩展Number对象：新增格式化函数 format
+ */
+Object.defineProperty(Number.prototype, 'format', {
+  enumerable: false,
+  value: function(locale, options) {
+    if (!(typeof(locale) === 'string') && !options) {
+      options = locale;
+      locale = null;
+    }
+    return Intl.NumberFormat(locale || navigator.language || 'zh-CN', options ?? {}).format(this);
+  }
+});
+
+/**
+ * 扩展Array对象：新增删除指定下标元素的函数 remove
+ */
+Object.defineProperty(Array.prototype, 'remove', {
+  enumerable: false,
+  value: function(index) {
+    if ('number' == typeof(index) && index > -1 && index < this.length) {
+      this.splice(index, 1);
+    }
+    return this;
+  }
+});
+
+/**
+ * 扩展Array对象：新增差集函数 diff
+ */
+Object.defineProperty(Array.prototype, 'diff', {
+  enumerable: false,
+  value: function(arr) {
+    let diffArray = [];
+    if (arr instanceof Array) {
+      diffArray = arr.filter(currentValue => {
+        return !this.includes(currentValue);
+      });
+    }
+    return diffArray;
+  }
+});
+
+/**
+ * 扩展String对象：去除两边空格后，清除最后一个字符
+ */
+Object.defineProperty(String.prototype, 'clean', {
+  enumerable: false,
+  value: function(symbol) {
+    let val = this.valueOf();
+    let len = val.trim().length;
+    if (len > 0) {
+      symbol = symbol || ",";
+      val = val.trim();
+      if (val.endsWith(symbol)) {
+        val = val.substr(0, len - 1);
+      }
+    }
+    return val;
+  }
+});

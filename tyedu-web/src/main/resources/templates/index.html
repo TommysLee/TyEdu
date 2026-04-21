@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>[[${#site.title()}]]</title>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: scriptcss('')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app>
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header}"/>
+      </v-app-bar>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid>
+          <v-card-zoom flat rounded="0" class="pa-0 dark-grad" style="height: calc(100vh - 64px - 24px);" @zoom="zoom" @refresh="refresh">
+            <div id="map_container" class="w-100 fill-height"></div>
+            <div class="font-weight-bold zoom-font zoom-font-3x" style="position: fixed; bottom: 30px; right: 40px;">
+              TyFast · {{$t('[[${#site.name()}]]')}}
+            </div>
+          </v-card-zoom>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 导入Vuetify扩展组件 -->
+  <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
+
+  <!-- 业务js -->
+  <script type="text/javascript" th:src="@{/js/index.js}"></script>
+</body>
+</html>

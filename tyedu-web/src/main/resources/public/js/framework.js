@@ -1,0 +1,474 @@
+const defaultLocale = 'zh-CN';
+const defaultFallbackLocale = 'zh-CN';
+
+/*
+ * Vuetify实例
+ */
+const vuetify = Vuetify.createVuetify({
+  locale: {
+    locale: defaultLocale
+  },
+  defaults: {
+    VTextField: {
+      color: 'primary',
+      variant: 'outlined',
+      density: 'compact'
+    },
+    VTextarea: {
+      color: 'primary',
+      variant: 'outlined',
+      density: 'compact'
+    },
+    VSelect: {
+      variant: 'outlined',
+      density: 'compact'
+    },
+    VRadioGroup: {
+      color: 'primary'
+    },
+    VCheckbox: {
+      color: 'primary'
+    },
+    VSwitch: {
+      color: 'success'
+    },
+    VTreeview: {
+      activeColor: 'primary'
+    },
+    VPagination: {
+      activeColor: 'primary'
+    },
+    VDatePicker: {
+      color: 'primary'
+    }
+  }
+});
+
+/*
+ * Vue3国际化插件：Vue-i18N
+ */
+const i18n = VueI18n.createI18n({
+  locale: defaultLocale,                  // 设置语言环境
+  fallbackLocale: defaultFallbackLocale,  // 预设的语言环境【当前语言环境没有要获取的值时，默认从这个语言环境查找（预设的语言环境·首选语言缺少翻译时要使用的语言）】
+  messages: {},                           // 设置各本地化的语言包
+  preserveDirectiveContent: true          // 解决翻译内容闪烁的问题(有过渡动画时，可复现此问题)
+});
+
+/*
+ * Vue3表单验证插件：VeeValidate
+ */
+if ('undefined' !== typeof(VeeValidate)) {
+  VeeValidate.configure({
+    generateMessage: context => {
+      let field = i18n.global.t(context.field);
+      return i18n.global.t(`validations.${context.rule.name}`, [field, ...context.rule.params]);
+    }
+  });
+
+  // 导入官方所有规则
+  Object.keys(VeeValidateRules.all).forEach(rule => {
+    VeeValidate.defineRule(rule, VeeValidateRules.all[rule]);
+  });
+
+  // 扩展规则：中文字符
+  VeeValidate.defineRule('chinese', value => {
+    const reg = /^([\u4E00-\u9FA5\uF900-\uFA2D，。？！、；：【】“”‘’'']+)$/;
+    return reg.test(value);
+  });
+
+  // 扩展规则：通用的同步验证规则
+  VeeValidate.defineRule('check', (value, [funcName]) => {
+    return appInstance[funcName](value);
+  });
+
+  // 扩展规则：Ajax异步验证的规则
+  VeeValidate.defineRule('async', async (value, [url, ref, paramName], context) => {
+    // 清除当前的错误状态
+    const fieldRef = appInstance.$refs[ref] || appInstance.$refs[context.name];
+    fieldRef && fieldRef.setErrors([]);
+
+    // 请求参数
+    let param = {};
+    param[paramName || context.name] = value;
+
+    // 发送请求，并等待响应结果
+    let result = {};
+    await doAjaxPost(ctx + url, param, (data) => {
+      result = data;
+    });
+    return result.state? true : result.message;
+  })
+}
+
+/**
+ * Vue3 APP基类：封装基础业务功能，以简化使用(基于 Vue extends 实现功能复用)
+ */
+const baseApp = {
+  uses: function(app) { // 插件统一注册入口
+    app.use(i18n).use(vuetify);
+    Vue3Snackbar && app.use(Vue3Snackbar.SnackbarService);
+    return app;
+  },
+  components: {},
+  directives: {
+    blank: { //自定义指令：当文本框或文本域的值为null时，将null转换为空字符串
+      bind: function(el) {
+        let textEl = null;
+        let tagName = el.tagName.toUpperCase();
+        switch (tagName) {
+          case "INPUT":
+          case "TEXTAREA":
+            textEl = el;
+        }
+        textEl = textEl || el.querySelector("input[type]");
+        textEl = textEl || el.querySelector("textarea");
+        textEl && textEl.addEventListener('blur', function () {
+          if (this.value === '') {
+            this.dispatchEvent(new Event('input'))
+          }
+        });
+      }
+    }
+  },
+  data: function() {
+    return {
+      fullscreenIcon: "mdi-fullscreen",
+      menuName: '', // 页面上显示的菜单名称
+      vtheme: 'light', // Vuetify主题
+      storageThemeKey: 'vuetifyTheme', // 存储在LocalStorage中的主题数据Key
+      storageSlientKey: 'slient', // 存储在LocalStorage中的静音Key
+      alarmSilent: false, // 告警静音
+      colors: { // 全局色值
+        1: "primary",
+        2: "amber",
+        3: "pink-lighten-1",
+        4: "red-darken-4"
+      },
+      langList: [],// 语言列表
+      lang: null,  // 当前语言环境
+      loading: false, // 数据加载状态
+      posting: false, // 请求状态
+      overlay: false, // 全屏Loading
+      tabActivity: true, // 浏览器选项卡激活状态
+      pagination: { // 分页对象
+        page: 1,
+        pageSize: 20,
+        vp: 10
+      },
+      assistHeight: 20, // 辅助元素的总高度
+      placeholder: '--', // 占位符文本
+    }
+  },
+  computed: {
+    // 项目根路径
+    ctx() {
+      const base = ctx || '/';
+      return base.slice(0, -1);
+    },
+    // 是否为Dark Mode
+    vdark() {
+      return this.$vuetify.theme.global.current.dark;
+    },
+    // 是否移动端（根据屏幕尺寸判定）
+    isMobile() {
+      return this.$vuetify.display.xs || this.$vuetify.display.sm
+    },
+    // No Data Text From Vuetify3
+    noDataText() {
+      return this.$vuetify.locale.t('$vuetify.noDataText');
+    },
+    // Loading Text From Vuetify3
+    loadingText() {
+      return this.$vuetify.locale.t('$vuetify.loading');
+    }
+  },
+  watch: {
+    lang(val) {
+      $cookies.set("lang", val, '1y');
+      this.$i18n.locale = val;
+      this.$vuetify.locale.current = val;
+
+      // 加载语言本地化资源包
+      this.loadLangResources(this.changeLangCallback || (() => {this.datatable && (this.datatable.headers instanceof Array) && t(this.datatable.headers)}));
+    },
+    tabActivity(val) {
+      if (val) {
+        this.onActivityStarted && this.onActivityStarted();
+      } else {
+        this.onActivityStopped && this.onActivityStopped();
+      }
+    },
+    alarmSilent(val) {
+      localStorage.setItem(this.storageSlientKey, val);
+    }
+  },
+  created() {
+    // 注册全屏事件监听器
+    this.fullScreenListener();
+
+    // 切换Vuetify主题
+    this.switchTheme();
+
+    // 读取查询参数
+    this.param = readQueryParam(this.menuName, this.param);
+    this.pagination.page = (this.param && this.param.page) || this.pagination.page;
+  },
+  mounted() {
+    // 加载语言列表
+    this.loadLangList();
+  },
+  methods: {
+    // 浏览器全屏事件监听
+    fullScreenListener() {
+      screenfull && screenfull.onchange(() => {
+        this.fullscreenIcon = screenfull.isFullscreen? "mdi-fullscreen-exit" : "mdi-fullscreen";
+      });
+    },
+
+    // 浏览器全屏模式与普通模式切换
+    toggleFullScreen() {
+      screenfull.toggle();
+    },
+
+    // 切换导航菜单的显示方式
+    toggleSysMenu() {
+      if (this.sysNavStatus) {
+        this.sysRailStatus = !this.sysRailStatus;
+      } else {
+        this.sysNavStatus = !this.sysNavStatus;
+        this.sysRailStatus = false;
+      }
+    },
+
+    // 滚动到顶部
+    scrollTop() {
+      if (!this.method) {
+        if (this.vnode) {
+          this.vnode.$el && this.vnode.$el.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+        } else {
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+      }
+    },
+
+    // 滚动到数据表格顶部
+    scrollDTableTop(ref) {
+      if (!(this.method === 'update' || this.method === 'del')) {
+        ref = ref || 'dataTable';
+        this.$refs[ref] && this.$refs[ref].$el.querySelector(".v-table__wrapper").scroll(0,0);
+        this.isMobile && this.scrollTop();
+      }
+      this.method = null;
+    },
+
+    // 返回上一页
+    back() {
+      window.history.back();
+    },
+
+    // URL函数：自动添加项目名称，并支持随机参数，解决静态缓存问题
+    url(link, appendTail, tv) {
+      if (link) {
+        link = this.ctx + link;
+        if (appendTail) {
+          let t = tv || new Date().getTime();
+          if (typeof(link) === 'string') {
+            link += (link.lastIndexOf("?") > -1? '&' : '?') + '_t=' + t;
+          }
+        }
+      }
+      return link;
+    },
+
+    // 获取合适的分页页码
+    getFitPage(pagination, datatable) {
+      pagination = pagination || this.pagination;
+      datatable = datatable || this.datatable;
+
+      let page = pagination.page ?? 1;
+      let items = datatable.items || [];
+      if (page > 1 && this.method === 'del') {
+        page = items.length <= 1? (page - 1) : page;
+      }
+      if (this.method === 'save') {
+        page = 1;
+      }
+      return page;
+    },
+
+    // Toast
+    toast(msg, msgType) {
+      // 只在浏览器Tab页签被激活的情况下，才触发
+      if (this.tabActivity) {
+        msg = (undefined !== msg && null !== msg)? this.$t(msg + '') : msg;
+        if (msg) {
+          this.$snackbar.add({
+            type: msgType || 'success',
+            text: msg
+          })
+        }
+      }
+    },
+    // Clear All Toast
+    clearAllToast() {
+      this.$snackbar && this.$snackbar.clear();
+    },
+
+    // 合并属性值：将 Source 的属性值 复制到 Target (只复制Target存在的属性)
+    mergeValue(target, source) {
+      Object.keys(source).filter(p => p in target).forEach(p => target[p] = source[p])
+    },
+
+    // 将列表数据包装为树结构数据 (data 与 idKey 参数为必选)
+    wrapTreeData(data, idKey, headers, parentKey, activeKey) {
+      let datax = [];
+      if (data instanceof Array && data.length > 0) {
+        parentKey = parentKey || 'parentId';
+
+        // 为不改变原始数据，所以将数据复制一份
+        for (let item of data) {
+          if (activeKey) {
+            item[activeKey] = false;
+          }
+          datax.push({...item});
+        }
+
+        // 通过map 与 filter 进行数据变换
+        let childIds = {}; // 记录所有子节点ID
+        datax = datax.map((currentValue, index, arr) => {
+          // 查找当前节点的所有子节点
+          let children = [];
+          for (let item of arr) {
+            if (currentValue[idKey] === item[parentKey]) { // 若主外键相同
+              children.push(item);
+              childIds[item[idKey]] = item[idKey];
+            }
+          }
+          if (children.length > 0) {
+            currentValue.children = children;
+          }
+          return currentValue;
+        }).filter((currentValue) => {
+          // 过滤掉所有子节点（因为子节点已被添加到 父节点的 children 属性，若保留，则造成数据重复，也就不是树数据了）
+          let flag = !childIds[currentValue[idKey]];
+          if (flag) {
+            // 通过递归计算各个节点的实际层级
+            // 计算层级，主要用于在 TreeView组件中，让列数据对齐
+            let updateNodeLevel = function(val) {
+              if (val.children) {
+                for (let i in val.children) {
+                  let item = val.children[i];
+                  item.level = val.level + 1;
+                  updateNodeLevel(item);
+                }
+              }
+            };
+            currentValue.level = 1;
+            updateNodeLevel(currentValue);
+          }
+          return flag;
+        });
+      }
+
+      // 添加树表格的表头
+      if (headers) {
+        datax.unshift(headers);
+      }
+      return datax;
+    },
+
+    // 重置表单
+    resetForm(formRef) {
+      formRef = formRef || 'dataForm';
+      let formNode = this.$refs[formRef];
+      if (formNode) {
+        let formContainer = formNode.$el.querySelector('.v-card-text');
+        formContainer && formContainer.scroll(0,0);
+        formNode.$el.reset();
+        setTimeout(() => {
+          formNode.resetForm && formNode.resetForm();
+        }, 50)
+      }
+    },
+
+    // 打开目标页面
+    gotoPage(item, e) {
+      clearQueryParam();
+      item = item || {};
+      for (let m of this.navMenus) {
+        m.selected = item.parentId === m.menuId;
+        if (m.children) { // 子菜单
+          for (let c of m.children) {
+            c.selected = item.menuId === c.menuId;
+          }
+        }
+      }
+
+      // 跳转到目标页
+      if ('_self' === (item.target??'_self')) {
+        e.preventDefault();
+        this.overlay = true;
+        window.location.href = item.url;
+      }
+    },
+
+    // Vuetify主题切换
+    switchTheme(val) {
+      if (val) {
+        val = val[0];
+        this.vtheme = val;
+        localStorage.setItem(this.storageThemeKey, val);
+        this.themeEvent && this.themeEvent();
+      } else {
+        this.vtheme = localStorage.getItem(this.storageThemeKey) || 'dark';
+      }
+      this.$vuetify.theme.change(this.vtheme === 'dark' ? 'dark' : 'light');
+    },
+
+    // 加载语言列表
+    loadLangList() {
+      doAjaxGetSimple(this.url("/lang/list"), null, result => {
+        this.langList = result.data || [];
+      });
+
+      // 设置当前语言环境
+      this.lang = $cookies.get("lang") || defaultLocale;
+    },
+
+    // 加载语言本地化资源
+    loadLangResources(callback) {
+      let messages = i18n.global.messages[this.lang];
+      if (!messages) { // 若不存在静态语言包，则加载
+        loadJScript(this.url("/assets/lang/" + this.lang + ".js", true, _v), callback);
+      } else {
+        callback && callback();
+      }
+    },
+
+    // 如果只为空，则显示默认值
+    defaultIfBlank(val, defaultText = this.placeholder) {
+      return null != val? val : defaultText;
+    }
+  }
+};
+
+/**
+ * Vue3注册组件
+ */
+if ('undefined' !== typeof(VeeValidate)) {
+  baseApp.components['tform'] = VeeValidate.Form;
+  baseApp.components['tfield'] = VeeValidate.Field;
+}
+if ('undefined' !== typeof(Vue3Snackbar)) {
+  baseApp.components['vue3-snackbar'] = Vue3Snackbar.Vue3Snackbar;
+}
+
+/**
+ * 浏览器选项卡显隐监听事件
+ */
+document.addEventListener("visibilitychange", function () {
+  appInstance && (appInstance.tabActivity = !(document.hidden === true));
+});
+window.addEventListener('pagehide', function (event) {
+  appInstance && (appInstance.tabActivity = event.persisted? true : false);
+});

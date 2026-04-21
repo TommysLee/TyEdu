@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>include::Thymeleaf</title>
+</head>
+<body>
+  <!-- ################## -->
+  <!--/* 共用Meta与Title */-->
+  <!-- ################## -->
+  <th:block th:fragment="htitle(title)">
+    <title th:if="${!#strings.isEmpty(title)}" th:text="#{${title}} + ' - ' + ${#site.title()}"></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="expires" content="0">
+
+    <script type="text/javascript">
+      const ctx = '[[@{/}]]';
+      const _v = '#buildtime#';
+      let _t = Math.round(Math.random() * 1000);
+    </script>
+  </th:block>
+
+  <!-- ################### -->
+  <!--/* 本系统封装的JS类库 */-->
+  <!-- ################### -->
+  <th:block th:fragment="sysjslib">
+    <script type="text/javascript" th:src="@{/js/base.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/ajax.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/framework.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/assets/lang/{lang}.js?_t=#buildtime#(lang=${#locale.toLanguageTag()})}"></script>
+  </th:block>
+
+  <!-- ##################### -->
+  <!--/* 共用JS与CSS（Base） */-->
+  <!-- ##################### -->
+  <th:block th:fragment="scriptcss_base(title)">
+    <th:block th:replace="~{:: htitle(${title})}"/>
+
+    <!-- 全局CSS样式 -->
+    <link rel="stylesheet" th:href="@{/css/materialdesignicons.min.css?_t=#buildtime#}">
+    <link rel="stylesheet" th:href="@{/css/scrollbar.css?_t=#buildtime#}">
+    <link rel="stylesheet" th:href="@{/css/vuetify.min.css?_t=#buildtime#}">
+    <link rel="stylesheet" th:href="@{/css/vue3-snackbar.min.css?_t=#buildtime#}">
+    <link rel="stylesheet" th:href="@{/css/vuetify-theme.css?_t=#buildtime#}">
+    <link rel="stylesheet" th:href="@{/css/style.css?_t=#buildtime#}">
+
+    <!-- 全局JS类库 -->
+    <script type="text/javascript" th:src="@{/js/lib/screenfull.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vue.global.prod.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vuetify.min.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vue-cookies.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vue-i18n.global.prod.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vue3-snackbar.iife.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/axios.min.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/qs.min.js?_t=#buildtime#}"></script>
+  </th:block>
+
+  <!-- #################### -->
+  <!--/* 共用JS与CSS（标准） */-->
+  <!-- #################### -->
+  <th:block th:fragment="scriptcss(title)">
+    <th:block th:replace="~{:: scriptcss_base(${title})}"/>
+    <th:block th:replace="~{:: sysjslib}"/>
+  </th:block>
+
+  <!-- ############################# -->
+  <!--/* 共用JS与CSS（含Form验证框架） */-->
+  <!-- ############################# -->
+  <th:block th:fragment="scriptcss_form(title)">
+    <th:block th:replace="~{:: scriptcss_base(${title})}"/>
+    <script type="text/javascript" th:src="@{/js/lib/vee-validate/vee-validate.iife.prod.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vee-validate/vee-validate-rules.iife.min.js?_t=#buildtime#}"></script>
+    <th:block th:replace="~{:: sysjslib}"/>
+  </th:block>
+
+  <!-- #################### -->
+  <!--/* 共用JS与CSS（默认） */-->
+  <!-- #################### -->
+  <th:block th:fragment="scriptcss_default(title)">
+    <th:block th:replace="~{:: scriptcss_form(${title})}"/>
+  </th:block>
+
+  <!-- ########### -->
+  <!--/* 系统页眉 */-->
+  <!-- ########### -->
+  <th:block th:fragment="header">
+    <!-- 模块名称 -->
+    <v-subheader class="text-h6 font-weight-bold text-truncate">
+      <v-btn th:if="${true == back}" icon small depressed class="mr-2" @click="back">
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
+
+      {{$t(menuName)}}
+      [[${menuName ?: ''}]]
+    </v-subheader>
+
+    <v-spacer></v-spacer>
+
+    <!--/* 语言列表 */-->
+    <v-menu open-on-hover z-index="1009">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon variant="text">
+          <v-icon>mdi-translate</v-icon>
+          <v-icon>mdi-chevron-down</v-icon>
+        </v-btn>
+      </template>
+      <v-list :selected="lang?[lang]:[]" @update:selected="(selection)=>lang=selection[0]" mandatory :items="langList" item-title="text" item-value="value" color="primary"></v-list>
+    </v-menu>
+
+    <!-- 主题切换按钮 -->
+    <v-menu transition="slide-y-transition" z-index="1008">
+      <template v-slot:activator="{ props }">
+        <v-btn v-bind="props" icon variant="text">
+          <v-icon>mdi-theme-light-dark</v-icon>
+          <v-tooltip activator="parent" location="bottom" style="z-index:7">{{$t('主题切换')}}</v-tooltip>
+        </v-btn>
+      </template>
+      <v-list :selected="vtheme?[vtheme]:[]" @update:selected="switchTheme" mandatory color="primary">
+        <v-list-item v-for="(item, i) in [{value:'light',title:$t('浅色主题'),icon:'mdi-white-balance-sunny'},{value:'dark',title:$t('深色主题'),icon:'mdi-weather-night'}]" :key="i" :value="item.value">
+          <v-list-item-title><v-icon :icon="item.icon"></v-icon>{{item.title}}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+
+    <!-- 全屏切换按钮 -->
+    <v-btn icon @click="toggleFullScreen">
+      <v-icon>{{fullscreenIcon}}</v-icon>
+    </v-btn>
+
+    <!-- Toast占位符 -->
+    <vue3-snackbar top right></vue3-snackbar>
+  </th:block>
+</body>
+</html>
