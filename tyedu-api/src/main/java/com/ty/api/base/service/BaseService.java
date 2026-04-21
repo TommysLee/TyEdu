@@ -101,7 +101,7 @@ public interface BaseService<T> {
      * @return T
      * @throws Exception
      */
-    default T getById(String id) throws Exception {
+    default T getById(Integer id) throws Exception {
         return null;
     }
 
@@ -134,7 +134,7 @@ public interface BaseService<T> {
      * @return int 返回受影响的行数
      * @throws Exception
      */
-    default int delete(String id) throws Exception {
+    default int delete(Integer id) throws Exception {
         return 0;
     }
 
@@ -145,7 +145,7 @@ public interface BaseService<T> {
      * @return int 返回受影响的行数
      * @throws Exception
      */
-    default int deleteBatch(List<String> ids) throws Exception {
+    default int deleteBatch(List<Integer> ids) throws Exception {
         return 0;
     }
 }

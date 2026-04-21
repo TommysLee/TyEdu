@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.rs.dao.RsKnowledgeDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="RsKnowledgeMap" type="RsKnowledge">
+        <result property="kId" column="k_id" />
+        <result property="parentId" column="parent_id" />
+        <result property="kName" column="k_name" />
+        <result property="isLeaf" column="is_leaf" />
+        <result property="stage" column="stage" />
+        <result property="subject" column="subject" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_rsKnowledge">
+        <where>
+            <if test="kId != null">
+                and t.k_id=#{kId}
+            </if>
+            <if test="parentId != null">
+                and t.parent_id=#{parentId}
+            </if>
+            <if test="isLeaf != null">
+                and t.is_leaf=#{isLeaf}
+            </if>
+            <if test="stage != null and stage != ''">
+                and t.stage=#{stage}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject=#{subject}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findRsKnowledgeCount" parameterType="RsKnowledge" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_rs_knowledge t
+        <include refid="condition_rsKnowledge" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findRsKnowledge" parameterType="RsKnowledge" resultMap="RsKnowledgeMap">
+        SELECT
+            t.k_id,
+            t.parent_id,
+            t.k_name,
+            t.is_leaf,
+            t.stage,
+            t.subject
+        FROM
+            t_rs_knowledge t
+        <include refid="condition_rsKnowledge" />
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findRsKnowledgeById" parameterType="java.lang.String" resultMap="RsKnowledgeMap">
+        SELECT
+            t.k_id,
+            t.parent_id,
+            t.k_name,
+            t.is_leaf,
+            t.stage,
+            t.subject
+        FROM
+            t_rs_knowledge t
+        WHERE t.k_id = #{kId}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveRsKnowledge" parameterType="RsKnowledge">
+        INSERT INTO t_rs_knowledge
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="parentId != null">parent_id,</if>
+            <if test="kName != null">k_name,</if>
+            <if test="isLeaf != null">is_leaf,</if>
+            <if test="stage != null">stage,</if>
+            <if test="subject != null">subject,</if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="parentId != null">#{parentId},</if>
+            <if test="kName != null">#{kName},</if>
+            <if test="isLeaf != null">#{isLeaf},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="subject != null">#{subject},</if>
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateRsKnowledge" parameterType="RsKnowledge">
+        UPDATE t_rs_knowledge
+        <set>
+            <if test="kId != null">k_id=#{kId},</if>
+            <if test="parentId != null">parent_id=#{parentId},</if>
+            <if test="kName != null">k_name=#{kName},</if>
+            <if test="isLeaf != null">is_leaf=#{isLeaf},</if>
+            <if test="stage != null">stage=#{stage},</if>
+            <if test="subject != null">subject=#{subject},</if>
+            update_time=now()
+        </set>
+        WHERE k_id = #{kId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delRsKnowledge" parameterType="RsKnowledge">
+        DELETE FROM t_rs_knowledge WHERE k_id = #{kId}
+    </delete>
+</mapper>

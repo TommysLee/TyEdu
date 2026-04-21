@@ -11,31 +11,22 @@ import java.util.Set;
  * 业务实体类的基类
  *
  * @Author Tommy
- * @Date 2022/1/26
+ * @Date 2026/4/21
  */
 @Data
 public class BaseBO implements Serializable {
 
     @Serial
-    private static final long serialVersionUID = 2788426702510961969L;
+    private static final long serialVersionUID = 8181610377834111322L;
 
     /** 备注 **/
     private String remark;
 
-    /** 创建者 **/
-    private String createUser;
-
     /** 创建时间 **/
     private Date createTime;
 
-    /** 更新者 **/
-    private String updateUser;
-
     /** 更新时间 **/
     private Date updateTime;
-
-    /** 租户ID **/
-    private String tenantId;
 
     /** ID集合 **/
     private Set<String> ids;
@@ -47,9 +38,7 @@ public class BaseBO implements Serializable {
      * 置空不重要的属性值
      */
     public BaseBO clean() {
-        this.setCreateUser(null);
         this.setCreateTime(null);
-        this.setUpdateUser(null);
         this.setUpdateTime(null);
         return this;
     }
