@@ -1,0 +1,220 @@
+ty:
+  # 学段
+  dict-stage-list: [
+    { title: 小学, value: XX },
+    { title: 初中, value: CZ },
+    { title: 高中, value: GZ }
+  ]
+  # 难度
+  dict-difficulty-list: [
+    { title: 容易, value: 1 },
+    { title: 较易, value: 2 },
+    { title: 适中, value: 3 },
+    { title: 较难, value: 4 },
+    { title: 困难, value: 5 }
+  ]
+  # 学科
+  dict-subject-map:
+    XX: [
+      { title: 语文, value: YW },
+      { title: 数学, value: SX },
+      { title: 英语, value: YY }
+    ]
+    CZ: [
+      { title: 语文, value: YW },
+      { title: 数学, value: SX },
+      { title: 英语, value: YY },
+      { title: 物理, value: WL },
+      { title: 化学, value: HX },
+      { title: 生物, value: SW },
+      { title: 地理, value: DL },
+      { title: 历史, value: LS },
+      { title: 道德与法治, value: ZZ }
+    ]
+    GZ: [
+      { title: 语文, value: YW },
+      { title: 数学, value: SX },
+      { title: 英语, value: YY },
+      { title: 物理, value: WL },
+      { title: 化学, value: HX },
+      { title: 生物, value: SW },
+      { title: 政治, value: ZZ },
+      { title: 历史, value: LS },
+      { title: 地理, value: DL },
+      { title: 日语, value: RY }
+    ]
+  # 教材版本
+  dict-edition-map:
+    XX:
+      YW: [
+        { title: 统编版, value: TB }
+      ]
+      SX: [
+        { title: 人教版, value: RJ },
+        { title: 北师大版, value: BSD }
+      ]
+      YY: [
+        { title: 人教PEP版, value: RJPEP }
+      ]
+    CZ:
+      YW: [
+        { title: 统编版, value: TB }
+      ]
+      SX: [
+        { title: 人教版, value: RJ },
+        { title: 北师大版, value: BSD }
+      ]
+      YY: [
+        { title: 人教版, value: RJ }
+      ]
+      WL: [
+        { title: 人教版, value: RJ }
+      ]
+      HX: [
+        { title: 人教版, value: RJ }
+      ]
+      SW: [
+        { title: 人教版, value: RJ }
+      ]
+    GZ:
+      YW: [
+        { title: 统编版, value: TB }
+      ]
+      SX: [
+        { title: 人教A版, value: RJA },
+        { title: 北师大版, value: BSD }
+      ]
+      YY: [
+        { title: 人教版, value: RJ }
+      ]
+      WL: [
+        { title: 人教版, value: RJ }
+      ]
+      HX: [
+        { title: 人教版, value: RJ }
+      ]
+      SW: [
+        { title: 人教版, value: RJ }
+      ]
+  # 题型
+  dict-q-type-map:
+    XX:
+      YW: [
+        { title: 基础知识, value: JCZZ },
+        { title: 积累运用, value: JLYY },
+        { title: 现代文阅读, value: XDWYD },
+        { title: 文言文阅读, value: WYWYD },
+        { title: 诗词曲鉴赏, value: SCQJS },
+        { title: 名著阅读, value: MZYD },
+        { title: 书面表达, value: SMBD },
+        { title: 听读鉴赏, value: TGJS }
+      ]
+      SX: [
+        { title: 选择题, value: XZT },
+        { title: 填空题, value: TKT },
+        { title: 判断题, value: PDT },
+        { title: 计算题, value: JST },
+        { title: 解答题, value: JDT },
+        { title: 排序题, value: PXT },
+        { title: 连线题, value: LXT },
+        { title: 作图题, value: ZTT },
+        { title: 改错题, value: GCT }
+      ]
+      YY: [
+        { title: 听力选择, value: TLXZ },
+        { title: 听力排序, value: TLPX },
+        { title: 听力填空, value: TLTK },
+        { title: 听力连线, value: TLLX },
+        { title: 听力判断, value: TLPD },
+        { title: 听音理解, value: TYLJ },
+        { title: 单项选择, value: DXXZ },
+        { title: 情景选择, value: QJXZ },
+        { title: 填空题, value: TKT },
+        { title: 语音题, value: YYT },
+        { title: 单词题, value: DCT },
+        { title: 排序题, value: PXT },
+        { title: 阅读选择, value: YDXZ },
+        { title: 阅读判断, value: YDPD },
+        { title: 任务型阅读, value: RWXYD },
+        { title: 翻译题, value: FYT },
+        { title: 判断题, value: PDT },
+        { title: 句型转换, value: JXZH },
+        { title: 完形填空, value: WXTK },
+        { title: 补全对话/短文, value: BQDHDW },
+        { title: 改错题, value: GCT },
+        { title: 匹配题, value: PPT },
+        { title: 字母题, value: ZMT },
+        { title: 抄写题, value: CXT },
+        { title: 画图题, value: HTT },
+        { title: 仿写题, value: FXT },
+        { title: 连词成句, value: LCCJ },
+        { title: 连线题, value: LXT },
+        { title: 书面表达, value: SMBD }
+      ]
+    CZ:
+      YW: [
+        { title: 积累运用, value: JLYY },
+        { title: 默写, value: MX },
+        { title: 综合性学习, value: ZHXXX },
+        { title: 现代文阅读, value: XDWYD },
+        { title: 文言文阅读, value: WYWYD },
+        { title: 诗歌阅读, value: SGYD },
+        { title: 整本书阅读, value: ZBSYD },
+        { title: 写作, value: XZ }
+      ]
+      SX: [
+        { title: 单选题, value: DXT },
+        { title: 多选题, value: DGXT },
+        { title: 填空题, value: TKT },
+        { title: 解答题, value: JDT },
+        { title: 判断题, value: PDT }
+      ]
+      YY: [
+        { title: 听力选择, value: TLXX },
+        { title: 听力填空, value: TLTK },
+        { title: 听力匹配, value: TLPP },
+        { title: 听力判断, value: TLPD },
+        { title: 听力排序, value: TLPX },
+        { title: 听力问答, value: TLWD },
+        { title: 语音题, value: YYT },
+        { title: 单项选择, value: DXXZ },
+        { title: 完形填空, value: WXTK },
+        { title: 语法选择, value: YFXZ },
+        { title: 阅读理解, value: YDLJ },
+        { title: 任务型阅读, value: RWXYD },
+        { title: 短文填空, value: DWTK },
+        { title: 选词填空, value: XCTK },
+        { title: 补全对话, value: BQDH },
+        { title: 单词拼写, value: DCPX },
+        { title: 完成句子, value: WCJZ },
+        { title: 情景运用, value: QJYY },
+        { title: 翻译, value: FY },
+        { title: 改错, value: GCT },
+        { title: 读写综合, value: DXZH },
+        { title: 书面表达, value: SMBD },
+        { title: 其它, value: OTHERS}
+      ]
+      WL: [
+        { title: 单选题, value: DXT },
+        { title: 多选题, value: DGXT },
+        { title: 填空题, value: TKT },
+        { title: 课内填空, value: KNTK },
+        { title: 判断题, value: PDT },
+        { title: 实验题, value: SYT },
+        { title: 计算题, value: JST },
+        { title: 作图题, value: XTT },
+        { title: 简答题, value: JDT },
+        { title: 综合题, value: ZHT },
+        { title: 科普阅读题, value: KPYDT }
+      ]
+      HX: [
+        { title: 单选题, value: DXT },
+        { title: 多选题, value: DGXT },
+        { title: 判断题, value: PDT },
+        { title: 填空题, value: TKT },
+        { title: 简答题, value: JDT },
+        { title: 实验题, value: SYT },
+        { title: 计算题, value: JST },
+        { title: 综合应用题, value: ZHYYT },
+        { title: 课内填空, value: KNTK }
+      ]

@@ -1,6 +1,8 @@
 package com.ty.web.spring.config.properties;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.ty.api.model.system.DictionaryItem;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -25,4 +27,19 @@ public class TyProperties {
 
     /** 视图映射 **/
     private Map<String, String> viewMapping = Maps.newHashMap();
+
+    /** 字典【学段】 **/
+    private List<DictionaryItem> dictStageList = Lists.newArrayList();
+
+    /** 字典【难度】 **/
+    private List<DictionaryItem> dictDifficultyList = Lists.newArrayList();
+
+    /** 字典【学科】 **/
+    private Map<String, List<DictionaryItem>> dictSubjectMap = Maps.newLinkedHashMap();
+
+    /** 字典【教材版本】 **/
+    private Map<String, Map<String, List<DictionaryItem>>> dictEditionMap = Maps.newLinkedHashMap();
+
+    /** 字典【题型】 **/
+    private Map<String, Map<String, List<DictionaryItem>>> dictQTypeMap = Maps.newLinkedHashMap();
 }

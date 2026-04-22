@@ -10,5 +10,5 @@ ty:
 #https://spring.io/blog/2020/08/14/config-file-processing-in-spring-boot-2-4
 spring:
   profiles:
-    include: view-mapping
+    include: view-mapping, dict
     active: prod

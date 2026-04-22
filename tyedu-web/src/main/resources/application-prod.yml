@@ -23,7 +23,7 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-    default-property-inclusion: NON_EMPTY
+    default-property-inclusion: NON_NULL
   servlet:
     #文件上传配置（单文件大小限制与请求总大小限制）
     multipart:
