@@ -39,7 +39,7 @@
   color: #fff !important;
 }
 
-.v-application {
+.v-application:not(.v-admin) {
   background-image: url('../images/bg.png') !important;
   background-repeat: no-repeat !important;
   background-position: center center !important;
@@ -51,7 +51,7 @@
   background: #010919;
 }
 
-.v-app-bar.v-toolbar {
+.v-application:not(.v-admin) .v-app-bar.v-toolbar {
   background-color: transparent;
 }
 .v-theme--dark.v-sheet {
