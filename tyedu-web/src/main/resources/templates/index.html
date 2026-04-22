@@ -17,19 +17,30 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid>
-          <v-card-zoom flat rounded="0" class="pa-0 dark-grad" style="height: calc(100vh - 64px - 24px);" @zoom="zoom" @refresh="refresh">
-            <div id="map_container" class="w-100 fill-height"></div>
-            <div class="font-weight-bold zoom-font zoom-font-3x" style="position: fixed; bottom: 30px; right: 40px;">
-              TyFast · {{$t('[[${#site.name()}]]')}}
-            </div>
-          </v-card-zoom>
+          <v-row>
+            <v-col cols="12" md="4">
+              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="orange-darken-1" href="#">
+                <v-icon icon="mdi-bookshelf"></v-icon>
+                {{$t('题库')}}
+              </v-card>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="green-lighten-1" href="#">
+                <v-icon icon="mdi-text-box-edit-outline"></v-icon>
+                {{$t('考试')}}
+              </v-card>
+            </v-col>
+            <v-col cols="12" md="4">
+              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="pink-accent-2" href="#">
+                <v-icon icon="mdi-text-box-remove-outline"></v-icon>
+                {{$t('我的错题')}}
+              </v-card>
+            </v-col>
+          </v-row>
         </v-container>
       </v-main>
     </v-app>
   </div>
-
-  <!-- 导入Vuetify扩展组件 -->
-  <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
 
   <!-- 业务js -->
   <script type="text/javascript" th:src="@{/js/index.js}"></script>

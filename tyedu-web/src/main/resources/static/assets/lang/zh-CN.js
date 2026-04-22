@@ -1,5 +1,5 @@
 loadLocaleMessages("zh-CN", Object.assign({
-    "productName": "快速开发平台",
+    "productName": "K12精准教学系统"
 }, {
     validations: {
         "_default": "{0}不是一个有效值",

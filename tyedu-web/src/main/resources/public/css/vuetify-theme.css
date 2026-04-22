@@ -39,12 +39,20 @@
   color: #fff !important;
 }
 
+.v-application {
+  background-image: url('../images/bg.png') !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+}
+
 .v-application.v-theme--dark {
   background: #010919;
 }
 
-.v-theme--dark.v-app-bar.v-toolbar {
-  background-color:#041729
+.v-app-bar.v-toolbar {
+  background-color: transparent;
 }
 .v-theme--dark.v-sheet {
   background-color:#041729;
@@ -57,7 +65,7 @@
   background:#011c36
 }
 .v-menu>.v-overlay__content>.v-theme--dark.v-list {
-  background:#011c36 !important;
+  background:#251EA2 !important;
 }
 .v-theme--dark.v-badge .v-badge__badge:after {
   border-color:#011c36
