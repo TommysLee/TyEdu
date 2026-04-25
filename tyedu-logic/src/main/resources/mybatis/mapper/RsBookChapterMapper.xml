@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.rs.dao.RsBookChapterDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="RsBookChapterMap" type="RsBookChapter">
+        <result property="chptId" column="chpt_id" />
+        <result property="bId" column="b_id" />
+        <result property="parentId" column="parent_id" />
+        <result property="chptName" column="chpt_name" />
+        <result property="isLeaf" column="is_leaf" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_rsBookChapter">
+        <where>
+            <if test="chptId != null">
+                and t.chpt_id=#{chptId}
+            </if>
+            <if test="bId != null">
+                and t.b_id=#{bId}
+            </if>
+            <if test="parentId != null">
+                and t.parent_id=#{parentId}
+            </if>
+            <if test="chptName != null and chptName != ''">
+                and t.chpt_name=#{chptName}
+            </if>
+            <if test="isLeaf != null">
+                and t.is_leaf=#{isLeaf}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findRsBookChapterCount" parameterType="RsBookChapter" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_rs_book_chapter t
+        <include refid="condition_rsBookChapter" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findRsBookChapter" parameterType="RsBookChapter" resultMap="RsBookChapterMap">
+        SELECT
+            t.chpt_id,
+            t.b_id,
+            t.parent_id,
+            t.chpt_name,
+            t.is_leaf
+        FROM
+            t_rs_book_chapter t
+        <include refid="condition_rsBookChapter" />
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findRsBookChapterById" parameterType="java.lang.Integer" resultMap="RsBookChapterMap">
+        SELECT
+            t.chpt_id,
+            t.b_id,
+            t.parent_id,
+            t.chpt_name,
+            t.is_leaf
+        FROM
+            t_rs_book_chapter t
+        WHERE t.chpt_id = #{chptId}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveRsBookChapter" parameterType="RsBookChapter">
+        INSERT INTO t_rs_book_chapter
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="chptId != null">chpt_id,</if>
+            <if test="bId != null">b_id,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="chptName != null">chpt_name,</if>
+            <if test="isLeaf != null">is_leaf,</if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="chptId != null">#{chptId},</if>
+            <if test="bId != null">#{bId},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="chptName != null">#{chptName},</if>
+            <if test="isLeaf != null">#{isLeaf},</if>
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateRsBookChapter" parameterType="RsBookChapter">
+        UPDATE t_rs_book_chapter
+        <set>
+            <if test="chptId != null">chpt_id=#{chptId},</if>
+            <if test="bId != null">b_id=#{bId},</if>
+            <if test="parentId != null">parent_id=#{parentId},</if>
+            <if test="chptName != null">chpt_name=#{chptName},</if>
+            <if test="isLeaf != null">is_leaf=#{isLeaf},</if>
+            update_time=now()
+        </set>
+        WHERE chpt_id = #{chptId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delRsBookChapter" parameterType="java.lang.Integer">
+        DELETE FROM t_rs_book_chapter WHERE chpt_id = #{chptId}
+    </delete>
+</mapper>

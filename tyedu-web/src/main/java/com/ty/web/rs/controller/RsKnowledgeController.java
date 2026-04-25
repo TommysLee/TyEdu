@@ -22,22 +22,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class RsKnowledgeController extends BaseController {
 
     @Autowired
-    private RsKnowledgeService rsKnowledgeService;
+    private RsKnowledgeService knowledgeService;
 
     /**
      * 查询知识点列表
      */
     @RequestMapping("/list")
-    public AjaxResult list(RsKnowledge rsKnowledge) throws Exception {
-        return AjaxResult.success(rsKnowledgeService.getAll(rsKnowledge));
+    public AjaxResult list(RsKnowledge knowledge) throws Exception {
+        return AjaxResult.success(knowledgeService.getAll(knowledge));
     }
 
     /**
      * 增加知识点
      */
     @PostMapping("/save")
-    public AjaxResult save(RsKnowledge rsKnowledge) throws Exception {
-        int n = rsKnowledgeService.save(rsKnowledge);
+    public AjaxResult save(RsKnowledge knowledge) throws Exception {
+        int n = knowledgeService.save(knowledge);
         return AjaxResult.success(n);
     }
 
@@ -46,15 +46,15 @@ public class RsKnowledgeController extends BaseController {
      */
     @GetMapping("/single/{kId}")
     public AjaxResult single(@PathVariable Integer kId) throws Exception {
-        return AjaxResult.success(rsKnowledgeService.getById(kId));
+        return AjaxResult.success(knowledgeService.getById(kId));
     }
 
     /**
      * 修改知识点
      */
     @PostMapping("/update")
-    public AjaxResult update(RsKnowledge rsKnowledge) throws Exception {
-        int n = rsKnowledgeService.update(rsKnowledge);
+    public AjaxResult update(RsKnowledge knowledge) throws Exception {
+        int n = knowledgeService.update(knowledge);
         return AjaxResult.success(n);
     }
 
@@ -63,7 +63,7 @@ public class RsKnowledgeController extends BaseController {
      */
     @GetMapping("/del/{kId}")
     public AjaxResult del(@PathVariable Integer kId) throws Exception {
-        int n = rsKnowledgeService.delete(kId);
+        int n = knowledgeService.delete(kId);
         return AjaxResult.success(n);
     }
 }

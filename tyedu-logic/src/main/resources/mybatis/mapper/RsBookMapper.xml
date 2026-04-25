@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.rs.dao.RsBookDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="RsBookMap" type="RsBook">
+        <result property="bId" column="b_id" />
+        <result property="bName" column="b_name" />
+        <result property="stage" column="stage" />
+        <result property="subject" column="subject" />
+        <result property="remark" column="remark" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_rsBook">
+        <where>
+            <if test="bId != null">
+                and t.b_id=#{bId}
+            </if>
+            <if test="bName != null and bName != ''">
+                and t.b_name=#{bName}
+            </if>
+            <if test="stage != null and stage != ''">
+                and t.stage=#{stage}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject=#{subject}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findRsBookCount" parameterType="RsBook" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_rs_book t
+        <include refid="condition_rsBook" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findRsBook" parameterType="RsBook" resultMap="RsBookMap">
+        SELECT
+            t.b_id,
+            t.b_name,
+            t.stage,
+            t.subject,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_rs_book t
+        <include refid="condition_rsBook" />
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findRsBookById" parameterType="java.lang.String" resultMap="RsBookMap">
+        SELECT
+            t.b_id,
+            t.b_name,
+            t.stage,
+            t.subject,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_rs_book t
+        WHERE t.b_id = #{bId}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveRsBook" parameterType="RsBook">
+        INSERT INTO t_rs_book
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="bId != null">b_id,</if>
+            <if test="bName != null">b_name,</if>
+            <if test="stage != null">stage,</if>
+            <if test="subject != null">subject,</if>
+            <if test="remark != null">remark,</if>
+            create_time,
+            update_time,
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="bId != null">#{bId},</if>
+            <if test="bName != null">#{bName},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="remark != null">#{remark},</if>
+            now(),
+            now(),
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateRsBook" parameterType="RsBook">
+        UPDATE t_rs_book
+        <set>
+            <if test="bId != null">b_id=#{bId},</if>
+            <if test="bName != null">b_name=#{bName},</if>
+            <if test="stage != null">stage=#{stage},</if>
+            <if test="subject != null">subject=#{subject},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            update_time=now()
+        </set>
+        WHERE b_id = #{bId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delRsBook" parameterType="java.lang.String">
+        DELETE FROM t_rs_book WHERE b_id = #{bId}
+    </delete>
+</mapper>

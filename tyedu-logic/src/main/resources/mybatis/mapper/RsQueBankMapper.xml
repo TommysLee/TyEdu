@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.rs.dao.RsQueBankDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="RsQueBankMap" type="RsQueBank">
+        <result property="qId" column="q_id" />
+        <result property="subject" column="subject" />
+        <result property="type" column="type" />
+        <result property="difficulty" column="difficulty" />
+        <result property="stem" column="stem" />
+        <result property="answer" column="answer" />
+        <result property="analysis" column="analysis" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_rsQueBank">
+        <where>
+            <if test="qId != null">
+                and t.q_id=#{qId}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject=#{subject}
+            </if>
+            <if test="type != null and type != ''">
+                and t.type=#{type}
+            </if>
+            <if test="difficulty != null">
+                and t.difficulty=#{difficulty}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findRsQueBankCount" parameterType="RsQueBank" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_rs_que_bank t
+        <include refid="condition_rsQueBank" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findRsQueBank" parameterType="RsQueBank" resultMap="RsQueBankMap">
+        SELECT
+            t.q_id,
+            t.subject,
+            t.type,
+            t.difficulty,
+            t.stem,
+            t.answer,
+            t.analysis,
+            t.create_time,
+            t.update_time
+        FROM
+            t_rs_que_bank t
+        <include refid="condition_rsQueBank" />
+        ORDER BY t.q_id DESC
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findRsQueBankById" parameterType="java.lang.Integer" resultMap="RsQueBankMap">
+        SELECT
+            t.q_id,
+            t.subject,
+            t.type,
+            t.difficulty,
+            t.stem,
+            t.answer,
+            t.analysis,
+            t.create_time,
+            t.update_time
+        FROM
+            t_rs_que_bank t
+        WHERE t.q_id = #{qId}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveRsQueBank" parameterType="RsQueBank">
+        INSERT INTO t_rs_que_bank
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="qId != null">q_id,</if>
+            <if test="subject != null">subject,</if>
+            <if test="type != null">type,</if>
+            <if test="difficulty != null">difficulty,</if>
+            <if test="stem != null">stem,</if>
+            <if test="answer != null">answer,</if>
+            <if test="analysis != null">analysis,</if>
+            create_time,
+            update_time,
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="qId != null">#{qId},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="type != null">#{type},</if>
+            <if test="difficulty != null">#{difficulty},</if>
+            <if test="stem != null">#{stem},</if>
+            <if test="answer != null">#{answer},</if>
+            <if test="analysis != null">#{analysis},</if>
+            now(),
+            now(),
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateRsQueBank" parameterType="RsQueBank">
+        UPDATE t_rs_que_bank
+        <set>
+            <if test="qId != null">q_id=#{qId},</if>
+            <if test="subject != null">subject=#{subject},</if>
+            <if test="type != null">type=#{type},</if>
+            <if test="difficulty != null">difficulty=#{difficulty},</if>
+            <if test="stem != null">stem=#{stem},</if>
+            <if test="answer != null">answer=#{answer},</if>
+            <if test="analysis != null">analysis=#{analysis},</if>
+            update_time=now()
+        </set>
+        WHERE q_id = #{qId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delRsQueBank" parameterType="java.lang.Integer">
+        DELETE FROM t_rs_que_bank WHERE q_id = #{qId}
+    </delete>
+</mapper>

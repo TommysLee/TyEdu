@@ -33,6 +33,8 @@ spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: "jdbc:sqlite:${user.home}/sqlite_db/data.db"
+    hikari:
+      connection-init-sql: PRAGMA foreign_keys=ON
 
 #MyBatis配置
 mybatis:
