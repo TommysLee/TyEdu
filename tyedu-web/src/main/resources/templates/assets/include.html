@@ -5,6 +5,13 @@
   <title>include::Thymeleaf</title>
 </head>
 <body>
+  <!-- ############# -->
+  <!--/* 前端常量数据 */-->
+  <!-- ############# -->
+  <th:block th:fragment="data">
+    <script type="text/javascript" th:src="@{/js/data/nav-menus.js?_t=#buildtime#}"></script>
+  </th:block>
+
   <!-- ################## -->
   <!--/* 共用Meta与Title */-->
   <!-- ################## -->
@@ -88,14 +95,29 @@
   <!--/* 系统页眉 */-->
   <!-- ########### -->
   <th:block th:fragment="header">
-    <!-- 模块名称 -->
-    <v-subheader class="text-h6 font-weight-bold text-truncate pl-md-2">
+    <!-- 切换左侧导航菜单的显示方式 -->
+    <v-app-bar-nav-icon th:if="${vadmin}" @click.stop="toggleSysMenu"></v-app-bar-nav-icon>
+
+    <!-- 产品名称 -->
+    <v-subheader class="text-h6 font-weight-bold text-truncate pl-md-2" @dblclick="clearAllToast">
       <v-btn th:if="${true == back}" icon small depressed class="mr-2" @click="back">
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
       {{$t('productName')}}
     </v-subheader>
 
+    <v-spacer></v-spacer>
+    <v-chip-group th:if="${vadmin}" mandatory selected-class="text-primary" v-model="stage">
+      <v-chip
+          filter
+          variant="text"
+          size="x-large"
+          v-for="item in stageList"
+          :value="item.value"
+          :text="item.title"
+      >
+      </v-chip>
+    </v-chip-group>
     <v-spacer></v-spacer>
 
     <!--/* 语言列表 */-->
@@ -124,11 +146,67 @@
       </v-list>
     </v-menu>
 
-    <!-- 全屏切换按钮 -->
-    <v-btn icon="mdi-cog-outline" v-tooltip:bottom="$t('设置')"></v-btn>
+    <!-- 设置按钮 -->
+    <v-btn th:unless="${vadmin}" icon="mdi-cog-outline" v-tooltip:bottom="$t('设置')" th:href="@{/adm/index}"></v-btn>
+
+    <!-- 返回前端的按钮 -->
+    <v-btn th:if="${vadmin}" icon="mdi-arrow-left-top-bold" v-tooltip:bottom="$t('返回')" th:href="@{/index}"></v-btn>
 
     <!-- Toast占位符 -->
     <vue3-snackbar top right></vue3-snackbar>
+  </th:block>
+
+  <!-- ############## -->
+  <!--/* 系统导航菜单 */-->
+  <!-- ############## -->
+  <th:block th:fragment="navMenu">
+    <v-navigation-drawer theme="dark" v-model="sysNavStatus" :rail="sysRailStatus" :expand-on-hover="sysRailStatus" class="opacity-90" :class="{'bg-nav-light':!vdark}">
+      <!-- 导航菜单 -->
+      <v-list nav :opened="openMenus" open-strategy="single" class="mb-12">
+        <template v-for="item in navMenus">
+          <!-- 不含子菜单的 -->
+          <v-list-item
+              :key="item.menuId"
+              :href="item.url"
+              :target="item.target"
+              :prepend-icon="item.icon"
+              active-class="bg-light-blue"
+              v-model:active="item.selected"
+              @click="gotoPage(item, $event)"
+              v-if="!item.children || item.children.length === 0"
+          >
+            <v-list-item-title>{{$t(item.menuName)}}</v-list-item-title>
+          </v-list-item>
+
+          <!-- 含子菜单的 -->
+          <v-list-group
+              :key="item.menuId"
+              :value="item.menuId"
+              v-else
+          >
+            <template v-slot:activator="{ props, isOpen }">
+              <v-list-item
+                  v-bind="props"
+                  :prepend-icon="item.icon"
+                  :title="$t(item.menuName)"
+                  :active="isOpen"
+                  color="primary"
+              ></v-list-item>
+            </template>
+            <v-list-item
+                v-for="child in item.children"
+                :key="child.menuId"
+                :title="$t(child.menuName)"
+                :href="child.url"
+                :target="child.target"
+                active-class="bg-light-blue"
+                :active="child.selected && !deactiveMenu"
+                @click="gotoPage(child, $event)"
+            ></v-list-item>
+          </v-list-group>
+        </template>
+      </v-list>
+    </v-navigation-drawer>
   </th:block>
 </body>
 </html>

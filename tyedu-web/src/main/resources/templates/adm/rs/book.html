@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 前端数据 */-->
+  <th:block th:replace="~{assets/include :: data}"/>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: scriptcss('教材管理')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app class="v-admin">
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(vadmin=true)}"/>
+      </v-app-bar>
+
+      <!-- 左侧区域::导航菜单 -->
+      <th:block th:replace="~{assets/include :: navMenu}"/>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid>
+          <v-sheet class="rounded-0 px-6 py-3">
+          </v-sheet>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 业务js -->
+  <script type="text/javascript" th:src="@{/js/adm/rs/book.js}"></script>
+</body>
+</html>

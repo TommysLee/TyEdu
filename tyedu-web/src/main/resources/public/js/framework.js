@@ -133,7 +133,13 @@ const baseApp = {
   data: function() {
     return {
       fullscreenIcon: "mdi-fullscreen",
+      sysNavStatus: true, // 左侧导航栏状态：显示/隐藏
+      sysRailStatus: false, // 左侧导航栏是否只以图标形式显示
       menuName: '', // 页面上显示的菜单名称
+      navMenus: typeof(navMenus) != 'undefined'? navMenus : [], // 导航菜单数据
+      deactiveMenu: false, // 不高亮显示导航菜单
+      enableMenuInfer: false, // 是否启用Menu智能推断
+      storageRailStatusKey: "railStatus", // 存储在LocalStorage中的导航菜单形态状态Key
       vtheme: 'light', // Vuetify主题
       storageThemeKey: 'vuetifyTheme', // 存储在LocalStorage中的主题数据Key
       storageSlientKey: 'slient', // 存储在LocalStorage中的静音Key
@@ -157,6 +163,8 @@ const baseApp = {
       },
       assistHeight: 20, // 辅助元素的总高度
       placeholder: '--', // 占位符文本
+      stageList: [], // 学段列表
+      stage: 'XX' // 学段
     }
   },
   computed: {
@@ -180,9 +188,24 @@ const baseApp = {
     // Loading Text From Vuetify3
     loadingText() {
       return this.$vuetify.locale.t('$vuetify.loading');
-    }
+    },
+    // 打开的菜单组
+    openMenus() {
+      let opened = [];
+      if (!this.deactiveMenu) {
+        for (let m of this.navMenus) {
+          if (m.selected) {
+            opened.push(m.menuId);
+          }
+        }
+      }
+      return opened;
+    },
   },
   watch: {
+    sysRailStatus(val) {
+      localStorage.setItem(this.storageRailStatusKey, val);
+    },
     lang(val) {
       $cookies.set("lang", val, '1y');
       this.$i18n.locale = val;
@@ -203,8 +226,16 @@ const baseApp = {
     }
   },
   created() {
+    // 移动端默认收起导航栏
+    if (this.isMobile) {
+      this.sysNavStatus = false;
+    }
+
     // 注册全屏事件监听器
     this.fullScreenListener();
+
+    // 加载系统导航菜单
+    this.loadNavMenus();
 
     // 切换Vuetify主题
     this.switchTheme();
@@ -388,6 +419,101 @@ const baseApp = {
         setTimeout(() => {
           formNode.resetForm && formNode.resetForm();
         }, 50)
+      }
+    },
+
+    // 加载系统导航菜单
+    loadNavMenus() {
+      // 状态
+      let sysRailStatus = localStorage.getItem(this.storageRailStatusKey);
+      if (sysRailStatus) {
+        this.sysRailStatus = !("false" === sysRailStatus);
+      }
+
+      // 高亮菜单
+      if (this.navMenus) {
+        this.highlightNavMenuItem();
+      }
+    },
+
+    // 高亮显示导航菜单项
+    highlightNavMenuItem() {
+      let url = location.pathname;
+      url = '/adm/index' === url? '/adm/rs/book/view' : url;
+      let item = null, parentItem = null, urlMatchItem = null, urlMatchParentItem = null;
+      for (let m of this.navMenus) {
+        if (!m.children) { // 没有子菜单的情况
+          if (m.selected) {
+            item = m;
+          }
+          if (m.url === url) {
+            urlMatchItem = m;
+          }
+        } else { // 有子菜单的情况
+          for (let c of m.children) {
+            if (c.selected) {
+              item = c;
+              parentItem = m;
+            }
+            if (c.url === url) {
+              urlMatchItem = c;
+              urlMatchParentItem = m;
+            }
+          }
+        }
+      }
+
+      // 若没有菜单被选中，但存在URL匹配菜单，则高亮显示URL匹配菜单
+      if (null == item && null != urlMatchItem) {
+        urlMatchItem.selected = true;
+        urlMatchParentItem && (urlMatchParentItem.selected = true);
+        console.log('没有菜单被选中，但存在URL匹配菜单，则高亮此菜单')
+      } else if (null != item && null != urlMatchItem && item.url !== urlMatchItem.url) { // 若有菜单被选中，但与URL匹配菜单不同，则高亮显示URL匹配菜单
+        item.selected = false;
+        parentItem && (parentItem.selected = false);
+        urlMatchItem.selected = true;
+        urlMatchParentItem && (urlMatchParentItem.selected = true);
+        console.log('菜单被选中，但与URL匹配菜单不同，则高亮显示URL匹配菜单')
+      }
+
+      // Menu推断功能
+      if (null == urlMatchItem && this.enableMenuInfer) {
+        this.inferSuitableMenu(item, parentItem);
+      }
+    },
+
+    // Menu推断，高亮最合适的Menu
+    inferSuitableMenu(menuItem, parentItem) {
+      const url = location.pathname;
+      let maxSimilarity = 0;
+      if (menuItem) { // 优先与传递来的菜单比较
+        let { similarity } = prefixTextSimilarity(url, menuItem.url);
+        maxSimilarity = similarity;
+      }
+
+      // 从菜单集合中，逐一查找，找到相似度最高的菜单
+      for (let m of this.navMenus) {
+        m.selected = false;
+        if (m.children) {
+          for (let c of m.children) {
+            let { similarity } = prefixTextSimilarity(url, c.url);
+            if (similarity > maxSimilarity) {
+              maxSimilarity = similarity;
+              menuItem = c;
+              parentItem = m;
+            }
+            c.selected = false;
+          }
+        }
+      }
+
+      // 将相似度最高的Menu，高亮显示
+      console.log("相似度最高Menu：", maxSimilarity, menuItem)
+      if (menuItem) {
+        menuItem.selected = true;
+      }
+      if (parentItem) {
+        parentItem.selected = true;
       }
     },
 

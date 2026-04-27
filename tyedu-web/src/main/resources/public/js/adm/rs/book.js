@@ -6,6 +6,11 @@ const app = Vue.createApp({
     }
   },
   mounted() {
+    doAjaxGetSimple(this.url('/dict/stage'), null, result => {
+      if (result.state) {
+        this.stageList = result.data || [];
+      }
+    })
   },
   methods: {
   }

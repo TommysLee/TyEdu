@@ -1,3 +1,5 @@
 ty:
   view-mapping:
-    "[/user/profile/view]": "system/user/profile/profile"
+    #后台管理
+    "[/adm/index]": "adm/rs/book"
+    "[/adm/rs/book/view]": "adm/rs/book"

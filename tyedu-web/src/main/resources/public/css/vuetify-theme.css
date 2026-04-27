@@ -51,6 +51,10 @@
   background: #010919;
 }
 
+.v-application .v-theme--dark.v-app-bar.v-toolbar {
+  background-color: #041729;
+}
+
 .v-application:not(.v-admin) .v-app-bar.v-toolbar {
   background-color: transparent;
 }
@@ -109,7 +113,7 @@
   background-color:#04223e;
 }
 .v-theme--dark.v-navigation-drawer {
-  background-color:#041729
+  background-color:#010919
 }
 .v-theme--dark.v-overflow-btn:not(.v-input--is-focused):not(.v-input--has-state)>.v-input__control>.v-input__slot:hover {
   background:#011c36

@@ -96,14 +96,14 @@ function doAjax(url, params, callback, method, errCallback, ignore=false, opts={
 }
 
 /**
- * Ajax Post请求（不处理Loading状态）
+ * Ajax请求（不处理Loading状态）
  */
 function doAjaxSimple(url, params, callback, errCallback) {
   return doAjax(url, params, callback, null, errCallback, true);
 }
 
 /**
- * Ajax Post请求（不处理Loading状态）
+ * Ajax Get请求（不处理Loading状态）
  */
 function doAjaxGetSimple(url, params, callback, errCallback) {
   return doAjax(url, params, callback, "GET", errCallback, true);
