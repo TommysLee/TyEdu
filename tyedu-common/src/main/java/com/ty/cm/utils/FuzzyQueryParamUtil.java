@@ -14,13 +14,16 @@ import java.util.regex.Pattern;
 public class FuzzyQueryParamUtil {
 
     // 默认数据库类型
-    private final static DatabaseType DEFAULT_DB_TYPE = DatabaseType.MYSQL;
+    private final static DatabaseType DEFAULT_DB_TYPE = DatabaseType.SQLITE;
 
     // 通配符
     private final static String WILDCARD = "%";
 
     // MySQL正则表达式
     private final static String REGX_MYSQL = "[\\%\\_\\\\]";
+
+    // Sqlite正则表达式
+    private final static String REGX_SQLITE = "[\\%\\_\\\\]";
 
     /**
      * 转义模糊查询的参数值
@@ -47,6 +50,10 @@ public class FuzzyQueryParamUtil {
                     break;
                 case MSSQL:
                     break;
+                case SQLITE:
+                    escape = "\\\\";
+                    matcher = Pattern.compile(REGX_SQLITE).matcher(value);
+                    break;
             }
 
             while (matcher.find()) {
@@ -58,6 +65,6 @@ public class FuzzyQueryParamUtil {
     }
 
     public enum DatabaseType {
-        MYSQL, ORACLE, MSSQL
+        MYSQL, ORACLE, MSSQL, SQLITE
     }
 }

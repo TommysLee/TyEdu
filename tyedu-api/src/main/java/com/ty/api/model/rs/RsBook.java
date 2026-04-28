@@ -1,5 +1,6 @@
 package com.ty.api.model.rs;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.ty.api.model.BaseBO;
 import lombok.Data;
 
@@ -12,6 +13,11 @@ import java.io.Serial;
  * @Date 2026/04/25
  */
 @Data
+@JsonAutoDetect(
+        fieldVisibility = JsonAutoDetect.Visibility.ANY,
+        getterVisibility = JsonAutoDetect.Visibility.NONE,
+        setterVisibility = JsonAutoDetect.Visibility.NONE
+)
 public class RsBook extends BaseBO {
 
     @Serial

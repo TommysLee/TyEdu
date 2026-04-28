@@ -2,6 +2,8 @@ package com.ty.logic.rs.service.impl;
 
 import com.ty.api.model.rs.RsBook;
 import com.ty.api.rs.service.RsBookService;
+import com.ty.cm.utils.DateUtils;
+import com.ty.cm.utils.FuzzyQueryParamUtil;
 import com.ty.logic.rs.dao.RsBookDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ public class RsBookServiceImpl implements RsBookService {
         if (null == rsBook) {
             rsBook = new RsBook();
         }
+        rsBook.setBName(FuzzyQueryParamUtil.escape(rsBook.getBName()));
         return rsBookDao.findRsBook(rsBook);
     }
 
@@ -52,6 +55,8 @@ public class RsBookServiceImpl implements RsBookService {
     public int save(RsBook rsBook) throws Exception {
         int n = 0;
         if (null != rsBook) {
+            rsBook.setCreateTime(DateUtils.nowText());
+            rsBook.setUpdateTime(rsBook.getCreateTime());
             n = rsBookDao.saveRsBook(rsBook);
         }
         return n;
@@ -103,6 +108,7 @@ public class RsBookServiceImpl implements RsBookService {
     public int update(RsBook rsBook) throws Exception {
         int n = 0;
         if (null != rsBook) {
+            rsBook.setUpdateTime(DateUtils.nowText());
             n = rsBookDao.updateRsBook(rsBook);
         }
         return n;

@@ -20,7 +20,7 @@
                 and t.b_id=#{bId}
             </if>
             <if test="bName != null and bName != ''">
-                and t.b_name=#{bName}
+                and t.b_name like '%' || #{bName} || '%' ESCAPE '\'
             </if>
             <if test="stage != null and stage != ''">
                 and t.stage=#{stage}
@@ -53,7 +53,7 @@
     </select>
 
     <!-- 根据ID查询记录 -->
-    <select id="findRsBookById" parameterType="java.lang.String" resultMap="RsBookMap">
+    <select id="findRsBookById" parameterType="java.lang.Integer" resultMap="RsBookMap">
         SELECT
             t.b_id,
             t.b_name,
@@ -89,8 +89,8 @@
             <if test="stage != null">#{stage},</if>
             <if test="subject != null">#{subject},</if>
             <if test="remark != null">#{remark},</if>
-            now(),
-            now(),
+            #{createTime},
+            #{updateTime}
         </trim>
         )
     </insert>
@@ -104,13 +104,13 @@
             <if test="stage != null">stage=#{stage},</if>
             <if test="subject != null">subject=#{subject},</if>
             <if test="remark != null">remark=#{remark},</if>
-            update_time=now()
+            update_time=#{updateTime}
         </set>
         WHERE b_id = #{bId}
     </update>
 
     <!-- 删除 -->
-    <delete id="delRsBook" parameterType="java.lang.String">
+    <delete id="delRsBook" parameterType="java.lang.Integer">
         DELETE FROM t_rs_book WHERE b_id = #{bId}
     </delete>
 </mapper>

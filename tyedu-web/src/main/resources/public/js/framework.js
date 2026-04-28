@@ -163,6 +163,8 @@ const baseApp = {
       },
       assistHeight: 20, // 辅助元素的总高度
       placeholder: '--', // 占位符文本
+      dictConfig: { // 数据字典配置
+      },
       stageList: [], // 学段列表
       stage: 'XX' // 学段
     }
@@ -247,6 +249,9 @@ const baseApp = {
   mounted() {
     // 加载语言列表
     this.loadLangList();
+
+    // 加载数据字典
+    this.loadDicts();
   },
   methods: {
     // 浏览器全屏事件监听
@@ -568,6 +573,18 @@ const baseApp = {
         loadJScript(this.url("/assets/lang/" + this.lang + ".js", true, _v), callback);
       } else {
         callback && callback();
+      }
+    },
+
+    // 加载数据字典
+    loadDicts() {
+      let keys = Object.keys(this.dictConfig);
+      for (let k of keys) {
+        doAjaxGetSimple(this.url('/dict/' + k), null, result => {
+          if (result.state) {
+            this[this.dictConfig[k]] = result.data || [];
+          }
+        })
       }
     },
 
