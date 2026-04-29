@@ -5,7 +5,7 @@ const app = Vue.createApp({
     return {
       // 查询条件
       param: {
-        bName: null,
+        bname: null,
         subject: null,
         stage: null
       },
@@ -14,9 +14,9 @@ const app = Vue.createApp({
       datatable: {
         headers: [
           { title: '#', value:'index', align:"center", width: 60},
-          { title: '教材名称', value:'bName'},
+          { title: '教材名称', value:'bname'},
           { title: '学科', value:'subject'},
-          { title: '创建时间', value:'createTime', align:"center", width:180},
+          { title: '更新时间', value:'updateTime', align:"center", width:180},
           { title: '操作', value:'operation', align:"center"}
         ],
         items: [],
@@ -24,8 +24,8 @@ const app = Vue.createApp({
       },
       // 表单数据
       formData: {
-        bId: null,
-        bName: null,
+        bid: null,
+        bname: null,
         stage: null,
         subject: null,
         remark: null,
@@ -40,7 +40,7 @@ const app = Vue.createApp({
     }
   },
   watch: {
-    stage(val) {
+    stage() {
       this.param.subject = null;
       this.doQuerySubject();
       this.doQuery();
@@ -107,7 +107,7 @@ const app = Vue.createApp({
      * 打开表单编辑画面
      */
     openFormDialog(title, id) {
-      this.formData.bId = id || null;
+      this.formData.bid = id || null;
       this.dialogTitle = title;
       this.winDialog = true;
 

@@ -4,8 +4,8 @@
 
     <!-- 关系映射 -->
     <resultMap id="RsBookMap" type="RsBook">
-        <result property="bId" column="b_id" />
-        <result property="bName" column="b_name" />
+        <result property="bid" column="bid" />
+        <result property="bname" column="bname" />
         <result property="stage" column="stage" />
         <result property="subject" column="subject" />
         <result property="remark" column="remark" />
@@ -16,11 +16,11 @@
     <!-- 查询条件 -->
     <sql id="condition_rsBook">
         <where>
-            <if test="bId != null">
-                and t.b_id=#{bId}
+            <if test="bid != null">
+                and t.bid=#{bid}
             </if>
-            <if test="bName != null and bName != ''">
-                and t.b_name like '%' || #{bName} || '%' ESCAPE '\'
+            <if test="bname != null and bname != ''">
+                and t.bname like '%' || #{bname} || '%' ESCAPE '\'
             </if>
             <if test="stage != null and stage != ''">
                 and t.stage=#{stage}
@@ -40,8 +40,8 @@
     <!-- 查询结果集 -->
     <select id="findRsBook" parameterType="RsBook" resultMap="RsBookMap">
         SELECT
-            t.b_id,
-            t.b_name,
+            t.bid,
+            t.bname,
             t.stage,
             t.subject,
             t.remark,
@@ -55,8 +55,8 @@
     <!-- 根据ID查询记录 -->
     <select id="findRsBookById" parameterType="java.lang.Integer" resultMap="RsBookMap">
         SELECT
-            t.b_id,
-            t.b_name,
+            t.bid,
+            t.bname,
             t.stage,
             t.subject,
             t.remark,
@@ -64,7 +64,7 @@
             t.update_time
         FROM
             t_rs_book t
-        WHERE t.b_id = #{bId}
+        WHERE t.bid = #{bid}
     </select>
 
     <!-- 保存 -->
@@ -72,8 +72,8 @@
         INSERT INTO t_rs_book
         (
         <trim suffix="" suffixOverrides=",">
-            <if test="bId != null">b_id,</if>
-            <if test="bName != null">b_name,</if>
+            <if test="bid != null">bid,</if>
+            <if test="bname != null">bname,</if>
             <if test="stage != null">stage,</if>
             <if test="subject != null">subject,</if>
             <if test="remark != null">remark,</if>
@@ -84,8 +84,8 @@
         VALUES
         (
         <trim suffix="" suffixOverrides=",">
-            <if test="bId != null">#{bId},</if>
-            <if test="bName != null">#{bName},</if>
+            <if test="bid != null">#{bid},</if>
+            <if test="bname != null">#{bname},</if>
             <if test="stage != null">#{stage},</if>
             <if test="subject != null">#{subject},</if>
             <if test="remark != null">#{remark},</if>
@@ -99,8 +99,8 @@
     <update id="updateRsBook" parameterType="RsBook">
         UPDATE t_rs_book
         <set>
-            <if test="bId != null">b_id=#{bId},</if>
-            <if test="bName != null">b_name=#{bName},</if>
+            <if test="bid != null">bid=#{bid},</if>
+            <if test="bname != null">b_name=#{bname},</if>
             <if test="stage != null">stage=#{stage},</if>
             <if test="subject != null">subject=#{subject},</if>
             <if test="remark != null">remark=#{remark},</if>
@@ -111,6 +111,6 @@
 
     <!-- 删除 -->
     <delete id="delRsBook" parameterType="java.lang.Integer">
-        DELETE FROM t_rs_book WHERE b_id = #{bId}
+        DELETE FROM t_rs_book WHERE bid = #{bid}
     </delete>
 </mapper>

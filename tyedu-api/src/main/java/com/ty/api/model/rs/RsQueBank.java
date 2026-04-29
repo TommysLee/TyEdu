@@ -18,7 +18,7 @@ public class RsQueBank extends BaseBO {
     private static final long serialVersionUID = 560772516785385472L;
 
     /** 题目ID (主键) **/
-    private Integer qId;
+    private Integer qid;
 
     /** 学科 **/
     private String subject;

@@ -18,13 +18,13 @@ public class RsKnowledge extends BaseBO {
     private static final long serialVersionUID = 559313382311424000L;
 
     /** 知识点ID (主键) **/
-    private Integer kId;
+    private Integer kid;
 
     /** 父ID **/
     private Integer parentId;
 
     /** 知识点名称 **/
-    private String kName;
+    private String kname;
 
     /** 是否叶子节点 **/
     private Integer isLeaf;

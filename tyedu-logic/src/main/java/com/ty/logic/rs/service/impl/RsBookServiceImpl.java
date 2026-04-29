@@ -39,7 +39,7 @@ public class RsBookServiceImpl implements RsBookService {
         if (null == rsBook) {
             rsBook = new RsBook();
         }
-        rsBook.setBName(FuzzyQueryParamUtil.escape(rsBook.getBName()));
+        rsBook.setBname(FuzzyQueryParamUtil.escape(rsBook.getBname()));
         return rsBookDao.findRsBook(rsBook);
     }
 

@@ -4,7 +4,7 @@
 
     <!-- 关系映射 -->
     <resultMap id="RsQueBankMap" type="RsQueBank">
-        <result property="qId" column="q_id" />
+        <result property="qid" column="qid" />
         <result property="subject" column="subject" />
         <result property="type" column="type" />
         <result property="difficulty" column="difficulty" />
@@ -18,8 +18,8 @@
     <!-- 查询条件 -->
     <sql id="condition_rsQueBank">
         <where>
-            <if test="qId != null">
-                and t.q_id=#{qId}
+            <if test="qid != null">
+                and t.qid=#{qid}
             </if>
             <if test="subject != null and subject != ''">
                 and t.subject=#{subject}
@@ -42,7 +42,7 @@
     <!-- 查询结果集 -->
     <select id="findRsQueBank" parameterType="RsQueBank" resultMap="RsQueBankMap">
         SELECT
-            t.q_id,
+            t.qid,
             t.subject,
             t.type,
             t.difficulty,
@@ -54,13 +54,13 @@
         FROM
             t_rs_que_bank t
         <include refid="condition_rsQueBank" />
-        ORDER BY t.q_id DESC
+        ORDER BY t.qid DESC
     </select>
 
     <!-- 根据ID查询记录 -->
     <select id="findRsQueBankById" parameterType="java.lang.Integer" resultMap="RsQueBankMap">
         SELECT
-            t.q_id,
+            t.qid,
             t.subject,
             t.type,
             t.difficulty,
@@ -71,7 +71,7 @@
             t.update_time
         FROM
             t_rs_que_bank t
-        WHERE t.q_id = #{qId}
+        WHERE t.qid = #{qid}
     </select>
 
     <!-- 保存 -->
@@ -79,7 +79,7 @@
         INSERT INTO t_rs_que_bank
         (
         <trim suffix="" suffixOverrides=",">
-            <if test="qId != null">q_id,</if>
+            <if test="qid != null">qid,</if>
             <if test="subject != null">subject,</if>
             <if test="type != null">type,</if>
             <if test="difficulty != null">difficulty,</if>
@@ -93,7 +93,7 @@
         VALUES
         (
         <trim suffix="" suffixOverrides=",">
-            <if test="qId != null">#{qId},</if>
+            <if test="qid != null">#{qid},</if>
             <if test="subject != null">#{subject},</if>
             <if test="type != null">#{type},</if>
             <if test="difficulty != null">#{difficulty},</if>
@@ -110,7 +110,7 @@
     <update id="updateRsQueBank" parameterType="RsQueBank">
         UPDATE t_rs_que_bank
         <set>
-            <if test="qId != null">q_id=#{qId},</if>
+            <if test="qid != null">qid=#{qid},</if>
             <if test="subject != null">subject=#{subject},</if>
             <if test="type != null">type=#{type},</if>
             <if test="difficulty != null">difficulty=#{difficulty},</if>
@@ -119,11 +119,11 @@
             <if test="analysis != null">analysis=#{analysis},</if>
             update_time=now()
         </set>
-        WHERE q_id = #{qId}
+        WHERE qid = #{qid}
     </update>
 
     <!-- 删除 -->
     <delete id="delRsQueBank" parameterType="java.lang.Integer">
-        DELETE FROM t_rs_que_bank WHERE q_id = #{qId}
+        DELETE FROM t_rs_que_bank WHERE qid = #{qid}
     </delete>
 </mapper>

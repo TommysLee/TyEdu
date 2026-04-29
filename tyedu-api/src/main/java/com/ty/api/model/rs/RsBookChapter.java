@@ -21,7 +21,7 @@ public class RsBookChapter extends BaseBO {
     private Integer chptId;
 
     /** 教材ID **/
-    private Integer bId;
+    private Integer bid;
 
     /** 父ID **/
     private Integer parentId;

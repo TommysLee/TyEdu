@@ -29,7 +29,7 @@
                   <v-select v-model="param.subject" :items="subjectList" hide-details :label="$t('学科')"></v-select>
                 </v-col>
                 <v-col cols="12" sm="6" md="3" lg="2">
-                  <v-text-field v-model="param.bName" hide-details clearable :label="$t('教材名称')"></v-text-field>
+                  <v-text-field v-model="param.bname" hide-details clearable :label="$t('教材名称')"></v-text-field>
                 </v-col>
                 <v-col class="text-right">
                   <v-btn size="large" color="primary" class="mr-2" @click="doQuery">{{$t('查询')}}</v-btn>
@@ -45,7 +45,7 @@
                   :loading="loading"
                   :headers="datatable.headers"
                   :items="datatable.items"
-                  item-value="bId"
+                  item-value="bid"
                   mobile-breakpoint="md"
                   fixed-header
                   hover
@@ -63,8 +63,8 @@
                   </v-row>
                 </template>
                 <template v-slot:item.operation="{item}">
-                  <a class="mr-2" @click="openFormDialog('修改教材', item.bId)">{{$t('修改')}}</a>
-                  <v-btn-confirm :data="item.bId" @confirm="doDelete"></v-btn-confirm>
+                  <a class="mr-2" @click="openFormDialog('修改教材', item.bid)">{{$t('修改')}}</a>
+                  <v-btn-confirm :data="item.bid" @confirm="doDelete"></v-btn-confirm>
                 </template>
               </v-data-table-virtual>
             </v-card-zoom>
@@ -79,7 +79,7 @@
                 </v-toolbar>
                 <v-card-text class="overflow-auto">
                   <!-- 数据表单 -->
-                  <tfield v-model.trim="formData.bName" name="教材名称" v-slot="{ field, errors }" rules="required|max:50">
+                  <tfield v-model.trim="formData.bname" name="教材名称" v-slot="{ field, errors }" rules="required|max:50">
                     <v-text-field v-bind="field" :model-value="field.value" clearable v-blank type="text" :error-messages="errors" :label="$t('教材名称')" class="mt-1"></v-text-field>
                   </tfield>
                   <tfield v-model.trim="formData.subject" name="学科" v-slot="{ field, errors }" rules="required">

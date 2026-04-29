@@ -1,9 +1,7 @@
 package com.ty.logic.rs.dao;
 
-import com.github.pagehelper.Page;
 import com.ty.api.model.rs.RsBookChapter;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 

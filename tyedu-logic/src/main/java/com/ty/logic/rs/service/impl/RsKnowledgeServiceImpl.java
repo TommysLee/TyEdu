@@ -108,23 +108,6 @@ public class RsKnowledgeServiceImpl implements RsKnowledgeService {
     }
 
     /**
-     * 删除知识点数据
-     *
-     * @param rsKnowledge 知识点
-     * @return int 返回受影响的行数
-     * @throws Exception
-     */
-    @Transactional
-    @Override
-    public int delete(RsKnowledge rsKnowledge) throws Exception {
-        int n = 0;
-        if (null != rsKnowledge && null != rsKnowledge.getKId()) {
-            n = rsKnowledgeDao.delRsKnowledge(rsKnowledge);
-        }
-        return n;
-    }
-
-    /**
      * 根据ID删除知识点数据
      *
      * @param id ID
@@ -136,9 +119,7 @@ public class RsKnowledgeServiceImpl implements RsKnowledgeService {
     public int delete(Integer id) throws Exception {
         int n = 0;
         if (null != id) {
-            RsKnowledge rsKnowledge = new RsKnowledge();
-            rsKnowledge.setKId(id);
-            n = this.delete(rsKnowledge);
+            n = rsKnowledgeDao.delRsKnowledge(id);
         }
         return n;
     }

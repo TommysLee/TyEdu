@@ -44,9 +44,9 @@ public class RsKnowledgeController extends BaseController {
     /**
      * 查询知识点明细
      */
-    @GetMapping("/single/{kId}")
-    public AjaxResult single(@PathVariable Integer kId) throws Exception {
-        return AjaxResult.success(knowledgeService.getById(kId));
+    @GetMapping("/single/{kid}")
+    public AjaxResult single(@PathVariable Integer kid) throws Exception {
+        return AjaxResult.success(knowledgeService.getById(kid));
     }
 
     /**
@@ -61,9 +61,9 @@ public class RsKnowledgeController extends BaseController {
     /**
      * 删除知识点
      */
-    @GetMapping("/del/{kId}")
-    public AjaxResult del(@PathVariable Integer kId) throws Exception {
-        int n = knowledgeService.delete(kId);
+    @GetMapping("/del/{kid}")
+    public AjaxResult del(@PathVariable Integer kid) throws Exception {
+        int n = knowledgeService.delete(kid);
         return AjaxResult.success(n);
     }
 }

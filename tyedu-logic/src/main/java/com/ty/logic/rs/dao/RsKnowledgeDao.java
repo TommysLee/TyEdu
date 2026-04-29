@@ -33,10 +33,10 @@ public interface RsKnowledgeDao {
     /**
      * 根据ID查询知识点数据
      *
-     * @param kId 知识点ID
+     * @param kid 知识点ID
      * @return RsKnowledge
      */
-    RsKnowledge findRsKnowledgeById(Integer kId);
+    RsKnowledge findRsKnowledgeById(Integer kid);
 
     /**
      * 保存知识点数据
@@ -57,8 +57,8 @@ public interface RsKnowledgeDao {
     /**
      * 删除知识点数据
      *
-     * @param rsKnowledge 知识点
+     * @param kid 知识点ID
      * @return int 返回受影响的行数
      */
-    int delRsKnowledge(RsKnowledge rsKnowledge);
+    int delRsKnowledge(Integer kid);
 }

@@ -5,7 +5,7 @@
     <!-- 关系映射 -->
     <resultMap id="RsBookChapterMap" type="RsBookChapter">
         <result property="chptId" column="chpt_id" />
-        <result property="bId" column="b_id" />
+        <result property="bid" column="bid" />
         <result property="parentId" column="parent_id" />
         <result property="chptName" column="chpt_name" />
         <result property="isLeaf" column="is_leaf" />
@@ -17,8 +17,8 @@
             <if test="chptId != null">
                 and t.chpt_id=#{chptId}
             </if>
-            <if test="bId != null">
-                and t.b_id=#{bId}
+            <if test="bid != null">
+                and t.bid=#{bid}
             </if>
             <if test="parentId != null">
                 and t.parent_id=#{parentId}
@@ -42,7 +42,7 @@
     <select id="findRsBookChapter" parameterType="RsBookChapter" resultMap="RsBookChapterMap">
         SELECT
             t.chpt_id,
-            t.b_id,
+            t.bid,
             t.parent_id,
             t.chpt_name,
             t.is_leaf
@@ -55,7 +55,7 @@
     <select id="findRsBookChapterById" parameterType="java.lang.Integer" resultMap="RsBookChapterMap">
         SELECT
             t.chpt_id,
-            t.b_id,
+            t.bid,
             t.parent_id,
             t.chpt_name,
             t.is_leaf
@@ -70,7 +70,7 @@
         (
         <trim suffix="" suffixOverrides=",">
             <if test="chptId != null">chpt_id,</if>
-            <if test="bId != null">b_id,</if>
+            <if test="bid != null">bid,</if>
             <if test="parentId != null">parent_id,</if>
             <if test="chptName != null">chpt_name,</if>
             <if test="isLeaf != null">is_leaf,</if>
@@ -80,7 +80,7 @@
         (
         <trim suffix="" suffixOverrides=",">
             <if test="chptId != null">#{chptId},</if>
-            <if test="bId != null">#{bId},</if>
+            <if test="bid != null">#{bid},</if>
             <if test="parentId != null">#{parentId},</if>
             <if test="chptName != null">#{chptName},</if>
             <if test="isLeaf != null">#{isLeaf},</if>
@@ -93,7 +93,7 @@
         UPDATE t_rs_book_chapter
         <set>
             <if test="chptId != null">chpt_id=#{chptId},</if>
-            <if test="bId != null">b_id=#{bId},</if>
+            <if test="bid != null">bid=#{bid},</if>
             <if test="parentId != null">parent_id=#{parentId},</if>
             <if test="chptName != null">chpt_name=#{chptName},</if>
             <if test="isLeaf != null">is_leaf=#{isLeaf},</if>

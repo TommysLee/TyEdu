@@ -33,10 +33,10 @@ public interface RsBookDao {
     /**
      * 根据ID查询教材数据
      *
-     * @param bId 教材ID
+     * @param bid 教材ID
      * @return RsBook
      */
-    RsBook findRsBookById(Integer bId);
+    RsBook findRsBookById(Integer bid);
 
     /**
      * 保存教材数据
@@ -57,8 +57,8 @@ public interface RsBookDao {
     /**
      * 删除教材数据
      *
-     * @param bId 教材ID
+     * @param bid 教材ID
      * @return int 返回受影响的行数
      */
-    int delRsBook(Integer bId);
+    int delRsBook(Integer bid);
 }

@@ -46,9 +46,9 @@ public class RsQueBankController extends BaseController {
     /**
      * 查询题库明细
      */
-    @GetMapping("/single/{qId}")
-    public AjaxResult single(@PathVariable Integer qId) throws Exception {
-        return AjaxResult.success(queBankService.getById(qId));
+    @GetMapping("/single/{qid}")
+    public AjaxResult single(@PathVariable Integer qid) throws Exception {
+        return AjaxResult.success(queBankService.getById(qid));
     }
 
     /**
@@ -63,9 +63,9 @@ public class RsQueBankController extends BaseController {
     /**
      * 删除题库
      */
-    @GetMapping("/del/{qId}")
-    public AjaxResult del(@PathVariable Integer qId) throws Exception {
-        int n = queBankService.delete(qId);
+    @GetMapping("/del/{qid}")
+    public AjaxResult del(@PathVariable Integer qid) throws Exception {
+        int n = queBankService.delete(qid);
         return AjaxResult.success(n);
     }
 }

@@ -24,10 +24,10 @@ public class RsBook extends BaseBO {
     private static final long serialVersionUID = 560763799897600000L;
 
     /** 教材ID (主键) **/
-    private Integer bId;
+    private Integer bid;
 
     /** 教材名称 **/
-    private String bName;
+    private String bname;
 
     /** 学段 **/
     private String stage;

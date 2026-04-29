@@ -44,10 +44,10 @@ public interface RsQueBankDao {
     /**
      * 根据ID查询题库数据
      *
-     * @param qId 题库ID
+     * @param qid 题库ID
      * @return RsQueBank
      */
-    RsQueBank findRsQueBankById(Integer qId);
+    RsQueBank findRsQueBankById(Integer qid);
 
     /**
      * 保存题库数据
@@ -68,8 +68,8 @@ public interface RsQueBankDao {
     /**
      * 删除题库数据
      *
-     * @param qId 题库ID
+     * @param qid 题库ID
      * @return int 返回受影响的行数
      */
-    int delRsQueBank(Integer qId);
+    int delRsQueBank(Integer qid);
 }

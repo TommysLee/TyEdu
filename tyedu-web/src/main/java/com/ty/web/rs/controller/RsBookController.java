@@ -44,9 +44,9 @@ public class RsBookController extends BaseController {
     /**
      * 查询教材明细
      */
-    @GetMapping("/single/{bId}")
-    public AjaxResult single(@PathVariable Integer bId) throws Exception {
-        return AjaxResult.success(bookService.getById(bId));
+    @GetMapping("/single/{bid}")
+    public AjaxResult single(@PathVariable Integer bid) throws Exception {
+        return AjaxResult.success(bookService.getById(bid));
     }
 
     /**
@@ -61,9 +61,9 @@ public class RsBookController extends BaseController {
     /**
      * 删除教材
      */
-    @GetMapping("/del/{bId}")
-    public AjaxResult del(@PathVariable Integer bId) throws Exception {
-        int n = bookService.delete(bId);
+    @GetMapping("/del/{bid}")
+    public AjaxResult del(@PathVariable Integer bid) throws Exception {
+        int n = bookService.delete(bid);
         return AjaxResult.success(n);
     }
 }
