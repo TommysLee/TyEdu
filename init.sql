@@ -6,10 +6,11 @@ DROP TABLE IF EXISTS t_rs_que_ref_chapter;
 DROP TABLE IF EXISTS t_rs_que_ref_knowledge;
 
 CREATE TABLE t_rs_book (
-    b_id        INTEGER PRIMARY KEY AUTOINCREMENT,
-    b_name      TEXT,
-    stage       TEXT,
-    subject     TEXT,
+    bid         INTEGER PRIMARY KEY AUTOINCREMENT,
+    bname       TEXT,
+    stage       TEXT NOT NULL,
+    subject     TEXT NOT NULL,
+    edition     TEXT NOT NULL,
     remark      TEXT,
     create_time TEXT,
     update_time TEXT
@@ -17,24 +18,24 @@ CREATE TABLE t_rs_book (
 
 CREATE TABLE t_rs_book_chapter (
     chpt_id     INTEGER PRIMARY KEY AUTOINCREMENT,
-    b_id        INTEGER,
+    bid         INTEGER NOT NULL,
     parent_id   INTEGER DEFAULT 0,
     chpt_name   TEXT,
     is_leaf     INTEGER DEFAULT 1,
-    FOREIGN KEY (b_id) REFERENCES t_rs_book(b_id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (bid) REFERENCES t_rs_book(bid) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE t_rs_knowledge (
-    k_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    kid         INTEGER PRIMARY KEY AUTOINCREMENT,
     parent_id   INTEGER DEFAULT 0,
-    k_name      TEXT,
+    kname       TEXT,
     is_leaf     INTEGER DEFAULT 1,
     stage       TEXT,
     subject     TEXT
 );
 
 CREATE TABLE t_rs_que_bank (
-    q_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    qid         INTEGER PRIMARY KEY AUTOINCREMENT,
     subject     TEXT,
     type        TEXT,
     difficulty  INTEGER,
@@ -46,18 +47,17 @@ CREATE TABLE t_rs_que_bank (
 );
 
 CREATE TABLE t_rs_que_ref_chapter (
-    q_id        INTEGER NOT NULL,
+    qid         INTEGER NOT NULL,
     chpt_id     INTEGER NOT NULL,
-    b_id        INTEGER,
-    PRIMARY KEY (q_id, chpt_id),
-    FOREIGN KEY (q_id) REFERENCES t_rs_que_bank(q_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (qid, chpt_id),
+    FOREIGN KEY (qid) REFERENCES t_rs_que_bank(qid) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (chpt_id) REFERENCES t_rs_book_chapter(chpt_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE t_rs_que_ref_knowledge (
-    q_id        INTEGER NOT NULL,
-    k_id        INTEGER NOT NULL,
-    PRIMARY KEY (q_id, k_id),
-    FOREIGN KEY (q_id) REFERENCES t_rs_que_bank(q_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (k_id) REFERENCES t_rs_knowledge(k_id) ON DELETE CASCADE ON UPDATE CASCADE
+    qid         INTEGER NOT NULL,
+    kid         INTEGER NOT NULL,
+    PRIMARY KEY (qid, kid),
+    FOREIGN KEY (qid) REFERENCES t_rs_que_bank(qid) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (kid) REFERENCES t_rs_knowledge(kid) ON DELETE CASCADE ON UPDATE CASCADE
 );
