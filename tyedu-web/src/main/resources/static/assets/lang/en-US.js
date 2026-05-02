@@ -167,7 +167,10 @@ loadLocaleMessages("en-US", Object.assign({
     "经纬度": "Lng/Lat",
     "题库": "Question Bank",
     "考试": "Examination",
-    "我的错题": "Mistake Notebook"
+    "我的错题": "Mistake Notebook",
+    "教材名称": "Book Name",
+    "学科": "Subject",
+    "版本": "Edition"
 }, {
     validations: {
         "_default": "The {0} is not valid",

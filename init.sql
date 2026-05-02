@@ -11,6 +11,7 @@ CREATE TABLE t_rs_book (
     stage       TEXT NOT NULL,
     subject     TEXT NOT NULL,
     edition     TEXT NOT NULL,
+	edition_title     TEXT NOT NULL,
     remark      TEXT,
     create_time TEXT,
     update_time TEXT
@@ -22,6 +23,7 @@ CREATE TABLE t_rs_book_chapter (
     parent_id   INTEGER DEFAULT 0,
     chpt_name   TEXT,
     is_leaf     INTEGER DEFAULT 1,
+	importance	INTEGER DEFAULT 3,
     FOREIGN KEY (bid) REFERENCES t_rs_book(bid) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -31,13 +33,15 @@ CREATE TABLE t_rs_knowledge (
     kname       TEXT,
     is_leaf     INTEGER DEFAULT 1,
     stage       TEXT,
-    subject     TEXT
+    subject     TEXT,
+	importance	INTEGER DEFAULT 3
 );
 
 CREATE TABLE t_rs_que_bank (
     qid         INTEGER PRIMARY KEY AUTOINCREMENT,
     subject     TEXT,
     type        TEXT,
+	type_title  TEXT,
     difficulty  INTEGER,
     stem        TEXT,
     answer      TEXT,

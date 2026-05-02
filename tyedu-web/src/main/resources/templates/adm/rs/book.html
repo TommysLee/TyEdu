@@ -62,6 +62,9 @@
                     </v-col>
                   </v-row>
                 </template>
+                <template #item.subject="{value}">
+                  {{subjectMap[value]}}
+                </template>
                 <template v-slot:item.operation="{item}">
                   <a class="mr-2" @click="openFormDialog('修改教材', item.bid)">{{$t('修改')}}</a>
                   <v-btn-confirm :data="item.bid" @confirm="doDelete"></v-btn-confirm>
@@ -84,6 +87,9 @@
                   </tfield>
                   <tfield v-model.trim="formData.subject" name="学科" v-slot="{ field, errors }" rules="required">
                     <v-select v-bind="field" :model-value="field.value" clearable :error-messages="errors" :items="subjectList" :label="$t('学科')"></v-select>
+                  </tfield>
+                  <tfield v-model.trim="formData.edition" name="版本" v-slot="{ field, errors }" rules="required">
+                    <v-select v-bind="field" :model-value="field.value" clearable :error-messages="errors" :items="editionList" :label="$t('版本')"></v-select>
                   </tfield>
                   <tfield v-model.trim="formData.remark" name="备注" v-slot="{ field, errors }" rules="max:200">
                     <v-textarea v-bind="field" :model-value="field.value" clearable v-blank :error-messages="errors" :label="$t('备注')" class="mt-1"></v-textarea>

@@ -8,6 +8,8 @@
         <result property="bname" column="bname" />
         <result property="stage" column="stage" />
         <result property="subject" column="subject" />
+        <result property="edition" column="edition" />
+        <result property="editionTitle" column="edition_title" />
         <result property="remark" column="remark" />
         <result property="createTime" column="create_time" />
         <result property="updateTime" column="update_time" />
@@ -44,6 +46,8 @@
             t.bname,
             t.stage,
             t.subject,
+            t.edition,
+            t.edition_title,
             t.remark,
             t.create_time,
             t.update_time
@@ -59,6 +63,8 @@
             t.bname,
             t.stage,
             t.subject,
+            t.edition,
+            t.edition_title,
             t.remark,
             t.create_time,
             t.update_time
@@ -76,6 +82,8 @@
             <if test="bname != null">bname,</if>
             <if test="stage != null">stage,</if>
             <if test="subject != null">subject,</if>
+            <if test="edition != null">edition,</if>
+            <if test="editionTitle != null">edition_title,</if>
             <if test="remark != null">remark,</if>
             create_time,
             update_time,
@@ -88,6 +96,8 @@
             <if test="bname != null">#{bname},</if>
             <if test="stage != null">#{stage},</if>
             <if test="subject != null">#{subject},</if>
+            <if test="edition != null">#{edition},</if>
+            <if test="editionTitle != null">#{editionTitle},</if>
             <if test="remark != null">#{remark},</if>
             #{createTime},
             #{updateTime}
@@ -100,13 +110,15 @@
         UPDATE t_rs_book
         <set>
             <if test="bid != null">bid=#{bid},</if>
-            <if test="bname != null">b_name=#{bname},</if>
+            <if test="bname != null">bname=#{bname},</if>
             <if test="stage != null">stage=#{stage},</if>
             <if test="subject != null">subject=#{subject},</if>
+            <if test="edition != null">edition=#{edition},</if>
+            <if test="editionTitle != null">edition_title=#{editionTitle},</if>
             <if test="remark != null">remark=#{remark},</if>
             update_time=#{updateTime}
         </set>
-        WHERE b_id = #{bId}
+        WHERE bid = #{bid}
     </update>
 
     <!-- 删除 -->

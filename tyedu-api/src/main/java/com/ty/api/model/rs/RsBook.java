@@ -34,4 +34,10 @@ public class RsBook extends BaseBO {
 
     /** 学科 **/
     private String subject;
+
+    /** 版本 **/
+    private String edition;
+
+    /** 版本名称 **/
+    private String editionTitle;
 }
