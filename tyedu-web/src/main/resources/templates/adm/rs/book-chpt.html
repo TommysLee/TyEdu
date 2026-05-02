@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 前端数据 */-->
+  <th:block th:replace="~{assets/include :: data}"/>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: scriptcss_default('教材管理')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app class="v-admin">
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(vadmin=true)}"/>
+      </v-app-bar>
+
+      <!-- 左侧区域::导航菜单 -->
+      <th:block th:replace="~{assets/include :: navMenu}"/>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid>
+          <v-row class="ma-0 assist" no-gutters>
+            <v-col>
+              <v-card-title class="pl-0">{{title}}</v-card-title>
+            </v-col>
+            <v-col class="text-right">
+              <v-btn color="primary" class="pr-5 pl-4" @click="openFormDialog('新增章节')">
+                <v-icon size="small">mdi-plus</v-icon>
+                {{$t('新增')}}
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <!-- 章节树结构 -->
+          <v-card-zoom flat class="pa-3 v-fill-height overflow-auto" :style="{'--ty-assist-height': assistHeight}" :loading="loading">
+            <v-treeview v-model:activated="selectedChpt" open-all return-object activatable color="primary" density="compact" item-value="chptId" item-title="chptName" :items="chptTreeData" class="bg-transparent">
+              <template #title="{ title, item }">
+                <div class="d-flex align-center">
+                  {{title}} &nbsp; <v-rating v-model="item.importance" class="mt-n1" readonly density='compact' size="small" active-color="yellow" :length="item.importance"></v-rating>
+                </div>
+              </template>
+              <template #append="{ item }">
+                <a class="mr-2" @click="openFormDialog('修改章节', item.chptId)">{{$t('修改')}}</a>
+                <v-btn-confirm :data="item.chptId" @confirm="doDelete"></v-btn-confirm>
+              </template>
+            </v-treeview>
+            <v-empty-state v-if="chptList?.length < 1" :headline="loading? loadingText : noDataText"></v-empty-state>
+          </v-card-zoom>
+
+          <!-- 数据表单模态窗口 -->
+          <v-dialog v-model="winDialog" persistent :fullscreen="isMobile" width="800">
+            <tform as="v-form" ref="dataForm" class="fill-height" @submit="doSubmit">
+              <v-card :loading="posting">
+                <v-toolbar color="indigo" :title="$t(dialogTitle)">
+                  <v-btn icon="mdi-close" @click="closeFormDialog"></v-btn>
+                </v-toolbar>
+                <v-card-text class="overflow-auto">
+                  <v-list-subheader v-show="!formData.chptId">隶属于：{{parentItem.chptName}}</v-list-subheader>
+                  <tfield v-model.trim="formData.chptName" name="章节名称" v-slot="{ field, errors }" rules="required|max:50">
+                    <v-text-field v-bind="field" :model-value="field.value" clearable v-blank type="text" :error-messages="errors" :label="$t('章节名称')" class="mt-1"></v-text-field>
+                  </tfield>
+                  <v-rating v-model="formData.importance" hover active-color="yellow" :item-labels="['重要性']"></v-rating>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn size="large" variant="elevated" color="primary" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
+                </v-card-actions>
+              </v-card>
+            </tform>
+          </v-dialog>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 导入Vuetify扩展组件 -->
+  <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
+  <th:block th:replace="~{assets/vuetify :: v-btn-confirm}"/>
+
+  <!-- 业务js -->
+  <script type="text/javascript">
+    const _bid = "[[${book?.bid}]]";
+    const _bname = "[[${book?.bname}]]";
+    const _stage = "[[${book?.stage}]]";
+    const _subject = "[[${book?.subject}]]";
+    const _edition = "[[${book?.editionTitle}]]";
+  </script>
+  <script type="text/javascript" th:src="@{/js/adm/rs/book-chpt.js?_t=#buildtime#}"></script>
+</body>
+</html>

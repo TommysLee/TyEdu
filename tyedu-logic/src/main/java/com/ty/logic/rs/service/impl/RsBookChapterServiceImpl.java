@@ -2,6 +2,7 @@ package com.ty.logic.rs.service.impl;
 
 import com.ty.api.model.rs.RsBookChapter;
 import com.ty.api.rs.service.RsBookChapterService;
+import com.ty.cm.exception.CustomException;
 import com.ty.logic.rs.dao.RsBookChapterDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+
+import static com.ty.cm.constant.Messages.EXISTS_CHILD_NODE;
 
 /**
  * 教材章节业务逻辑实现
@@ -24,6 +27,18 @@ public class RsBookChapterServiceImpl implements RsBookChapterService {
 
     @Autowired
     private RsBookChapterDao rsBookChapterDao;
+
+    /**
+     * 该方法用于获取符合条件的总记录数
+     *
+     * @param rsBookChapter 教材章节
+     * @return int
+     * @throws Exception
+     */
+    @Override
+    public int getCount(RsBookChapter rsBookChapter) throws Exception {
+        return rsBookChapterDao.findRsBookChapterCount(rsBookChapter);
+    }
 
     /**
      * 根据条件查询所有教材章节数据
@@ -120,6 +135,13 @@ public class RsBookChapterServiceImpl implements RsBookChapterService {
     public int delete(Integer id) throws Exception {
         int n = 0;
         if (Objects.nonNull(id)) {
+            // 检查是否存在子节点
+            int count = this.getCount(new RsBookChapter().setParentId(id));
+            if (count > 0) {
+                throw new CustomException(EXISTS_CHILD_NODE);
+            }
+
+            // 删除
             n = rsBookChapterDao.delRsBookChapter(id);
         }
         return n;

@@ -46,6 +46,8 @@ CREATE TABLE t_rs_que_bank (
     stem        TEXT,
     answer      TEXT,
     analysis    TEXT,
+	chpt_marked INTEGER DEFAULT 0,
+	knowledge_marked INTEGER DEFAULT 0,
     create_time TEXT,
     update_time TEXT
 );

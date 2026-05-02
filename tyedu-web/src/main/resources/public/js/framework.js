@@ -509,6 +509,14 @@ const baseApp = {
             }
             c.selected = false;
           }
+        } else {
+          let { similarity } = prefixTextSimilarity(url, m.url);
+          if (similarity > maxSimilarity) {
+            maxSimilarity = similarity;
+            menuItem = m;
+            parentItem = null;
+          }
+          m.selected = false;
         }
       }
 
@@ -580,12 +588,15 @@ const baseApp = {
     loadDicts() {
       let keys = Object.keys(this.dictConfig);
       for (let k of keys) {
-        doAjaxGetSimple(this.url('/dict/' + k), null, result => {
+        this.loadDict(k, result => {
           if (result.state) {
             this[this.dictConfig[k]] = result.data || [];
           }
         })
       }
+    },
+    loadDict(key, callback) {
+      doAjaxGetSimple(this.url("/dict/" + key), null, callback)
     },
 
     // 如果只为空，则显示默认值

@@ -66,6 +66,7 @@
                   {{subjectMap[value]}}
                 </template>
                 <template v-slot:item.operation="{item}">
+                  <a class="mr-2" @click="viewChpt(item.bid)">{{$t('章节管理')}}</a>
                   <a class="mr-2" @click="openFormDialog('修改教材', item.bid)">{{$t('修改')}}</a>
                   <v-btn-confirm :data="item.bid" @confirm="doDelete"></v-btn-confirm>
                 </template>

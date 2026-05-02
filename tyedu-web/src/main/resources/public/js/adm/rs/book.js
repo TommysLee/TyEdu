@@ -1,4 +1,4 @@
-// 初始化Vue
+const prefix = "/rs/book";
 const app = Vue.createApp({
   extends: baseApp,
   data() {
@@ -91,7 +91,7 @@ const app = Vue.createApp({
     doQueryTable() {
       this.loading = true;
       this.scrollDTableTop();
-      doAjaxPost(this.url("/rs/book/list"), this.param, (result) => {
+      doAjaxPost(this.url(`${prefix}/list`), this.param, (result) => {
         if (result.state) {
           this.datatable.items = addIndexPropForArray(result.data);
         } else {
@@ -104,7 +104,7 @@ const app = Vue.createApp({
      * 查询学科列表
      */
     doQuerySubject() {
-      doAjaxGetSimple(this.url("/dict/subject/" + this.stage), null, result => {
+      this.loadDict("subject/" + this.stage, result => {
         this.subjectList = result.data || [];
       })
     },
@@ -114,7 +114,7 @@ const app = Vue.createApp({
      */
     doQueryEdition(subject) {
       if (subject) {
-        doAjaxGetSimple(this.url("/dict/edition/" + this.stage + "/" + subject), null, result => {
+        this.loadDict("edition/" + this.stage + "/" + subject, result => {
           this.editionList = result.data || [];
         })
       } else {
@@ -143,7 +143,7 @@ const app = Vue.createApp({
       // 查询记录详情
       if (id) {
         this.posting = true;
-        doAjaxGet(this.url("/rs/book/single/" + id), null, (result) => {
+        doAjaxGet(this.url(prefix + "/single/" + id), null, (result) => {
           if (result.state) {
             this.mergeValue(this.formData, result.data);
           } else {
@@ -175,7 +175,7 @@ const app = Vue.createApp({
 
       this.posting = true;
       this.method = this.formData.bid? "update" : "save";
-      doAjaxPost(this.url("/rs/book/" + this.method), this.formData, (result) => {
+      doAjaxPost(this.url(prefix + "/" + this.method), this.formData, (result) => {
         if (result.state) {
           this.toast("操作成功");
           this.closeFormDialog();
@@ -189,9 +189,9 @@ const app = Vue.createApp({
     /*
      * 删除数据
      */
-    doDelete(bId) {
+    doDelete(bid) {
       this.method = "del";
-      doAjaxGet(this.url("/rs/book/del/" + bId), null, (result) => {
+      doAjaxGet(this.url(prefix + "/del/" + bid), null, (result) => {
         if (result.state) {
           this.toast("操作成功");
           this.doQuery();
@@ -199,6 +199,13 @@ const app = Vue.createApp({
           this.toast(result.message, 'warning');
         }
       });
+    },
+
+    /*
+     * 跳转到章节管理模块
+     */
+    viewChpt(bid) {
+      window.location.href = this.url(`/rs/book-chpt/${bid}/view`);
     }
   }
 });

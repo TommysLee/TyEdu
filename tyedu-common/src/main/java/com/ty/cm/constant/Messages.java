@@ -10,6 +10,8 @@ public interface Messages {
 
     String RELATED_DATA_DELETE = "存在关联数据，删除失败";
 
+    String EXISTS_CHILD_NODE = "存在子节点，删除失败";
+
     String NO_OPERATION = "没有进行任何操作";
 
     /** 验证码错误消息 **/

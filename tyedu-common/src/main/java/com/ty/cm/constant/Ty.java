@@ -85,4 +85,7 @@ public interface Ty {
 
     /** 租户标识 **/
     String TENANT_ID = "tenantId";
+
+    /** 根节点值 **/
+    Integer ROOT_NODE = 0;
 }

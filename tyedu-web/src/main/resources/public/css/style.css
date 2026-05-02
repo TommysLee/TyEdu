@@ -192,7 +192,6 @@ textarea {
 .v-application .v-card--max {
   display: flex;
   flex-flow: column;
-  justify-content: center;
   position: fixed;
   top:0;
   left:0;
