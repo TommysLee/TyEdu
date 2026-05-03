@@ -9,6 +9,6 @@ const navMenus = [
     "menuId": "2",
     "menuName": "知识体系",
     "icon": "mdi-graph",
-    "url": "#"
+    "url": "/adm/rs/knowledge/view"
   }
 ]

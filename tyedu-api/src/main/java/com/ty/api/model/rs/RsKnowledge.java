@@ -2,6 +2,7 @@ package com.ty.api.model.rs;
 
 import com.ty.api.model.BaseBO;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 
@@ -12,6 +13,7 @@ import java.io.Serial;
  * @Date 2026/04/21
  */
 @Data
+@Accessors(chain = true)
 public class RsKnowledge extends BaseBO {
 
     @Serial
@@ -34,4 +36,7 @@ public class RsKnowledge extends BaseBO {
 
     /** 学科 **/
     private String subject;
+
+    /** 重要性 **/
+    private Integer importance;
 }

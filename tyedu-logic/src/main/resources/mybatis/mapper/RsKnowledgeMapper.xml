@@ -10,6 +10,7 @@
         <result property="isLeaf" column="is_leaf" />
         <result property="stage" column="stage" />
         <result property="subject" column="subject" />
+        <result property="importance" column="importance" />
     </resultMap>
 
     <!-- 查询条件 -->
@@ -20,9 +21,6 @@
             </if>
             <if test="parentId != null">
                 and t.parent_id=#{parentId}
-            </if>
-            <if test="kname != null and kname != ''">
-                and t.kname=#{kname}
             </if>
             <if test="isLeaf != null">
                 and t.is_leaf=#{isLeaf}
@@ -50,11 +48,11 @@
             t.kname,
             t.is_leaf,
             t.stage,
-            t.subject
+            t.subject,
+            t.importance
         FROM
             t_rs_knowledge t
         <include refid="condition_rsKnowledge" />
-        ORDER BY t.kid DESC
     </select>
 
     <!-- 根据ID查询记录 -->
@@ -65,7 +63,8 @@
             t.kname,
             t.is_leaf,
             t.stage,
-            t.subject
+            t.subject,
+            t.importance
         FROM
             t_rs_knowledge t
         WHERE t.kid = #{kid}
@@ -82,6 +81,7 @@
             <if test="isLeaf != null">is_leaf,</if>
             <if test="stage != null">stage,</if>
             <if test="subject != null">subject,</if>
+            <if test="importance != null">importance,</if>
         </trim>
         )
         VALUES
@@ -93,6 +93,7 @@
             <if test="isLeaf != null">#{isLeaf},</if>
             <if test="stage != null">#{stage},</if>
             <if test="subject != null">#{subject},</if>
+            <if test="importance != null">#{importance},</if>
         </trim>
         )
     </insert>
@@ -107,7 +108,7 @@
             <if test="isLeaf != null">is_leaf=#{isLeaf},</if>
             <if test="stage != null">stage=#{stage},</if>
             <if test="subject != null">subject=#{subject},</if>
-            update_time=now()
+            <if test="importance != null">importance=#{importance},</if>
         </set>
         WHERE kid = #{kid}
     </update>

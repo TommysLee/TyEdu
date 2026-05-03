@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 前端数据 */-->
+  <th:block th:replace="~{assets/include :: data}"/>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: scriptcss_default('知识点')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app class="v-admin">
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(vadmin=true)}"/>
+      </v-app-bar>
+
+      <!-- 左侧区域::导航菜单 -->
+      <th:block th:replace="~{assets/include :: navMenu}"/>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid>
+          <v-row class="ma-0 assist" no-gutters>
+            <v-col cols="10">
+              <v-tabs v-model="subject" align-tabs="center" color="teal" show-arrows density="comfortable">
+                <v-tab v-for="item in subjectList" :value="item.value">{{item.title}}</v-tab>
+              </v-tabs>
+            </v-col>
+            <v-col class="text-right">
+              <v-btn color="primary" class="pr-5 pl-4" @click="openFormDialog('新增知识点')">
+                <v-icon size="small">mdi-plus</v-icon>
+                {{$t('新增')}}
+              </v-btn>
+            </v-col>
+          </v-row>
+
+          <!-- 知识点树结构 -->
+          <v-card-zoom flat class="pa-3 v-fill-height overflow-auto" :style="{'--ty-assist-height': assistHeight}" :loading="loading">
+            <v-treeview v-model:activated="selectedKnowledge" activatable color="primary" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent">
+              <template #title="{ title, item }">
+                <div class="d-flex align-center">
+                  {{title}} &nbsp; <v-rating v-model="item.importance" class="mt-n1" readonly density='compact' size="small" active-color="yellow" :length="item.importance"></v-rating>
+                </div>
+              </template>
+              <template #append="{ item }">
+                <a class="mr-2" @click="openFormDialog('修改知识点', item.kid)">{{$t('修改')}}</a>
+                <v-btn-confirm :data="item.kid" @confirm="doDelete"></v-btn-confirm>
+              </template>
+            </v-treeview>
+            <v-empty-state v-if="knowledgeList?.length < 1" :headline="loading? loadingText : noDataText"></v-empty-state>
+          </v-card-zoom>
+
+          <!-- 数据表单模态窗口 -->
+          <v-dialog v-model="winDialog" persistent :fullscreen="isMobile" width="800">
+            <tform as="v-form" ref="dataForm" class="fill-height" @submit="doSubmit">
+              <v-card :loading="posting">
+                <v-toolbar color="indigo" :title="$t(dialogTitle)">
+                  <v-btn icon="mdi-close" @click="closeFormDialog"></v-btn>
+                </v-toolbar>
+                <v-card-text class="overflow-auto">
+                  <v-list-subheader>隶属于：{{knowledgeMap[formData.parentId]}}</v-list-subheader>
+                  <tfield v-model.trim="formData.kname" name="知识点名称" v-slot="{ field, errors }" rules="required|max:50">
+                    <v-text-field v-bind="field" :model-value="field.value" clearable v-blank type="text" :error-messages="errors" :label="$t('知识点名称')" class="mt-1"></v-text-field>
+                  </tfield>
+                  <v-rating v-model="formData.importance" hover active-color="yellow" :item-labels="['重要性']"></v-rating>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                  <v-btn size="large" variant="elevated" color="primary" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
+                </v-card-actions>
+              </v-card>
+            </tform>
+          </v-dialog>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 导入Vuetify扩展组件 -->
+  <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
+  <th:block th:replace="~{assets/vuetify :: v-btn-confirm}"/>
+
+  <!-- 业务js -->
+  <script type="text/javascript" th:src="@{/js/adm/rs/knowledge.js?_t=#buildtime#}"></script>
+</body>
+</html>

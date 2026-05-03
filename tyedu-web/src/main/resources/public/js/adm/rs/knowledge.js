@@ -1,43 +1,53 @@
-const prefix = "/rs/book-chpt";
+const prefix = "/rs/knowledge";
+const ROOT_NODE_ID = 0;
 const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
-      enableMenuInfer: true,
-      bid: _bid,
-      bname: _bname,
-      subject: _subject,
-      edition: _edition,
-      // 数据
-      chptList: [],
-      selectedChpt: [],
+      knowledgeList: [],
+      selectedKnowledge: [],
       // 表单数据
       formData: {
-        chptId: null,
+        kid: null,
         parentId: null,
-        chptName: null,
+        kname: null,
         importance: 3
       },
       // 模态窗口
       winDialog: false,
       dialogTitle: '',
       // 数据字典
-      subjectList: []
+      dictConfig: {
+        "stage": "stageList"
+      },
+      subjectList: [],
+      subject: null
     }
   },
   computed: {
-    title() {
-      return [this.bname, this.subjectMap[this.subject], this.edition].join(" · ");
+    knowledgeTreeData() {
+      return this.wrapTreeData(this.knowledgeList, 'kid');
     },
-    subjectMap() {
-      t(this.subjectList);
-      return toMap(this.subjectList);
+    knowledgeMap() {
+      let map = {};
+      map[ROOT_NODE_ID] = "根节点";
+      return toMap(this.knowledgeList, "kid", "kname", map);
     },
-    chptTreeData() {
-      return this.wrapTreeData(this.chptList, 'chptId');
+    parentId() {
+      return this.selectedKnowledge?.length > 0? this.selectedKnowledge[0] : ROOT_NODE_ID;
+    }
+  },
+  watch: {
+    stage() {
+      this.knowledgeList = [];
+      this.selectedKnowledge = [];
+      this.subject = null;
+      this.doQuerySubject();
     },
-    parentItem() {
-      return this.selectedChpt?.length > 0? this.selectedChpt[0] : {chptId: 0, chptName: "根节点"};
+    subject(val) {
+      if (val) {
+        this.doQuery();
+      }
     }
   },
   mounted() {
@@ -48,9 +58,6 @@ const app = Vue.createApp({
 
     // 加载学科列表
     this.doQuerySubject();
-
-    // 加载数据
-    this.doQuery();
   },
   methods: {
     /*
@@ -58,10 +65,10 @@ const app = Vue.createApp({
      */
     doQuery() {
       this.loading = true;
-      this.selectedChpt = [];
-      doAjaxGet(this.url(`${prefix}/${this.bid}/list`), null, result => {
+      this.selectedKnowledge = [];
+      doAjaxGet(this.url(`${prefix}/list/${this.stage}/${this.subject}`), null, result => {
         if (result.state) {
-          this.chptList = result.data || [];
+          this.knowledgeList = result.data || [];
         } else {
           this.toast(result.message, 'warning');
         }
@@ -72,9 +79,12 @@ const app = Vue.createApp({
      * 查询学科列表
      */
     doQuerySubject() {
-      if (_stage) {
-        this.loadDict("subject/" + _stage, result => {
+      if (this.stage) {
+        this.loadDict("subject/" + this.stage, result => {
           this.subjectList = result.data || [];
+          if (this.subjectList?.length > 0) {
+            this.subject = this.subjectList[0].value;
+          }
         })
       }
     },
@@ -83,15 +93,15 @@ const app = Vue.createApp({
      * 打开表单编辑画面
      */
     openFormDialog(title, id) {
-      this.formData.chptId = id || null;
-      this.formData.parentId = this.parentItem.chptId;
+      this.formData.kid = id || null;
+      this.formData.parentId = this.parentId;
       this.dialogTitle = title;
       this.winDialog = true;
 
       // 查询记录详情
       if (id) {
         this.posting = true;
-        doAjaxGet(this.url(`${prefix}/${this.bid}/single/${id}`), null, (result) => {
+        doAjaxGet(this.url(`${prefix}/single/${id}`), null, (result) => {
           if (result.state) {
             this.mergeValue(this.formData, result.data);
           } else {
@@ -115,8 +125,8 @@ const app = Vue.createApp({
      */
     doSubmit() {
       this.posting = true;
-      this.method = this.formData.chptId? "update" : "save";
-      doAjaxPost(this.url(`${prefix}/${this.bid}/${this.method}`), this.formData, (result) => {
+      this.method = this.formData.kid? "update" : "save";
+      doAjaxPost(this.url(`${prefix}/${this.method}/${this.stage}/${this.subject}`), this.formData, (result) => {
         if (result.state) {
           this.toast("操作成功");
           this.closeFormDialog();
@@ -130,9 +140,9 @@ const app = Vue.createApp({
     /*
      * 删除数据
      */
-    doDelete(chptId) {
+    doDelete(kid) {
       this.method = "del";
-      doAjaxGet(this.url(`${prefix}/${this.bid}/del/${chptId}`), null, (result) => {
+      doAjaxGet(this.url(`${prefix}/del/${kid}`), null, (result) => {
         if (result.state) {
           this.toast("操作成功");
           this.doQuery();

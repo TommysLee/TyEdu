@@ -3,3 +3,4 @@ ty:
     #后台管理
     "[/adm/index]": "adm/rs/book"
     "[/adm/rs/book/view]": "adm/rs/book"
+    "[/adm/rs/knowledge/view]": "adm/rs/knowledge"

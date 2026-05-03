@@ -2,6 +2,7 @@ package com.ty.logic.rs.service.impl;
 
 import com.ty.api.model.rs.RsKnowledge;
 import com.ty.api.rs.service.RsKnowledgeService;
+import com.ty.cm.exception.CustomException;
 import com.ty.logic.rs.dao.RsKnowledgeDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.ty.cm.constant.Messages.EXISTS_CHILD_NODE;
 
 /**
  * 知识点业务逻辑实现
@@ -23,6 +26,18 @@ public class RsKnowledgeServiceImpl implements RsKnowledgeService {
 
     @Autowired
     private RsKnowledgeDao rsKnowledgeDao;
+
+    /**
+     * 该方法用于获取符合条件的总记录数
+     *
+     * @param rsKnowledge 知识点
+     * @return int
+     * @throws Exception
+     */
+    @Override
+    public int getCount(RsKnowledge rsKnowledge) throws Exception {
+        return rsKnowledgeDao.findRsKnowledgeCount(rsKnowledge);
+    }
 
     /**
      * 根据条件查询所有知识点数据
@@ -119,6 +134,13 @@ public class RsKnowledgeServiceImpl implements RsKnowledgeService {
     public int delete(Integer id) throws Exception {
         int n = 0;
         if (null != id) {
+            // 检查是否存在子节点
+            int count = this.getCount(new RsKnowledge().setParentId(id));
+            if (count > 0) {
+                throw new CustomException(EXISTS_CHILD_NODE);
+            }
+
+            // 删除
             n = rsKnowledgeDao.delRsKnowledge(id);
         }
         return n;

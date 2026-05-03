@@ -27,7 +27,7 @@ public class RsKnowledgeController extends BaseController {
     /**
      * 查询知识点列表
      */
-    @RequestMapping("/list")
+    @RequestMapping("/list/{stage}/{subject}")
     public AjaxResult list(RsKnowledge knowledge) throws Exception {
         return AjaxResult.success(knowledgeService.getAll(knowledge));
     }
@@ -35,7 +35,7 @@ public class RsKnowledgeController extends BaseController {
     /**
      * 增加知识点
      */
-    @PostMapping("/save")
+    @PostMapping("/save/{stage}/{subject}")
     public AjaxResult save(RsKnowledge knowledge) throws Exception {
         int n = knowledgeService.save(knowledge);
         return AjaxResult.success(n);
@@ -52,7 +52,7 @@ public class RsKnowledgeController extends BaseController {
     /**
      * 修改知识点
      */
-    @PostMapping("/update")
+    @PostMapping("/update/{stage}/{subject}")
     public AjaxResult update(RsKnowledge knowledge) throws Exception {
         int n = knowledgeService.update(knowledge);
         return AjaxResult.success(n);
