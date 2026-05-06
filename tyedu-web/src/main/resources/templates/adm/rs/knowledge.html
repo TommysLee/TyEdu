@@ -40,7 +40,8 @@
             <v-treeview v-model:activated="selectedKnowledge" activatable color="primary" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent">
               <template #title="{ title, item }">
                 <div class="d-flex align-center">
-                  {{title}} &nbsp; <v-rating v-model="item.importance" class="mt-n1" readonly density='compact' size="small" active-color="yellow" :length="item.importance"></v-rating>
+                  <span class="mr-1">{{title}}</span>
+                  <v-icon icon="mdi-star" color="yellow" size="x-small" v-for="i in item.importance"></v-icon>
                 </div>
               </template>
               <template #append="{ item }">

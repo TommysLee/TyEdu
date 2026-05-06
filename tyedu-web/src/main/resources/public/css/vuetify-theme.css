@@ -303,3 +303,17 @@
   --ty-assist-gap-height: 24;
   height: calc(100vh - var(--ty-assist-gap-height, 24) * 1px - var(--ty-assist-height) * 1px);
 }
+
+/** v-card-zoom **/
+.v-card-zoom > .v-card-zoom-toolbar {
+  position:absolute;
+  right:0;
+  top:0;
+  z-index:9
+}
+.v-card-zoom > .v-card-zoom-toolbar .v-btn {
+  display: none;
+}
+.v-card-zoom:hover > .v-card-zoom-toolbar .v-btn {
+  display: inline;
+}
