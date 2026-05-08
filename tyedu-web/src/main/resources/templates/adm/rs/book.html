@@ -68,7 +68,7 @@
                 <template v-slot:item.operation="{item}">
                   <a class="mr-2" @click="viewChpt(item.bid)">{{$t('章节管理')}}</a>
                   <a class="mr-2" @click="openFormDialog('修改教材', item.bid)">{{$t('修改')}}</a>
-                  <v-btn-confirm :data="item.bid" @confirm="doDelete"></v-btn-confirm>
+                  <v-popconfirm :data="item.bid" @confirm="doDelete"></v-popconfirm>
                 </template>
               </v-data-table-virtual>
             </v-card-zoom>
@@ -110,7 +110,7 @@
 
   <!-- 导入Vuetify扩展组件 -->
   <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
-  <th:block th:replace="~{assets/vuetify :: v-btn-confirm}"/>
+  <th:block th:replace="~{assets/vuetify :: v-popconfirm}"/>
 
   <!-- 业务js -->
   <script type="text/javascript" th:src="@{/js/adm/rs/book.js?_t=#buildtime#}"></script>

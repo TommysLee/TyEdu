@@ -43,7 +43,7 @@
               </template>
               <template #append="{ item }">
                 <a class="mr-2" @click="openFormDialog('修改章节', item.chptId)">{{$t('修改')}}</a>
-                <v-btn-confirm :data="item.chptId" @confirm="doDelete"></v-btn-confirm>
+                <v-popconfirm :data="item.chptId" @confirm="doDelete"></v-popconfirm>
               </template>
             </v-treeview>
             <v-empty-state v-if="chptList?.length < 1" :headline="loading? loadingText : noDataText"></v-empty-state>
@@ -77,7 +77,7 @@
 
   <!-- 导入Vuetify扩展组件 -->
   <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
-  <th:block th:replace="~{assets/vuetify :: v-btn-confirm}"/>
+  <th:block th:replace="~{assets/vuetify :: v-popconfirm}"/>
 
   <!-- 业务js -->
   <script type="text/javascript">

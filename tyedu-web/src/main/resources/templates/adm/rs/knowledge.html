@@ -37,7 +37,7 @@
 
           <!-- 知识点树结构 -->
           <v-card-zoom flat class="pa-3 v-fill-height overflow-auto" :style="{'--ty-assist-height': assistHeight}" :loading="loading">
-            <v-treeview v-model:activated="selectedKnowledge" activatable color="primary" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent">
+            <v-treeview v-model:activated="selectedKnowledge" items-registration="props" activatable color="primary" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent">
               <template #title="{ title, item }">
                 <div class="d-flex align-center">
                   <span class="mr-1">{{title}}</span>
@@ -46,7 +46,7 @@
               </template>
               <template #append="{ item }">
                 <a class="mr-2" @click="openFormDialog('修改知识点', item.kid)">{{$t('修改')}}</a>
-                <v-btn-confirm :data="item.kid" @confirm="doDelete"></v-btn-confirm>
+                <v-popconfirm :data="item.kid" @confirm="doDelete"></v-popconfirm>
               </template>
             </v-treeview>
             <v-empty-state v-if="knowledgeList?.length < 1" :headline="loading? loadingText : noDataText"></v-empty-state>
@@ -80,7 +80,7 @@
 
   <!-- 导入Vuetify扩展组件 -->
   <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
-  <th:block th:replace="~{assets/vuetify :: v-btn-confirm}"/>
+  <th:block th:replace="~{assets/vuetify :: v-popconfirm}"/>
 
   <!-- 业务js -->
   <script type="text/javascript" th:src="@{/js/adm/rs/knowledge.js?_t=#buildtime#}"></script>

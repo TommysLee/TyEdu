@@ -5,139 +5,139 @@
   <title>Vuetify Components::Thymeleaf</title>
 </head>
 <body>
-  <!-- ######################## -->
-  <!--/* 带Confirm提示的按钮组件 */-->
-  <!-- ######################## -->
-  <th:block th:fragment="v-btn-confirm">
-    <template id="v-btn-confirm-template">
-      <v-menu location="top" :close-on-content-click="false" :disabled="disabled" v-model="visible">
-        <template v-slot:activator="{ props }">
-          <a v-bind="props" :class="fclass" ref="button">
-            <slot>{{$t('删除')}}</slot>
-          </a>
-        </template>
-        <v-list style="padding: 0;">
-          <v-list-item>
-            <v-list-item-title class="text-center" style="font-size: 14px;">
-              <v-icon color="warning">{{icon}}</v-icon><span class="confrim-message" v-html="$t(message)"></span>
-            </v-list-item-title>
-            <v-list-item-action class="justify-center">
-              <v-btn border size="small" variant="text" class="mr-2" :disabled="loading" @click="cancel">{{$t(cancelText)}}</v-btn>
-              <v-btn size="small" color="primary" :loading="loading" @click="confirm">{{$t(confirmText)}}</v-btn>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </template>
-    <script type="text/javascript">
-      const VButtonConfirmComponent = Vue.defineComponent({
-        name: 'VButtonConfirm',
-        template: '#v-btn-confirm-template',
-        data: function() {
-          return {
-            visible: false,
-            loading: false,
-            manual: false
-          }
-        },
-        computed: {
-          fclass() {
-            return ((this.clazz??'') + (this.visible? ' op-deleting':'')) || undefined;
-          }
-        },
-        watch: {
-          visible(v) {
-            let eventType = null;
-            if (v) {
-              this.manual = this.loading? this.manual : false;
-              eventType = "open";
-            } else {
-              if (!this.manual && !this.loading) {
-                eventType = "close";
-              }
+<!-- ######################## -->
+<!--/* 气泡确认框组件 */-->
+<!-- ######################## -->
+<th:block th:fragment="v-popconfirm">
+  <template id="v-popconfirm-template">
+    <v-menu location="top" :close-on-content-click="false" :disabled="disabled" v-model="visible">
+      <template v-slot:activator="{ props }">
+        <a v-bind="props" :class="fclass" ref="button">
+          <slot>{{$t('删除')}}</slot>
+        </a>
+      </template>
+      <v-list class="pa-0">
+        <v-list-item>
+          <v-list-item-title class="text-center" style="font-size: 14px;">
+            <v-icon color="warning">{{icon}}</v-icon><span class="confrim-message" v-html="$t(message)"></span>
+          </v-list-item-title>
+          <v-list-item-action class="justify-center">
+            <v-btn border size="small" variant="text" class="mr-2" :disabled="loading" @click="cancel">{{$t(cancelText)}}</v-btn>
+            <v-btn size="small" color="primary" :loading="loading" @click="confirm">{{$t(confirmText)}}</v-btn>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+  </template>
+  <script type="text/javascript">
+    const VPopconfirmComponent = Vue.defineComponent({
+      name: 'VPopconfirm',
+      template: '#v-popconfirm-template',
+      data: function() {
+        return {
+          visible: false,
+          loading: false,
+          manual: false
+        }
+      },
+      computed: {
+        fclass() {
+          return ((this.clazz??'') + (this.visible? ' op-deleting':'')) || undefined;
+        }
+      },
+      watch: {
+        visible(v) {
+          let eventType = null;
+          if (v) {
+            this.manual = this.loading? this.manual : false;
+            eventType = "open";
+          } else {
+            if (!this.manual && !this.loading) {
+              eventType = "close";
             }
-            if (eventType) this.$emit(v?"open":"close", this.data, this);
-            this.toggleHighlight(v);
           }
+          if (eventType) this.$emit(v?"open":"close", this.data, this);
+          this.toggleHighlight(v);
+        }
+      },
+      props: {
+        message: {
+          type: String,
+          default: '确定删除？'
         },
-        props: {
-          message: {
-            type: String,
-            default: '确定删除？'
-          },
-          icon: {
-            type: String,
-            default: 'mdi-message-question'
-          },
-          confirmText: {
-            type: String,
-            default: '确定'
-          },
-          cancelText: {
-            type: String,
-            default: '取消'
-          },
-          disabled: {
-            type: Boolean,
-            default: false
-          },
-          clazz: {
-            type: String
-          },
-          data: Object
+        icon: {
+          type: String,
+          default: 'mdi-message-question'
         },
-        methods: {
-          confirm() {
-            this.loading = true;
-            this.manual = true;
-            this.$emit("confirm", this.data, this);
-            window.confirmObj = this;
-          },
-          cancel() {
-            this.manual = true;
-            this.close();
-            this.$emit("cancel", this.data, this);
-          },
-          close() {
-            this.visible = false;
-          },
-          finish() {
-            this.close();
-            this.loading = false;
-          },
-          toggleHighlight(v) {
-            let hclazz = 'v-highlight';
-            let parentNode = this.$refs.button.parentNode.parentNode;
-            if (parentNode) {
-              if (parentNode.classList.contains('v-data-table__expanded__content')) {
-                let sibling = parentNode.previousElementSibling;
-                if (sibling && sibling.classList.contains('v-data-table__expanded__row')) {
-                  sibling.classList.toggle(hclazz)
-                }
-              } else {
-                if (parentNode.classList.contains('row')) { //TreeGrid
-                  while (parentNode) {
-                    if (parentNode.classList.contains('v-treeview-node__root')) {
-                      this.$nextTick(() => {
-                        v? parentNode.classList.add(hclazz) : parentNode.classList.remove(hclazz);
-                      })
-                      break;
-                    }
-                    parentNode = parentNode.parentNode;
+        confirmText: {
+          type: String,
+          default: '确定'
+        },
+        cancelText: {
+          type: String,
+          default: '取消'
+        },
+        disabled: {
+          type: Boolean,
+          default: false
+        },
+        clazz: {
+          type: String
+        },
+        data: Object
+      },
+      methods: {
+        confirm() {
+          this.loading = true;
+          this.manual = true;
+          this.$emit("confirm", this.data, this);
+          window.confirmObj = this;
+        },
+        cancel() {
+          this.manual = true;
+          this.close();
+          this.$emit("cancel", this.data, this);
+        },
+        close() {
+          this.visible = false;
+        },
+        finish() {
+          this.close();
+          this.loading = false;
+        },
+        toggleHighlight(v) {
+          let hclazz = 'v-highlight';
+          let parentNode = this.$refs.button.parentNode.parentNode;
+          if (parentNode) {
+            if (parentNode.classList.contains('v-data-table__expanded__content')) {
+              let sibling = parentNode.previousElementSibling;
+              if (sibling && sibling.classList.contains('v-data-table__expanded__row')) {
+                sibling.classList.toggle(hclazz)
+              }
+            } else {
+              if (parentNode.classList.contains('row')) { //TreeGrid
+                while (parentNode) {
+                  if (parentNode.classList.contains('v-treeview-node__root')) {
+                    this.$nextTick(() => {
+                      v? parentNode.classList.add(hclazz) : parentNode.classList.remove(hclazz);
+                    })
+                    break;
                   }
-                } else { //Datatable
-                  parentNode.classList.toggle(hclazz);
+                  parentNode = parentNode.parentNode;
                 }
+              } else { //Datatable
+                parentNode.classList.toggle(hclazz);
               }
             }
           }
         }
-      })
-      if (typeof(baseApp) === 'object') {
-        baseApp.components['v-btn-confirm'] = VButtonConfirmComponent;
       }
-    </script>
-  </th:block>
+    })
+    if (typeof(baseApp) === 'object') {
+      baseApp.components['v-popconfirm'] = VPopconfirmComponent;
+    }
+  </script>
+</th:block>
 
   <!-- ################# -->
   <!--/* 自定义下拉树组件 */-->
