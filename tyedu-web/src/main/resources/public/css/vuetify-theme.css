@@ -297,11 +297,17 @@
   height: calc(100vh - var(--ty-assist-gap-height, 36) * 1px - var(--ty-assist-height) * 1px);
 }
 
-/** 自适应高度CSS **/
+/** 自适应CSS **/
 .v-fill-height {
   --ty-assist-height: 88;
   --ty-assist-gap-height: 24;
   height: calc(100vh - var(--ty-assist-gap-height, 24) * 1px - var(--ty-assist-height) * 1px);
+}
+
+.v-fill-half-width {
+  --ty-min-width: 300;
+  width: 50vw;
+  min-width: calc(var(--ty-min-width) * 1px);
 }
 
 /** v-card-zoom **/

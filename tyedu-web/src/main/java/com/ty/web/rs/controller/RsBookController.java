@@ -33,6 +33,14 @@ public class RsBookController extends BaseController {
     }
 
     /**
+     * 查询教材列表
+     */
+    @RequestMapping("/{stage}/{subject}/{edition}/list")
+    public AjaxResult listBy(RsBook book) throws Exception {
+        return AjaxResult.success(bookService.getAll(book));
+    }
+
+    /**
      * 增加教材
      */
     @PostMapping("/save")

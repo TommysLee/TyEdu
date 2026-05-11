@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: scriptcss('题库')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app>
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(back=true)}"/>
+      </v-app-bar>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid class="pa-0">
+          <!-- 导航菜单 -->
+          <v-app-bar flat theme="light" color="white" class="px-4">
+            <v-menu :close-on-content-click="false" open-on-hover :open-delay="100" :close-delay="80" :width="257">
+              <template v-slot:activator="{ props }">
+                <v-btn append-icon="mdi-chevron-down" color="teal" v-bind="props" size="large" variant='elevated' :width="257">
+                  {{stageSujectText}}
+                </v-btn>
+              </template>
+              <v-list v-model:selected="selectedSubject" mandatory tile density="compact" active-class="text-teal" class="py-0" border="opacity-100 success thin">
+                <v-tabs v-model="stage" align-tabs="center" color="teal" show-arrows density="comfortable" class="mb-4">
+                  <v-tab slim :min-width="80" v-for="item in stageList" :value="item.value">{{item.title}}</v-tab>
+                </v-tabs>
+                <v-row dense class="ma-0">
+                  <v-col :cols="item.title.length > 2? 6: 4" v-for="item in subjectList">
+                    <v-list-item class="pa-1 text-center" :key="item.value" :value="item.value">
+                      <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-col>
+                </v-row>
+              </v-list>
+            </v-menu>
+            <v-tabs v-model="selectedMenu" align-tabs="center" color="teal" show-arrows>
+              <v-tab slim density="compact" size="large" :min-width="100" class="mx-4" v-for="item in menuList" :value="item.value">{{item.title}}</v-tab>
+            </v-tabs>
+            <v-spacer></v-spacer>
+            <v-btn variant='elevated' color="primary">{{$t('录题')}}</v-btn>
+          </v-app-bar>
+
+          <!-- 中间区域 -->
+          <v-sheet theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 104">
+            <!-- 左侧Tree -->
+            <v-navigation-drawer class="border-top-grey-bold pt-4 px-4" :width="350">
+              <!-- 章节树 -->
+              <v-sheet v-if="selectedMenu === 'chpt'">
+                <v-menu :close-on-content-click="false" open-on-hover :open-delay="100" :close-delay="80">
+                  <template v-slot:activator="{ props }">
+                    <v-btn block prepend-icon="mdi-bookshelf" append-icon="mdi-chevron-down-circle" color="teal" v-bind="props" size="large" variant='text'>
+                      {{editionBookText}}
+                    </v-btn>
+                  </template>
+                  <v-sheet border="opacity-100 success thin" class="v-fill-half-width">
+                    <v-row dense class="ma-0">
+                      <v-col cols="1" class="text-grey-darken-1 line-height-40">
+                        {{$t('版本')}}:
+                      </v-col>
+                      <v-col>
+                        <v-list v-model:selected="selectedEdition" mandatory tile density="compact" active-class="text-teal" class="py-0">
+                          <v-row dense class="ma-0">
+                            <v-col :cols="item.title.length > 5? 4: 3" v-for="item in editionList">
+                              <v-list-item class="pa-1 text-center" :key="item.value" :value="item.value">
+                                <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
+                              </v-list-item>
+                            </v-col>
+                          </v-row>
+                        </v-list>
+                      </v-col>
+                    </v-row>
+                    <v-row dense class="ma-0">
+                      <v-col cols="1" class="text-grey-darken-1 line-height-40">
+                        {{$t('教材')}}:
+                      </v-col>
+                      <v-col>
+                        <v-list v-model:selected="selectedBook" mandatory tile density="compact" active-class="text-teal" class="py-0">
+                          <v-row dense class="ma-0">
+                            <v-col :cols="item.bname.length > 5? 4: 3" v-for="item in bookList">
+                              <v-list-item class="pa-1 text-center" :key="item.bid" :value="item.bid">
+                                <v-list-item-title class="text-subtitle-2">{{ item.bname }}</v-list-item-title>
+                              </v-list-item>
+                            </v-col>
+                          </v-row>
+                        </v-list>
+                      </v-col>
+                    </v-row>
+                  </v-sheet>
+                </v-menu>
+                <v-treeview items-registration="props" activatable color="teal" density="compact" item-value="chptId" item-title="chptName" :items="chptTreeData" class="bg-transparent treeview-break">
+                </v-treeview>
+              </v-sheet>
+
+              <!-- 知识点树 -->
+              <v-sheet v-else>
+                <v-treeview items-registration="props" activatable color="teal" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent treeview-break">
+                </v-treeview>
+              </v-sheet>
+            </v-navigation-drawer>
+
+            <!-- 题目列表 -->
+            <v-card-zoom flat tile class="fill-height pa-4 overflow-auto" :loading="loading">
+              题目列表区域
+              <ul>
+                <li>
+                  selectedSubject = {{selectedSubject}}
+                </li>
+                <li>
+                  selectedBook = {{selectedBook}}
+                </li>
+                <li>
+                  stage = {{stage}}
+                </li>
+                <li>
+                  knowledgeList = {{knowledgeList}}
+                </li>
+              </ul>
+            </v-card-zoom>
+          </v-sheet>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 导入Vuetify扩展组件 -->
+  <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
+
+  <!-- 业务js -->
+  <script type="text/javascript" th:src="@{/js/rs/que-bank.js}"></script>
+</body>
+</html>

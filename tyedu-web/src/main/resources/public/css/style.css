@@ -83,8 +83,21 @@ input:-webkit-autofill {
   list-style-type: none;
 }
 
-header.v-app-bar {
+.v-application__wrap > header.v-app-bar {
   opacity: 0.9;
+}
+
+.border-top-grey-bold {
+  border-top: 12px solid #EEEEEE;
+}
+
+.line-height-40 {
+  line-height: 40px;
+}
+
+.treeview-break .v-list-item-title {
+  white-space: break-spaces !important;
+  text-overflow: unset;
 }
 
 form.v-form > .v-card > .v-card__text {

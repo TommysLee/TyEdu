@@ -30,6 +30,9 @@
             <if test="subject != null and subject != ''">
                 and t.subject=#{subject}
             </if>
+            <if test="edition != null and edition != ''">
+                and t.edition=#{edition}
+            </if>
         </where>
     </sql>
 
