@@ -91,13 +91,13 @@
                     </v-row>
                   </v-sheet>
                 </v-menu>
-                <v-treeview items-registration="props" activatable color="teal" density="compact" item-value="chptId" item-title="chptName" :items="chptTreeData" class="bg-transparent treeview-break">
+                <v-treeview v-model:activated="selectedChpt" items-registration="props" activatable color="teal" density="compact" item-value="chptId" item-title="chptName" :items="chptTreeData" class="bg-transparent treeview-break">
                 </v-treeview>
               </v-sheet>
 
               <!-- 知识点树 -->
               <v-sheet v-else>
-                <v-treeview items-registration="props" activatable color="teal" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent treeview-break">
+                <v-treeview v-model:activated="selectedKnowledge" items-registration="props" activatable color="teal" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent treeview-break">
                 </v-treeview>
               </v-sheet>
             </v-navigation-drawer>
@@ -110,13 +110,19 @@
                   selectedSubject = {{selectedSubject}}
                 </li>
                 <li>
+                  qtypeList = {{qtypeList}}
+                </li>
+                <li>
                   selectedBook = {{selectedBook}}
                 </li>
                 <li>
                   stage = {{stage}}
                 </li>
                 <li>
-                  knowledgeList = {{knowledgeList}}
+                  selectedChpt = {{selectedChpt}}
+                </li>
+                <li>
+                  selectedKnowledge = {{selectedKnowledge}}
                 </li>
               </ul>
             </v-card-zoom>

@@ -18,7 +18,10 @@ const app = Vue.createApp({
       bookList: [],
       selectedBook: [],
       chptList: [],
+      selectedChpt: [],
       knowledgeList: [],
+      selectedKnowledge: [],
+      qtypeList: [],
 
       // 数据字典
       dictConfig: {
@@ -77,6 +80,7 @@ const app = Vue.createApp({
     selectedSubject(val) {
       if (val?.length) {
         this.doQuery();
+        this.doQueryQTypes();
         this.doQueryEdition();
         this.doQueryKnowledges();
       }
@@ -84,12 +88,11 @@ const app = Vue.createApp({
     selectedEdition() {
       this.doQueryBook();
     },
-    selectedBook(val) {
+    selectedBook() {
       this.doQueryChpts();
     },
     bookList(val) {
       if (!(val?.length > 0)) {
-        this.chptList = [];
         this.selectedBook = [];
       }
     }
@@ -117,6 +120,17 @@ const app = Vue.createApp({
           if (this.subjectList?.length > 0) {
             this.selectedSubject = [this.subjectList[0].value];
           }
+        })
+      }
+    },
+
+    /*
+     * 查询学科对应的题目类型
+     */
+    doQueryQTypes() {
+      if (this.subject) {
+        this.loadDict("qtype/" + this.stage + "/" + this.subject, result => {
+          this.qtypeList = result.data || [];
         })
       }
     },
@@ -162,9 +176,11 @@ const app = Vue.createApp({
       if ("chpt" === this.selectedMenu && this.selectedBook?.length > 0) {
         doAjaxGetSimple(this.url(`/rs/book-chpt/${this.book}/list`), null, result => {
           this.chptList = result.data || [];
+          this.selectedChpt = [];
         })
       } else {
         this.chptList = [];
+        this.selectedChpt = [];
       }
     },
 
@@ -175,9 +191,11 @@ const app = Vue.createApp({
       if ("k" === this.selectedMenu) {
         doAjaxGetSimple(this.url(`/rs/knowledge/list/${this.stage}/${this.subject}`), null, result => {
           this.knowledgeList = result.data || [];
+          this.selectedKnowledge = [];
         })
       } else {
         this.knowledgeList = [];
+        this.selectedKnowledge = [];
       }
     }
   }
