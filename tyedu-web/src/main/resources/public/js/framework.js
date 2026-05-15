@@ -636,6 +636,9 @@ const baseApp = {
 if ('undefined' !== typeof(VeeValidate)) {
   baseApp.components['tform'] = VeeValidate.Form;
   baseApp.components['tfield'] = VeeValidate.Field;
+  baseApp.methods.onInvalidSubmit = function() {
+    this.toast(this.$t('请检查表单'), 'info');
+  }
 }
 if ('undefined' !== typeof(Vue3Snackbar)) {
   baseApp.components['vue3-snackbar'] = Vue3Snackbar.Vue3Snackbar;

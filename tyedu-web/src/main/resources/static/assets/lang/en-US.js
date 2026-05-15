@@ -13,6 +13,7 @@ loadLocaleMessages("en-US", Object.assign({
     "确定重置密码？": "Are you sure to reset password?",
     "确定清除设置？": "Are you sure to clear settings?",
     "密码重置成功": "Password reset succeeded",
+    "请检查表单": "Please check the form",
     "操作成功": "Success",
     "微信": "WeChat",
     "值": "Value",

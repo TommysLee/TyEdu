@@ -17,15 +17,15 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid class="pa-0">
-          <v-app-bar flat theme="light" color="white" class="px-4">
+          <v-app-bar flat theme="light" border="b" color="white" class="px-4">
             <v-breadcrumbs :items="breadcrumbs" class="font-weight-bold"></v-breadcrumbs>
             <v-spacer></v-spacer>
             <v-btn variant='elevated' color="teal" href="https://www.latexlive.com" target="_blank">{{$t('速查公式')}}</v-btn>
           </v-app-bar>
 
           <!-- 中间区域（Form表单） -->
-          <tform as="v-form" ref="dataForm" @submit="doSubmit">
-            <v-card flat tile theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 164">
+          <tform as="v-form" ref="dataForm" @submit="doSubmit" :on-invalid-submit="onInvalidSubmit">
+            <v-sheet tile theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 164">
               <tfield v-model="formData.type" name="题型" v-slot="{ field, errors }" rules="required">
                 <v-list class="mb-2">
                   <v-list-item class="font-weight-bold">
@@ -66,14 +66,7 @@
                 <p class="font-weight-bold mb-1">{{$t('解析')}}:</p>
                 <div id="analysisEditor" class="mb-4 height-350"></div>
               </v-sheet>
-
-              <p>
-                type = {{formData.type}}
-              </p>
-              <p>
-                difficulty = {{formData.difficulty}}
-              </p>
-            </v-card>
+            </v-sheet>
 
             <!-- 页脚 -->
             <v-footer app theme="light" border="t" class="justify-end">

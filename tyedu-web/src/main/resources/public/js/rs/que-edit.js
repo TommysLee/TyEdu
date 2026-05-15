@@ -1,4 +1,4 @@
-// 初始化Vue
+const prefix = "/rs/que";
 const app = Vue.createApp({
   extends: baseApp,
   data() {
@@ -17,8 +17,13 @@ const app = Vue.createApp({
 
       // 表单数据
       formData: {
+        qid: _qid,
+        subject: _subject,
         type: null,
-        difficulty: 3
+        difficulty: 3,
+        stem: null,
+        answer: null,
+        analysis: null
       },
 
       // 数据字典
@@ -87,11 +92,32 @@ const app = Vue.createApp({
     },
 
     /*
+     * 关闭表单编辑画面
+     */
+    closeFormDialog() {
+      setTimeout(() => {
+        this.back();
+      }, 800)
+    },
+
+    /*
      * 提交表单数据
      */
     doSubmit() {
-      console.log("表单提交中...");
+      this.formData.stem = this.stemEditor.getSemanticHTML();
+      this.formData.answer = this.answerEditor.getSemanticHTML();
+      this.formData.analysis = this.analysisEditor.getSemanticHTML()
+
       this.posting = true;
+      this.method = this.formData.qid? "update" : "save";
+      doAjaxPost(this.url(`${prefix}/${this.method}`), this.formData, (result) => {
+        if (result.state) {
+          this.toast("操作成功");
+          this.closeFormDialog();
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      });
     }
   }
 });
