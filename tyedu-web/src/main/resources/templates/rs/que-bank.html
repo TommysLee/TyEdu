@@ -41,7 +41,7 @@
               <v-tab slim density="compact" size="large" :min-width="100" class="mx-4" v-for="item in menuList" :value="item.value">{{item.title}}</v-tab>
             </v-tabs>
             <v-spacer></v-spacer>
-            <v-btn variant='elevated' color="primary">{{$t('录题')}}</v-btn>
+            <v-btn variant='elevated' color="primary" @click="goEdit">{{$t('录题')}}</v-btn>
           </v-app-bar>
 
           <!-- 中间区域 -->

@@ -3,6 +3,7 @@ package com.ty.logic.rs.service.impl;
 import com.github.pagehelper.Page;
 import com.ty.api.model.rs.RsQueBank;
 import com.ty.api.rs.service.RsQueBankService;
+import com.ty.cm.utils.DateUtils;
 import com.ty.logic.rs.dao.RsQueBankDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -98,6 +99,8 @@ public class RsQueBankServiceImpl implements RsQueBankService {
     public int save(RsQueBank rsQueBank) throws Exception {
         int n = 0;
         if (null != rsQueBank) {
+            rsQueBank.setCreateTime(DateUtils.nowText());
+            rsQueBank.setSubject(StringUtils.upperCase(rsQueBank.getSubject()));
             n = queBankDao.saveRsQueBank(rsQueBank);
         }
         return n;
@@ -149,6 +152,7 @@ public class RsQueBankServiceImpl implements RsQueBankService {
     public int update(RsQueBank rsQueBank) throws Exception {
         int n = 0;
         if (null != rsQueBank) {
+            rsQueBank.setUpdateTime(DateUtils.nowText());
             n = queBankDao.updateRsQueBank(rsQueBank);
         }
         return n;

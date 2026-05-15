@@ -5,6 +5,7 @@ import com.ty.api.rs.service.RsQueBankService;
 import com.ty.cm.constant.Ty;
 import com.ty.cm.model.AjaxResult;
 import com.ty.web.base.controller.BaseController;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 题库Controller
@@ -25,6 +27,34 @@ public class RsQueBankController extends BaseController {
 
     @Autowired
     private RsQueBankService queBankService;
+    private final String editView = "rs/que-edit";
+
+    /**
+     * 新增题目View视图
+     */
+    @GetMapping("/{stage}/{subject}/edit/view")
+    public ModelAndView addView(@PathVariable String stage, RsQueBank queBank) throws Exception {
+        stage = StringUtils.upperCase(stage);
+        queBank.setSubject(StringUtils.upperCase(queBank.getSubject()));
+        ModelAndView mview = new ModelAndView(editView);
+        mview.addObject("que", queBank);
+        mview.addObject("stage", stage);
+
+        return mview;
+    }
+
+    /**
+     * 修改题目View视图
+     */
+    @GetMapping("/{stage}/{subject}/edit/{qid}/view")
+    public ModelAndView editView(@PathVariable String stage, RsQueBank queBank) throws Exception {
+        stage = StringUtils.upperCase(stage);
+        queBank.setSubject(StringUtils.upperCase(queBank.getSubject()));
+        ModelAndView mview = new ModelAndView(editView);
+        mview.addObject("que", queBank);
+        mview.addObject("stage", stage);
+        return mview;
+    }
 
     /**
      * 分页查询题库列表

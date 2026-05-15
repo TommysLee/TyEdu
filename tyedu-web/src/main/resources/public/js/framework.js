@@ -163,6 +163,7 @@ const baseApp = {
       },
       assistHeight: 20, // 辅助元素的总高度
       placeholder: '--', // 占位符文本
+      backUrl: null, //返回上一页的URL
       dictConfig: { // 数据字典配置
       },
       stageList: [], // 学段列表
@@ -299,7 +300,11 @@ const baseApp = {
 
     // 返回上一页
     back() {
-      window.history.back();
+      if (this.backUrl) {
+        window.location.href = this.url(this.backUrl);
+      } else {
+        window.history.back();
+      }
     },
 
     // URL函数：自动添加项目名称，并支持随机参数，解决静态缓存问题
@@ -597,6 +602,25 @@ const baseApp = {
     },
     loadDict(key, callback) {
       doAjaxGetSimple(this.url("/dict/" + key), null, callback)
+    },
+
+    // 渲染容器中的所有LaTex公式
+    renderLaTex(el) {
+      this.$nextTick(() => {
+        el = el || this.$refs.qcontainer || document.body;
+        renderMathInElement(el, {
+          delimiters: [
+            {left: '$', right: '$', display: false},
+          ]
+        });
+      })
+    },
+
+    // 渲染LaTex公式
+    renderLaTexToString(latex) {
+      return katex.renderToString(latex, {
+        throwOnError: false
+      })
     },
 
     // 如果只为空，则显示默认值

@@ -131,6 +131,7 @@ const app = Vue.createApp({
       if (this.subject) {
         this.loadDict("qtype/" + this.stage + "/" + this.subject, result => {
           this.qtypeList = result.data || [];
+          // clear selected
         })
       }
     },
@@ -197,6 +198,18 @@ const app = Vue.createApp({
         this.knowledgeList = [];
         this.selectedKnowledge = [];
       }
+    },
+
+    /*
+     * 前往编辑页面（新增/修改）
+     */
+    goEdit(qid) {
+      let url = `/rs/que/${this.stage}/${this.subject}/edit/`;
+      if (!(qid instanceof Event) && qid) {
+        url += (qid + '/');
+      }
+      url += 'view';
+      window.location.href = this.url(url)
     }
   }
 });

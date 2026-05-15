@@ -11,6 +11,8 @@
         <result property="stem" column="stem" />
         <result property="answer" column="answer" />
         <result property="analysis" column="analysis" />
+        <result property="chptMarked" column="chpt_marked" />
+        <result property="knowledgeMarked" column="knowledge_marked" />
         <result property="createTime" column="create_time" />
         <result property="updateTime" column="update_time" />
     </resultMap>
@@ -49,6 +51,8 @@
             t.stem,
             t.answer,
             t.analysis,
+            t.chpt_marked,
+            t.knowledge_marked,
             t.create_time,
             t.update_time
         FROM
@@ -67,6 +71,8 @@
             t.stem,
             t.answer,
             t.analysis,
+            t.chpt_marked,
+            t.knowledge_marked,
             t.create_time,
             t.update_time
         FROM
@@ -100,8 +106,8 @@
             <if test="stem != null">#{stem},</if>
             <if test="answer != null">#{answer},</if>
             <if test="analysis != null">#{analysis},</if>
-            now(),
-            now(),
+            #{createTime},
+            #{createTime},
         </trim>
         )
     </insert>
@@ -117,7 +123,9 @@
             <if test="stem != null">stem=#{stem},</if>
             <if test="answer != null">answer=#{answer},</if>
             <if test="analysis != null">analysis=#{analysis},</if>
-            update_time=now()
+            <if test="chptMarked != null">chpt_marked=#{chptMarked},</if>
+            <if test="knowledgeMarked != null">knowledge_marked=#{knowledgeMarked},</if>
+            update_time=#{updateTime}
         </set>
         WHERE qid = #{qid}
     </update>

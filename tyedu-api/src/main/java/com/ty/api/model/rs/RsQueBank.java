@@ -37,4 +37,10 @@ public class RsQueBank extends BaseBO {
 
     /** 解析 **/
     private String analysis;
+
+    /** 章节标记 **/
+    private Integer chptMarked;
+
+    /** 知识点标记 **/
+    private Integer knowledgeMarked;
 }
