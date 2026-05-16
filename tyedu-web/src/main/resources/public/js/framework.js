@@ -159,6 +159,7 @@ const baseApp = {
       pagination: { // 分页对象
         page: 1,
         pageSize: 20,
+        pageCount: 0,
         vp: 10
       },
       assistHeight: 20, // 辅助元素的总高度
@@ -604,18 +605,6 @@ const baseApp = {
       doAjaxGetSimple(this.url("/dict/" + key), null, callback)
     },
 
-    // 渲染容器中的所有LaTex公式
-    renderLaTex(el) {
-      this.$nextTick(() => {
-        el = el || this.$refs.qcontainer || document.body;
-        renderMathInElement(el, {
-          delimiters: [
-            {left: '$', right: '$', display: false},
-          ]
-        });
-      })
-    },
-
     // 渲染LaTex公式
     renderLaTexToString(latex) {
       return katex.renderToString(latex, {
@@ -642,6 +631,13 @@ if ('undefined' !== typeof(VeeValidate)) {
 }
 if ('undefined' !== typeof(Vue3Snackbar)) {
   baseApp.components['vue3-snackbar'] = Vue3Snackbar.Vue3Snackbar;
+}
+
+/**
+ * Vue3指令注册
+ */
+if (typeof(renderMathInElement) === 'function') {
+  baseApp.directives['katex'] = vkatex;
 }
 
 /**
