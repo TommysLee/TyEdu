@@ -5,6 +5,7 @@
     <!-- 关系映射 -->
     <resultMap id="RsQueBankMap" type="RsQueBank">
         <result property="qid" column="qid" />
+        <result property="stage" column="stage" />
         <result property="subject" column="subject" />
         <result property="type" column="type" />
         <result property="difficulty" column="difficulty" />
@@ -22,6 +23,9 @@
         <where>
             <if test="qid != null">
                 and t.qid=#{qid}
+            </if>
+            <if test="stage != null and stage != ''">
+                and t.stage=#{stage}
             </if>
             <if test="subject != null and subject != ''">
                 and t.subject=#{subject}
@@ -45,6 +49,7 @@
     <select id="findRsQueBank" parameterType="RsQueBank" resultMap="RsQueBankMap">
         SELECT
             t.qid,
+            t.stage,
             t.subject,
             t.type,
             t.difficulty,
@@ -65,6 +70,7 @@
     <select id="findRsQueBankById" parameterType="java.lang.Integer" resultMap="RsQueBankMap">
         SELECT
             t.qid,
+            t.stage,
             t.subject,
             t.type,
             t.difficulty,
@@ -86,6 +92,7 @@
         (
         <trim suffix="" suffixOverrides=",">
             <if test="qid != null">qid,</if>
+            <if test="stage != null">stage,</if>
             <if test="subject != null">subject,</if>
             <if test="type != null">type,</if>
             <if test="difficulty != null">difficulty,</if>
@@ -100,6 +107,7 @@
         (
         <trim suffix="" suffixOverrides=",">
             <if test="qid != null">#{qid},</if>
+            <if test="stage != null">#{stage},</if>
             <if test="subject != null">#{subject},</if>
             <if test="type != null">#{type},</if>
             <if test="difficulty != null">#{difficulty},</if>
@@ -117,7 +125,6 @@
         UPDATE t_rs_que_bank
         <set>
             <if test="qid != null">qid=#{qid},</if>
-            <if test="subject != null">subject=#{subject},</if>
             <if test="type != null">type=#{type},</if>
             <if test="difficulty != null">difficulty=#{difficulty},</if>
             <if test="stem != null">stem=#{stem},</if>

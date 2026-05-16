@@ -20,6 +20,9 @@ public class RsQueBank extends BaseBO {
     /** 题目ID (主键) **/
     private Integer qid;
 
+    /** 学段 **/
+    private String stage;
+
     /** 学科 **/
     private String subject;
 

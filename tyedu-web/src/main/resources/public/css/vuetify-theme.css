@@ -6,6 +6,10 @@
   min-height: auto !important;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .h-n25 {
   height: calc(100% - 25px);
 }

@@ -3,8 +3,12 @@ const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
+      menuName: 'QueBank',
+      vnode: null,
+
       // 查询条件
       param: {
+        type: null
       },
 
       // 菜单
@@ -12,7 +16,7 @@ const app = Vue.createApp({
         {value: 'chpt', title: '章节选题'},
         {value: 'k', title: '知识点选题'}
       ],
-      selectedMenu: 'chpt',
+      selectedMenu: null,
 
       // 数据
       bookList: [],
@@ -22,11 +26,13 @@ const app = Vue.createApp({
       knowledgeList: [],
       selectedKnowledge: [],
       qtypeList: [],
+      dataList: [],
 
       // 数据字典
       dictConfig: {
         "stage": "stageList"
       },
+      stage: null,
       subjectList: [],
       selectedSubject: [],
       editionList: [],
@@ -45,6 +51,9 @@ const app = Vue.createApp({
     },
     bookMap() {
       return toMap(this.bookList, 'bid', 'bname');
+    },
+    qtypeMap() {
+      return toMap(this.qtypeList)
     },
     chptTreeData() {
       return this.wrapTreeData(this.chptList, 'chptId');
@@ -98,16 +107,31 @@ const app = Vue.createApp({
     }
   },
   mounted() {
-    // 加载学科列表
-    this.doQuerySubject();
+    clearQueryParam();
+    this.selectedMenu = this.param.selectedMenu || 'chpt';
+    this.stage = this.param.stage || 'XX';
+    this.vnode = this.$refs.qcontainer;
   },
   methods: {
     /*
      * 执行条件查询
      */
     doQuery() {
-      console.log("doQuery ....", "默认条件：stage、subject");
+      saveQueryParam(this.menuName, {stage: this.stage, subject: this.subject, selectedMenu: this.selectedMenu});
       this.loading = true;
+      this.param.page = this.pagination.page;
+      this.param.pageSize = this.pagination.pageSize;
+
+      doAjaxPost(this.url(`/rs/que/${this.stage}/${this.subject}/list`), this.param, result => {
+        if (result.state) {
+          let pageData = result.data;
+          this.pagination.pageCount = pageData.pages; // 总页数
+          this.dataList = addIndexPropForArray(pageData.data, this.pagination); // 数据集合
+          this.scrollTop();
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      })
     },
 
     /*
@@ -115,11 +139,16 @@ const app = Vue.createApp({
      */
     doQuerySubject() {
       if (this.stage) {
-        this.loadDict("subject/" + this.stage, result => {
+        this.loadDict(`subject/${this.stage}`, result => {
           this.subjectList = result.data || [];
           if (this.subjectList?.length > 0) {
-            this.selectedSubject = [this.subjectList[0].value];
+            let selected = [this.subjectList[0].value];
+            if (this.param.subject) {
+              selected = [this.param.subject];
+            }
+            this.selectedSubject = selected;
           }
+          this.clearParam();
         })
       }
     },
@@ -129,9 +158,9 @@ const app = Vue.createApp({
      */
     doQueryQTypes() {
       if (this.subject) {
-        this.loadDict("qtype/" + this.stage + "/" + this.subject, result => {
+        this.loadDict(`qtype/${this.stage}/${this.subject}`, result => {
           this.qtypeList = result.data || [];
-          // clear selected
+          this.param.type = null;
         })
       }
     },
@@ -141,7 +170,7 @@ const app = Vue.createApp({
      */
     doQueryEdition() {
       if (this.subject) {
-        this.loadDict("edition/" + this.stage + "/" + this.subject, result => {
+        this.loadDict(`edition/${this.stage}/${this.subject}`, result => {
           this.editionList = result.data || [];
           if (this.editionList?.length > 0) {
             this.selectedEdition = [this.editionList[0].value];
@@ -197,6 +226,15 @@ const app = Vue.createApp({
       } else {
         this.knowledgeList = [];
         this.selectedKnowledge = [];
+      }
+    },
+
+    /*
+     * 清空查询条件
+     */
+    clearParam() {
+      for (let p of Object.keys(this.param)) {
+        this.param[p] = null;
       }
     },
 

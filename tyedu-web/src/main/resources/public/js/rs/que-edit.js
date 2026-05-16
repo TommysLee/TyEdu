@@ -3,6 +3,7 @@ const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
+      menuName: 'QueBank',
       backUrl: '/rs/que-bank',
 
       // 参数
@@ -18,6 +19,7 @@ const app = Vue.createApp({
       // 表单数据
       formData: {
         qid: _qid,
+        stage: _stage,
         subject: _subject,
         type: null,
         difficulty: 3,
@@ -113,6 +115,7 @@ const app = Vue.createApp({
      * 关闭表单编辑画面
      */
     closeFormDialog() {
+      saveQueryParam(this.menuName, {stage: this.stage, subject: this.subject});
       setTimeout(() => {
         this.back();
       }, 800)

@@ -59,7 +59,7 @@ public class RsQueBankController extends BaseController {
     /**
      * 分页查询题库列表
      */
-    @RequestMapping("/list")
+    @RequestMapping("/{stage}/{subject}/list")
     public AjaxResult list(RsQueBank queBank, @RequestParam(defaultValue = Ty.DEFAULT_PAGE) String page, @RequestParam(defaultValue = Ty.DEFAULT_PAGESIZE) String pageSize) throws Exception {
         return AjaxResult.success(queBankService.query(queBank, page, pageSize));
     }

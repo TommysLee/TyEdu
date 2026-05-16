@@ -32,7 +32,7 @@
                     <template v-slot:prepend>
                       {{$t('题型')}}:
                     </template>
-                    <v-btn-toggle v-model="formData.type" mandatory density="compact" color="teal" variant="plain" class="flex-wrap">
+                    <v-btn-toggle v-model="formData.type" mandatory density="compact" color="teal" variant="plain" class="flex-wrap h-auto">
                       <v-btn v-for="item in qtypeList" :value="item.value">{{item.title}}</v-btn>
                     </v-btn-toggle>
                   </v-list-item>

@@ -171,7 +171,10 @@ loadLocaleMessages("en-US", Object.assign({
     "我的错题": "Mistake Notebook",
     "教材名称": "Book Name",
     "学科": "Subject",
-    "版本": "Edition"
+    "版本": "Edition",
+    "题号": "NO.",
+    "新增题目": "New",
+    "修改题目": "Modify"
 }, {
     validations: {
         "_default": "The {0} is not valid",

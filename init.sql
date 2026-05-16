@@ -39,7 +39,8 @@ CREATE TABLE t_rs_knowledge (
 
 CREATE TABLE t_rs_que_bank (
     qid         INTEGER PRIMARY KEY AUTOINCREMENT,
-    subject     TEXT,
+	stage       TEXT NOT NULL,
+    subject     TEXT NOT NULL,
     type        TEXT,
 	type_title  TEXT,
     difficulty  INTEGER,
