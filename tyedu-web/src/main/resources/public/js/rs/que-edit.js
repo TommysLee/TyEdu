@@ -45,9 +45,9 @@ const app = Vue.createApp({
       let items = [];
       items.push(this.stageMap[this.stage] + this.subjectMap[this.subject]);
       if (this.qid) {
-        items.push("修改题目", this.qid.toString());
+        items.push(this.$t("修改题目"), this.$t('题号') + ":" + this.qid.toString());
       } else {
-        items.push("新增题目");
+        items.push(this.$t("新增题目"));
       }
       return items;
     }
@@ -57,6 +57,7 @@ const app = Vue.createApp({
     this.doQueryQTypes();
     this.$nextTick(() => {
       this.initEditor();
+      this.doQueryDetail();
     })
   },
   methods: {
@@ -92,6 +93,23 @@ const app = Vue.createApp({
     },
 
     /*
+     * 查询记录详情
+     */
+    doQueryDetail() {
+      if (this.formData.qid) {
+        this.posting = true;
+        doAjaxGet(this.url(`${prefix}/single/${this.qid}`), null, result => {
+          if (result.state) {
+            this.mergeValue(this.formData, result.data);
+            this.setEditorsContent();
+          } else {
+            this.toast(result.message, 'warning');
+          }
+        })
+      }
+    },
+
+    /*
      * 关闭表单编辑画面
      */
     closeFormDialog() {
@@ -118,6 +136,21 @@ const app = Vue.createApp({
           this.toast(result.message, 'warning');
         }
       });
+    },
+
+    /*
+     * 设置编辑器内容
+     */
+    setEditorsContent() {
+      if (this.formData.stem) {
+        this.stemEditor.root.innerHTML = TinyEditor.resolveHtml(this.formData.stem);
+      }
+      if (this.formData.answer) {
+        this.answerEditor.root.innerHTML = TinyEditor.resolveHtml(this.formData.answer);
+      }
+      if (this.formData.analysis) {
+        this.analysisEditor.root.innerHTML = TinyEditor.resolveHtml(this.formData.analysis);
+      }
     }
   }
 });
