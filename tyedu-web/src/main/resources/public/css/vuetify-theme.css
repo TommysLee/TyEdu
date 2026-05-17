@@ -327,3 +327,8 @@
 .v-card-zoom:hover > .v-card-zoom-toolbar .v-btn {
   display: inline;
 }
+
+/** 富文本编辑器 **/
+.v-application .v-rich-text p:empty::before {
+  content: "\200B";  /* 零宽空格 (Zero-width space) */
+}

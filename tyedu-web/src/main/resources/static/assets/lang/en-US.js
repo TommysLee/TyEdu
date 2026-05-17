@@ -174,7 +174,8 @@ loadLocaleMessages("en-US", Object.assign({
     "版本": "Edition",
     "题号": "NO.",
     "新增题目": "New",
-    "修改题目": "Modify"
+    "修改题目": "Modify",
+    "答案": "Answer"
 }, {
     validations: {
         "_default": "The {0} is not valid",

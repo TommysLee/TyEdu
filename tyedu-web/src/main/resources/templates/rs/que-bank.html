@@ -125,56 +125,31 @@
                     <v-spacer></v-spacer>
                     <v-icon icon="mdi-star" size="x-small" color="yellow" v-for="i in item.difficulty"></v-icon>
                   </v-card-title>
-                  <v-card-subtitle> <!--  class="text-wrap" -->
+                  <v-card-subtitle>
                     {{qtypeMap[item.type]}} <span class="px-2 opacity-40">|</span> 知识点
                   </v-card-subtitle>
                 </v-card-item>
-                <v-card-text @click="console.log('card-text clicked')">
+                <v-card-text class="v-rich-text" @click="item.show = !item.show">
                   <div v-katex v-html="item.stem"></div>
+                  <v-expand-transition>
+                    <div class="border-t-thin mt-4 pt-4" v-if="item.show">
+                      <p class="font-weight-bold">{{$t('答案')}}:</p>
+                      <div v-katex v-html="item.answer"></div>
+                      <div v-katex v-html="item.analysis" class="mt-4"></div>
+                    </div>
+                  </v-expand-transition>
                 </v-card-text>
-                <v-card-actions class="justify-end">
-                  <v-btn color="teal">加入测验</v-btn>
+                <v-card-actions class="justify-end border-t-thin">
+                  <span class="text-subtitle-2 opacity-40">{{item.updateTime}}</span>
+                  <v-spacer></v-spacer>
+                  <v-btn color="teal">{{$t('打标')}}</v-btn>
+                  <v-btn color="teal" @click="goEdit(item.qid)">{{$t('修改')}}</v-btn>
                 </v-card-actions>
               </v-card>
               <v-pagination class="pagebar" v-model="pagination.page" :total-visible="pagination.vp" :length="pagination.pageCount" :disabled="loading" v-show="dataList?.length > 0"></v-pagination>
 
               <!-- No Data Tips -->
               <v-empty-state class="hm-auto height-350" :headline="noDataText" v-if="!dataList || dataList?.length === 0"></v-empty-state>
-
-
-
-
-
-
-
-              题目列表区域
-              <ul>
-                <li>
-                  dataList = {{dataList}}
-                  pagination = {{pagination}}
-                </li>
-                <li>
-                  selectedSubject = {{selectedSubject}}
-                </li>
-                <li>
-                  qtypeList = {{qtypeList}}
-                </li>
-                <li>
-                  selectedBook = {{selectedBook}}
-                </li>
-                <li>
-                  stage = {{stage}}
-                </li>
-                <li>
-                  selectedChpt = {{selectedChpt}}
-                </li>
-                <li>
-                  selectedKnowledge = {{selectedKnowledge}}
-                </li>
-                <li>
-                  param.type = {{param.type}}
-                </li>
-              </ul>
             </v-card-zoom>
           </v-sheet>
         </v-container>
