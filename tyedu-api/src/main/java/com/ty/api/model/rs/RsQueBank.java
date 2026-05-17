@@ -4,6 +4,7 @@ import com.ty.api.model.BaseBO;
 import lombok.Data;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * 题库实体类
@@ -46,4 +47,11 @@ public class RsQueBank extends BaseBO {
 
     /** 知识点标记 **/
     private Integer knowledgeMarked;
+
+    /*
+     * 辅助字段
+     */
+
+    // 知识点标签数据集合
+    private List<RsQueRefKnowledge> refKnowledgeList;
 }

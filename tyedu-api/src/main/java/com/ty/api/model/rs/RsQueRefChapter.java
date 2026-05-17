@@ -24,4 +24,11 @@ public class RsQueRefChapter extends BaseBO {
 
     /** 章节ID (主键) **/
     private Integer chptId;
+
+    /*
+     * 辅助字段
+     */
+
+    // 章节名称
+    private String chptName;
 }

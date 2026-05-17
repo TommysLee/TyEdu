@@ -6,6 +6,7 @@
     <resultMap id="RsQueRefKnowledgeMap" type="RsQueRefKnowledge">
         <result property="qid" column="qid" />
         <result property="kid" column="kid" />
+        <result property="kname" column="kname" />
     </resultMap>
 
     <!-- 查询结果集 -->
@@ -17,6 +18,19 @@
             t_rs_que_ref_knowledge t
         WHERE
             t.qid=#{qid}
+    </select>
+
+    <!-- 查询更详细的结果集 -->
+    <select id="findFullRsQueRefKnowledge" parameterType="java.util.Set" resultMap="RsQueRefKnowledgeMap">
+        SELECT
+            t1.qid, t1.kid, t2.kname
+        FROM
+            t_rs_que_ref_knowledge t1 INNER JOIN t_rs_knowledge t2 ON t1.kid = t2.kid
+        WHERE
+            t1.qid IN
+        <foreach collection="qids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
     <!-- 批量保存 -->

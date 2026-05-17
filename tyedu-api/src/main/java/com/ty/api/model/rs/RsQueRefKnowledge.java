@@ -24,4 +24,11 @@ public class RsQueRefKnowledge extends BaseBO {
 
     /** 知识点ID (主键) **/
     private Integer kid;
+
+    /*
+     * 辅助字段
+     */
+
+    // 知识点名称
+    private String kname;
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 题目知识点标签业务逻辑实现
@@ -37,6 +38,22 @@ public class RsQueRefKnowledgeServiceImpl implements RsQueRefKnowledgeService {
         List<RsQueRefKnowledge> list = Lists.newArrayList();
         if (null != qid) {
             list = queRefKnowledgeDao.findRsQueRefKnowledge(qid);
+        }
+        return list;
+    }
+
+    /**
+     * 查询题目的完整知识点标签数据
+     *
+     * @param qids 题目ID集合
+     * @return List<RsQueRefKnowledge>
+     * @throws Exception
+     */
+    @Override
+    public List<RsQueRefKnowledge> getFullAll(Set<Integer> qids) throws Exception {
+        List<RsQueRefKnowledge> list = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(qids)) {
+            list = queRefKnowledgeDao.findFullRsQueRefKnowledge(qids);
         }
         return list;
     }

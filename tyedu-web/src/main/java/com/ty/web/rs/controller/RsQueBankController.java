@@ -39,7 +39,6 @@ public class RsQueBankController extends BaseController {
         ModelAndView mview = new ModelAndView(editView);
         mview.addObject("que", queBank);
         mview.addObject("stage", stage);
-
         return mview;
     }
 

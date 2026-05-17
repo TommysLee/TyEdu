@@ -1,11 +1,15 @@
 package com.ty.logic.rs.service.impl;
 
 import com.github.pagehelper.Page;
+import com.google.common.collect.Lists;
 import com.ty.api.model.rs.RsQueBank;
+import com.ty.api.model.rs.RsQueRefKnowledge;
 import com.ty.api.rs.service.RsQueBankService;
+import com.ty.api.rs.service.RsQueRefKnowledgeService;
 import com.ty.cm.utils.DateUtils;
 import com.ty.logic.rs.dao.RsQueBankDao;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.ty.cm.constant.Ty.DATA;
 import static com.ty.cm.constant.Ty.PAGES;
@@ -34,6 +40,9 @@ public class RsQueBankServiceImpl implements RsQueBankService {
 
     @Autowired
     private RsQueBankDao queBankDao;
+
+    @Autowired
+    private RsQueRefKnowledgeService queRefKnowledgeService;
 
     /**
      * 根据条件查询所有题库数据
@@ -62,6 +71,7 @@ public class RsQueBankServiceImpl implements RsQueBankService {
     @Override
     public Map<String, Object> query(RsQueBank rsQueBank, String pageNum, String pageSize) throws Exception {
         Page<RsQueBank> page = (Page<RsQueBank>) this.queryData(rsQueBank, pageNum, pageSize);
+        this.getQueRefKnowledges(page);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put(TOTAL, page.getTotal());
         resultMap.put(PAGES, page.getPages());
@@ -173,5 +183,24 @@ public class RsQueBankServiceImpl implements RsQueBankService {
             n = queBankDao.delRsQueBank(id);
         }
         return n;
+    }
+
+    /*
+     * 获取题目的详细知识点标签数据
+     */
+    void getQueRefKnowledges(List<RsQueBank> queList) throws Exception {
+        if (CollectionUtils.isNotEmpty(queList)) {
+            // 抽取题目ID集合
+            Set<Integer> qidSet = queList.stream().map(RsQueBank::getQid).collect(Collectors.toSet());
+
+            // 查询知识点标签数据后，按题目ID分组
+            List<RsQueRefKnowledge> queRefKnowledgeList = queRefKnowledgeService.getFullAll(qidSet);
+            Map<Integer,List<RsQueRefKnowledge>> queRefKnowledgeMap = queRefKnowledgeList.stream().collect(Collectors.groupingBy(RsQueRefKnowledge::getQid));
+
+            // 将知识点标签数据，添加到题目对象中
+            for (RsQueBank q : queList) {
+                q.setRefKnowledgeList(queRefKnowledgeMap.getOrDefault(q.getQid(), Lists.newArrayListWithCapacity(0)));
+            }
+        }
     }
 }

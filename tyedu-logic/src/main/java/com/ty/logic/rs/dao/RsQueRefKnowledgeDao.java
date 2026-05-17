@@ -4,6 +4,7 @@ import com.ty.api.model.rs.RsQueRefKnowledge;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 题目知识点标签数据访问层
@@ -21,6 +22,14 @@ public interface RsQueRefKnowledgeDao {
      * @return List<RsQueRefKnowledge>
      */
     List<RsQueRefKnowledge> findRsQueRefKnowledge(Integer qid);
+
+    /**
+     * 查询题目的完整知识点标签数据
+     *
+     * @param qids 题目ID集合
+     * @return List<RsQueRefKnowledge>
+     */
+    List<RsQueRefKnowledge> findFullRsQueRefKnowledge(Set<Integer> qids);
 
     /**
      * 批量保存题目知识点标签数据
