@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.rs.dao.RsQueRefChapterDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="RsQueRefChapterMap" type="RsQueRefChapter">
+        <result property="qid" column="qid" />
+        <result property="chptId" column="chpt_id" />
+    </resultMap>
+
+    <!-- 查询结果集 -->
+    <select id="findRsQueRefChapter" parameterType="java.lang.Integer" resultMap="RsQueRefChapterMap">
+        SELECT
+            t.qid,
+            t.chpt_id
+        FROM
+            t_rs_que_ref_chapter t
+        WHERE
+            t.qid=#{qid}
+    </select>
+
+    <!-- 批量保存 -->
+    <insert id="saveMultiRsQueRefChapter" parameterType="java.util.List">
+        INSERT INTO t_rs_que_ref_chapter(qid, chpt_id)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.qid}, #{item.chptId})
+        </foreach>
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="delRsQueRefChapter" parameterType="java.lang.Integer">
+        DELETE FROM t_rs_que_ref_chapter WHERE qid = #{qid}
+    </delete>
+</mapper>

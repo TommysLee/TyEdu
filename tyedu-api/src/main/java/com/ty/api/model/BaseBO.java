@@ -29,7 +29,7 @@ public class BaseBO implements Serializable {
     private String updateTime;
 
     /** ID集合 **/
-    private Set<String> ids;
+    private Set<Integer> ids;
 
     /** 是否模糊查询 **/
     private Boolean isLike;

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.rs.dao.RsQueRefKnowledgeDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="RsQueRefKnowledgeMap" type="RsQueRefKnowledge">
+        <result property="qid" column="qid" />
+        <result property="kid" column="kid" />
+    </resultMap>
+
+    <!-- 查询结果集 -->
+    <select id="findRsQueRefKnowledge" parameterType="java.lang.Integer" resultMap="RsQueRefKnowledgeMap">
+        SELECT
+            t.qid,
+            t.kid
+        FROM
+            t_rs_que_ref_knowledge t
+        WHERE
+            t.qid=#{qid}
+    </select>
+
+    <!-- 批量保存 -->
+    <insert id="saveMultiRsQueRefKnowledge" parameterType="java.util.List">
+        INSERT INTO t_rs_que_ref_knowledge(qid, kid)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.qid}, #{item.kid})
+        </foreach>
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="delRsQueRefKnowledge" parameterType="java.lang.Integer">
+        DELETE FROM t_rs_que_ref_knowledge WHERE qid = #{qid}
+    </delete>
+</mapper>
