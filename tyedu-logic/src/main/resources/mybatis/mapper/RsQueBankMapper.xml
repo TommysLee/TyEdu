@@ -124,7 +124,6 @@
     <update id="updateRsQueBank" parameterType="RsQueBank">
         UPDATE t_rs_que_bank
         <set>
-            <if test="qid != null">qid=#{qid},</if>
             <if test="type != null">type=#{type},</if>
             <if test="difficulty != null">difficulty=#{difficulty},</if>
             <if test="stem != null">stem=#{stem},</if>

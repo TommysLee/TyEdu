@@ -1,12 +1,15 @@
 package com.ty.logic.rs.service.impl;
 
 import com.google.common.collect.Lists;
+import com.ty.api.model.rs.RsQueBank;
 import com.ty.api.model.rs.RsQueRefKnowledge;
+import com.ty.api.rs.service.RsQueBankService;
 import com.ty.api.rs.service.RsQueRefKnowledgeService;
 import com.ty.logic.rs.dao.RsQueRefKnowledgeDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,10 @@ public class RsQueRefKnowledgeServiceImpl implements RsQueRefKnowledgeService {
 
     @Autowired
     private RsQueRefKnowledgeDao queRefKnowledgeDao;
+
+    @Autowired
+    @Lazy
+    private RsQueBankService queBankService;
 
     /**
      * 根据题目ID查询所有题目知识点标签数据
@@ -70,11 +77,16 @@ public class RsQueRefKnowledgeServiceImpl implements RsQueRefKnowledgeService {
     public int saveBatch(List<RsQueRefKnowledge> list) throws Exception {
         int n = 0;
         if (CollectionUtils.isNotEmpty(list)) {
+            Integer qid = list.get(0).getQid();
+
             // 先删除原知识点标签
-            this.delete(list.get(0).getQid());
+            this.delete(qid);
 
             // 再新增
             n = queRefKnowledgeDao.saveMultiRsQueRefKnowledge(list);
+
+            // 更新题目的知识点标记
+            queBankService.update(new RsQueBank().setQid(qid).setKnowledgeMarked(1));
         }
         return n;
     }

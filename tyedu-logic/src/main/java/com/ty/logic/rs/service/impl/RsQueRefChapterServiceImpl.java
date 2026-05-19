@@ -1,12 +1,15 @@
 package com.ty.logic.rs.service.impl;
 
 import com.google.common.collect.Lists;
+import com.ty.api.model.rs.RsQueBank;
 import com.ty.api.model.rs.RsQueRefChapter;
+import com.ty.api.rs.service.RsQueBankService;
 import com.ty.api.rs.service.RsQueRefChapterService;
 import com.ty.logic.rs.dao.RsQueRefChapterDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,10 @@ public class RsQueRefChapterServiceImpl implements RsQueRefChapterService {
 
     @Autowired
     private RsQueRefChapterDao queRefChapterDao;
+
+    @Autowired
+    @Lazy
+    private RsQueBankService queBankService;
 
     /**
      * 根据题目ID查询所有题目章节标签数据
@@ -53,11 +60,16 @@ public class RsQueRefChapterServiceImpl implements RsQueRefChapterService {
     public int saveBatch(List<RsQueRefChapter> list) throws Exception {
         int n = 0;
         if (CollectionUtils.isNotEmpty(list)) {
+            Integer qid = list.get(0).getQid();
+
             // 先删除原知识点标签
-            this.delete(list.get(0).getQid());
+            this.delete(qid);
 
             // 再新增
             n = queRefChapterDao.saveMultiRsQueRefChapter(list);
+
+            // 更新题目的章节标记
+            queBankService.update(new RsQueBank().setQid(qid).setChptMarked(1));
         }
         return n;
     }

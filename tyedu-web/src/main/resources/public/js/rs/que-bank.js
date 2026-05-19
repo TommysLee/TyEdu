@@ -248,6 +248,13 @@ const app = Vue.createApp({
       }
       url += 'view';
       window.location.href = this.url(url)
+    },
+
+    /*
+     * 前往打标页面
+     */
+    goMarked(qid) {
+      window.location.href = this.url(`/rs/que/${this.stage}/${this.subject}/marked/${qid}/view`);
     }
   }
 });

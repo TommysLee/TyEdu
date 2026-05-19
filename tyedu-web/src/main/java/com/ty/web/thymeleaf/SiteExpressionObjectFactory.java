@@ -1,7 +1,7 @@
 package com.ty.web.thymeleaf;
 
 import com.ty.web.spring.SpringContextHolder;
-import com.ty.web.spring.config.properties.TyProperties;
+import com.ty.logic.spring.config.properties.TyProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

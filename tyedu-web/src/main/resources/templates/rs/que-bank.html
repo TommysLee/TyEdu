@@ -142,7 +142,7 @@
                 <v-card-actions class="justify-end border-t-thin">
                   <span class="text-subtitle-2 opacity-40">{{item.updateTime}}</span>
                   <v-spacer></v-spacer>
-                  <v-btn color="teal">{{$t('打标')}}</v-btn>
+                  <v-btn color="teal" @click="goMarked(item.qid)">{{$t('打标')}}</v-btn>
                   <v-btn color="teal" @click="goEdit(item.qid)">{{$t('修改')}}</v-btn>
                 </v-card-actions>
               </v-card>

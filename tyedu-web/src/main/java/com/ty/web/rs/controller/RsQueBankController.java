@@ -34,12 +34,7 @@ public class RsQueBankController extends BaseController {
      */
     @GetMapping("/{stage}/{subject}/edit/view")
     public ModelAndView addView(@PathVariable String stage, RsQueBank queBank) throws Exception {
-        stage = StringUtils.upperCase(stage);
-        queBank.setSubject(StringUtils.upperCase(queBank.getSubject()));
-        ModelAndView mview = new ModelAndView(editView);
-        mview.addObject("que", queBank);
-        mview.addObject("stage", stage);
-        return mview;
+        return buildView(stage, queBank, editView);
     }
 
     /**
@@ -47,12 +42,15 @@ public class RsQueBankController extends BaseController {
      */
     @GetMapping("/{stage}/{subject}/edit/{qid}/view")
     public ModelAndView editView(@PathVariable String stage, RsQueBank queBank) throws Exception {
-        stage = StringUtils.upperCase(stage);
-        queBank.setSubject(StringUtils.upperCase(queBank.getSubject()));
-        ModelAndView mview = new ModelAndView(editView);
-        mview.addObject("que", queBank);
-        mview.addObject("stage", stage);
-        return mview;
+        return buildView(stage, queBank, editView);
+    }
+
+    /**
+     * 题目打标View视图
+     */
+    @GetMapping("/{stage}/{subject}/marked/{qid}/view")
+    public ModelAndView markedView(@PathVariable String stage, RsQueBank queBank) throws Exception {
+        return buildView(stage, queBank, "rs/que-marked");
     }
 
     /**
@@ -96,5 +94,17 @@ public class RsQueBankController extends BaseController {
     public AjaxResult del(@PathVariable Integer qid) throws Exception {
         int n = queBankService.delete(qid);
         return AjaxResult.success(n);
+    }
+
+    /*
+     * 构建 ModelAndView
+     */
+    ModelAndView buildView(String stage, RsQueBank queBank, String viewName) {
+        stage = StringUtils.upperCase(stage);
+        queBank.setSubject(StringUtils.upperCase(queBank.getSubject()));
+        ModelAndView mview = new ModelAndView(viewName);
+        mview.addObject("que", queBank);
+        mview.addObject("stage", stage);
+        return mview;
     }
 }

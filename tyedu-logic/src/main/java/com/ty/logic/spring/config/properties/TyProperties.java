@@ -1,4 +1,4 @@
-package com.ty.web.spring.config.properties;
+package com.ty.logic.spring.config.properties;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;

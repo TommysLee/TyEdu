@@ -2,6 +2,7 @@ package com.ty.api.model.rs;
 
 import com.ty.api.model.BaseBO;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * @Date 2026/04/25
  */
 @Data
+@Accessors(chain = true)
 public class RsQueBank extends BaseBO {
 
     @Serial

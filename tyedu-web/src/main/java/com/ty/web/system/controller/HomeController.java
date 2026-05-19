@@ -2,7 +2,7 @@ package com.ty.web.system.controller;
 
 import com.ty.cm.model.AjaxResult;
 import com.ty.web.spring.SpringContextHolder;
-import com.ty.web.spring.config.properties.TyProperties;
+import com.ty.logic.spring.config.properties.TyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
