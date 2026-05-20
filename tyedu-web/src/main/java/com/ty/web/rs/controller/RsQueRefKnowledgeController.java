@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,12 +41,18 @@ public class RsQueRefKnowledgeController extends BaseController {
      * 增加题目的知识点标签
      */
     @PostMapping("/save/{qid}")
-    public AjaxResult save(@PathVariable Integer qid, Set<Integer> ids) throws Exception {
+    public AjaxResult save(@PathVariable Integer qid, @RequestParam LinkedHashSet<Integer> ids) throws Exception {
         List<RsQueRefKnowledge> list = Lists.newArrayList();
         for (Integer kid : ids) {
             list.add(new RsQueRefKnowledge().setQid(qid).setKid(kid));
         }
-        int n = queRefKnowledgeService.saveBatch(list);
+
+        int n = 0;
+        if (list.isEmpty()) {
+            n = queRefKnowledgeService.delete(qid);
+        } else {
+            n = queRefKnowledgeService.saveBatch(list);;
+        }
         return AjaxResult.success(n);
     }
 }

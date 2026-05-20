@@ -14,9 +14,10 @@ const app = Vue.createApp({
       // 数据
       content: null,
       knowledgeList: [],
-      selectedKnowledge: [],
+      selectedKnowledge: _selectedKnowledge,
+      chptList: [],
       chptTreeData: [],
-      selectedChpt: [],
+      selectedChpt: _selectedChpt,
 
       // 数据字典
       dictConfig: {
@@ -32,6 +33,12 @@ const app = Vue.createApp({
     },
     subjectMap() {
       return toMap(this.subjectList);
+    },
+    chptMap() {
+      return toMap(this.chptList, 'chptId', 'chptName')
+    },
+    knowledgeMap() {
+      return toMap(this.knowledgeList, 'kid', 'kname')
     },
     knowledgeTreeData() {
       return this.wrapTreeData(this.knowledgeList, 'kid');
@@ -98,7 +105,7 @@ const app = Vue.createApp({
         let arr = [];
         let id = new Date().getTime();
         for (let item of data) {
-          arr.push({chptId: (id + item.bid), bid: item.bid, chptName: (item.bname + '（' + item.editionTitle + '）'), prependIcon: 'mdi-bookshelf', disabled: true, children: []})
+          arr.push({chptId: (id + item.bid), bid: item.bid, chptName: (item.bname + '（' + item.editionTitle + '）'), prependIcon: 'mdi-bookshelf', baseColor: 'teal', disabled: true, children: []})
         }
         this.chptTreeData = arr;
       })
@@ -112,8 +119,30 @@ const app = Vue.createApp({
         let children = null;
         if (result.data) {
           children = this.wrapTreeData(result.data, 'chptId')
+          this.chptList.push(...result.data);
         }
         item.children = children;
+      })
+    },
+
+    /*
+     * 移除章节标数据
+     */
+    removeCTags(id) {
+      console.log("ctag=", id);
+      this.selectedChpt = this.selectedChpt.filter(v => v !== id)
+      console.log(this.selectedChpt);
+    },
+
+    /*
+     * 移除知识点标数据
+     */
+    removeKTags(id) {
+      this.$nextTick(() => {
+        console.log("Ktag=", id, typeof(id));
+        console.log(this.selectedKnowledge);
+        this.selectedKnowledge = this.selectedKnowledge.filter(v => v !== id)
+        console.log(this.selectedKnowledge);
       })
     },
 
@@ -121,12 +150,28 @@ const app = Vue.createApp({
      * 提交章节标数据
      */
     doSubmitChptMarked() {
+      this.posting = true;
+      doAjaxPost(this.url(`/rs/que-chapter/save/${this.qid}`), {ids: this.selectedChpt}, result => {
+        if (result.state) {
+          this.toast("操作成功");
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      })
     },
 
     /*
      * 提交知识点标数据
      */
     doSubmitKnowledgeMarked() {
+      this.posting = true;
+      doAjaxPost(this.url(`/rs/que-knowledge/save/${this.qid}`), {ids: this.selectedKnowledge}, result => {
+        if (result.state) {
+          this.toast("操作成功");
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      })
     }
   }
 });

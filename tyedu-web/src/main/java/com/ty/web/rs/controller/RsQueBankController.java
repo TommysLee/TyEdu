@@ -2,6 +2,8 @@ package com.ty.web.rs.controller;
 
 import com.ty.api.model.rs.RsQueBank;
 import com.ty.api.rs.service.RsQueBankService;
+import com.ty.api.rs.service.RsQueRefChapterService;
+import com.ty.api.rs.service.RsQueRefKnowledgeService;
 import com.ty.cm.constant.Ty;
 import com.ty.cm.model.AjaxResult;
 import com.ty.web.base.controller.BaseController;
@@ -27,6 +29,13 @@ public class RsQueBankController extends BaseController {
 
     @Autowired
     private RsQueBankService queBankService;
+
+    @Autowired
+    private RsQueRefKnowledgeService queRefKnowledgeService;
+
+    @Autowired
+    private RsQueRefChapterService queRefChapterService;
+
     private final String editView = "rs/que-edit";
 
     /**
@@ -50,7 +59,10 @@ public class RsQueBankController extends BaseController {
      */
     @GetMapping("/{stage}/{subject}/marked/{qid}/view")
     public ModelAndView markedView(@PathVariable String stage, RsQueBank queBank) throws Exception {
-        return buildView(stage, queBank, "rs/que-marked");
+        ModelAndView mview = buildView(stage, queBank, "rs/que-marked");
+        mview.addObject("ktags", queRefKnowledgeService.getSimpleAllForJson(queBank.getQid()));
+        mview.addObject("ctags", queRefChapterService.getSimpleAllForJson(queBank.getQid()));
+        return mview;
     }
 
     /**

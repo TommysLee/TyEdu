@@ -14,10 +14,19 @@ import java.util.List;
 public interface RsQueRefChapterService extends BaseService<RsQueRefChapter> {
 
     /**
-     * 根据题目ID查询所有题目章节标签数据
+     * 根据题目ID查询题目的所有章节标签数据
      *
      * @param qid 题目ID
      * @return List<RsQueRefChapter>
      */
     List<RsQueRefChapter> getAll(Integer qid) throws Exception;
+
+    /**
+     * 根据题目ID查询题目的所有章节标签ID数据，以JSON返回
+     *
+     * @param qid 题目ID
+     * @return String - JSON Format
+     * @throws Exception
+     */
+    String getSimpleAllForJson(Integer qid) throws Exception;
 }

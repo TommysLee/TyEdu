@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,12 +41,18 @@ public class RsQueRefChapterController extends BaseController {
      * 增加题目的章节标签
      */
     @PostMapping("/save/{qid}")
-    public AjaxResult save(@PathVariable Integer qid, Set<Integer> ids) throws Exception {
+    public AjaxResult save(@PathVariable Integer qid, @RequestParam LinkedHashSet<Integer> ids) throws Exception {
         List<RsQueRefChapter> list = Lists.newArrayList();
         for (Integer chptId : ids) {
             list.add(new RsQueRefChapter().setQid(qid).setChptId(chptId));
         }
-        int n = queRefChapterService.saveBatch(list);
+
+        int n = 0;
+        if (list.isEmpty()) {
+            n = queRefChapterService.delete(qid);
+        } else {
+            n = queRefChapterService.saveBatch(list);
+        }
         return AjaxResult.success(n);
     }
 }

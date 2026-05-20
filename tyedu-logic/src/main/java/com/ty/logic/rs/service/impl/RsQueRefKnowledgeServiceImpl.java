@@ -5,6 +5,7 @@ import com.ty.api.model.rs.RsQueBank;
 import com.ty.api.model.rs.RsQueRefKnowledge;
 import com.ty.api.rs.service.RsQueBankService;
 import com.ty.api.rs.service.RsQueRefKnowledgeService;
+import com.ty.cm.utils.DataUtil;
 import com.ty.logic.rs.dao.RsQueRefKnowledgeDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 题目知识点标签业务逻辑实现
@@ -35,7 +37,7 @@ public class RsQueRefKnowledgeServiceImpl implements RsQueRefKnowledgeService {
     private RsQueBankService queBankService;
 
     /**
-     * 根据题目ID查询所有题目知识点标签数据
+     * 根据题目ID查询题目的所有知识点标签数据
      *
      * @param qid 题目ID
      * @return List<RsQueRefKnowledge>
@@ -47,6 +49,23 @@ public class RsQueRefKnowledgeServiceImpl implements RsQueRefKnowledgeService {
             list = queRefKnowledgeDao.findRsQueRefKnowledge(qid);
         }
         return list;
+    }
+
+    /**
+     * 根据题目ID查询题目的所有知识点标签ID数据，以JSON返回
+     *
+     * @param qid 题目ID
+     * @return String - JSON Format
+     * @throws Exception
+     */
+    @Override
+    public String getSimpleAllForJson(Integer qid) throws Exception {
+        String jsonData = "[]";
+        List<RsQueRefKnowledge> list = this.getAll(qid);
+        if (CollectionUtils.isNotEmpty(list)) {
+            jsonData = DataUtil.toJSON(list.stream().map(RsQueRefKnowledge::getKid).collect(Collectors.toList()));
+        }
+        return jsonData;
     }
 
     /**
@@ -104,6 +123,9 @@ public class RsQueRefKnowledgeServiceImpl implements RsQueRefKnowledgeService {
         int n = 0;
         if (null != qid) {
             n = queRefKnowledgeDao.delRsQueRefKnowledge(qid);
+
+            // 更新题目的知识点标记
+            queBankService.update(new RsQueBank().setQid(qid).setKnowledgeMarked(0));
         }
         return n;
     }

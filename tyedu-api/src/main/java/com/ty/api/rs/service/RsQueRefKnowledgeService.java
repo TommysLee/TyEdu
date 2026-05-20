@@ -16,12 +16,21 @@ import java.util.Set;
 public interface RsQueRefKnowledgeService extends BaseService<RsQueRefKnowledge> {
 
     /**
-     * 根据题目ID查询所有题目知识点标签数据
+     * 根据题目ID查询题目的所有知识点标签数据
      *
      * @param qid 题目ID
      * @return List<RsQueRefKnowledge>
      */
     List<RsQueRefKnowledge> getAll(Integer qid) throws Exception;
+
+    /**
+     * 根据题目ID查询题目的所有知识点标签ID数据，以JSON返回
+     *
+     * @param qid 题目ID
+     * @return String - JSON Format
+     * @throws Exception
+     */
+    String getSimpleAllForJson(Integer qid) throws Exception;
 
     /**
      * 查询题目的完整知识点标签数据

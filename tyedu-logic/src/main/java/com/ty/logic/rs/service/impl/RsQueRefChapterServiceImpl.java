@@ -5,6 +5,7 @@ import com.ty.api.model.rs.RsQueBank;
 import com.ty.api.model.rs.RsQueRefChapter;
 import com.ty.api.rs.service.RsQueBankService;
 import com.ty.api.rs.service.RsQueRefChapterService;
+import com.ty.cm.utils.DataUtil;
 import com.ty.logic.rs.dao.RsQueRefChapterDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 题目章节标签业务逻辑实现
@@ -34,7 +36,7 @@ public class RsQueRefChapterServiceImpl implements RsQueRefChapterService {
     private RsQueBankService queBankService;
 
     /**
-     * 根据题目ID查询所有题目章节标签数据
+     * 根据题目ID查询题目的所有章节标签数据
      *
      * @param qid 题目ID
      * @return List<RsQueRefChapter>
@@ -46,6 +48,23 @@ public class RsQueRefChapterServiceImpl implements RsQueRefChapterService {
             list = queRefChapterDao.findRsQueRefChapter(qid);
         }
         return list;
+    }
+
+    /**
+     * 根据题目ID查询题目的所有章节标签ID数据，以JSON返回
+     *
+     * @param qid 题目ID
+     * @return String - JSON Format
+     * @throws Exception
+     */
+    @Override
+    public String getSimpleAllForJson(Integer qid) throws Exception {
+        String jsonData = "[]";
+        List<RsQueRefChapter> list = this.getAll(qid);
+        if (CollectionUtils.isNotEmpty(list)) {
+            jsonData = DataUtil.toJSON(list.stream().map(RsQueRefChapter::getChptId).collect(Collectors.toList()));
+        }
+        return jsonData;
     }
 
     /**
@@ -87,6 +106,9 @@ public class RsQueRefChapterServiceImpl implements RsQueRefChapterService {
         int n = 0;
         if (null != qid) {
             n = queRefChapterDao.delRsQueRefChapter(qid);
+
+            // 更新题目的章节标记
+            queBankService.update(new RsQueBank().setQid(qid).setChptMarked(0));
         }
         return n;
     }
