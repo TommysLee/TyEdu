@@ -173,6 +173,8 @@ loadLocaleMessages("en-US", Object.assign({
     "学科": "Subject",
     "版本": "Edition",
     "题号": "NO.",
+    "录题": "New",
+    "打标": "Tagging",
     "新增题目": "New",
     "修改题目": "Modify",
     "答案": "Answer"

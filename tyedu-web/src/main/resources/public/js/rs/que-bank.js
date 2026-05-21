@@ -121,6 +121,8 @@ const app = Vue.createApp({
       this.loading = true;
       this.param.page = this.pagination.page;
       this.param.pageSize = this.pagination.pageSize;
+      this.param.ctagsId = this.selectedChpt;
+      this.param.ktagsId = this.selectedKnowledge;
 
       doAjaxPost(this.url(`/rs/que/${this.stage}/${this.subject}/list`), this.param, result => {
         if (result.state) {

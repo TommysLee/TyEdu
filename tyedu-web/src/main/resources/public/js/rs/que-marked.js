@@ -129,21 +129,14 @@ const app = Vue.createApp({
      * 移除章节标数据
      */
     removeCTags(id) {
-      console.log("ctag=", id);
       this.selectedChpt = this.selectedChpt.filter(v => v !== id)
-      console.log(this.selectedChpt);
     },
 
     /*
      * 移除知识点标数据
      */
     removeKTags(id) {
-      this.$nextTick(() => {
-        console.log("Ktag=", id, typeof(id));
-        console.log(this.selectedKnowledge);
-        this.selectedKnowledge = this.selectedKnowledge.filter(v => v !== id)
-        console.log(this.selectedKnowledge);
-      })
+      this.selectedKnowledge = this.selectedKnowledge.filter(v => v !== id)
     },
 
     /*

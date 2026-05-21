@@ -1,12 +1,16 @@
 package com.ty.web.rs.controller;
 
+import com.google.common.collect.Lists;
 import com.ty.api.model.rs.RsQueBank;
+import com.ty.api.model.rs.RsQueRefChapter;
+import com.ty.api.model.rs.RsQueRefKnowledge;
 import com.ty.api.rs.service.RsQueBankService;
 import com.ty.api.rs.service.RsQueRefChapterService;
 import com.ty.api.rs.service.RsQueRefKnowledgeService;
 import com.ty.cm.constant.Ty;
 import com.ty.cm.model.AjaxResult;
 import com.ty.web.base.controller.BaseController;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * 题库Controller
@@ -69,7 +76,18 @@ public class RsQueBankController extends BaseController {
      * 分页查询题库列表
      */
     @RequestMapping("/{stage}/{subject}/list")
-    public AjaxResult list(RsQueBank queBank, @RequestParam(defaultValue = Ty.DEFAULT_PAGE) String page, @RequestParam(defaultValue = Ty.DEFAULT_PAGESIZE) String pageSize) throws Exception {
+    public AjaxResult list(RsQueBank queBank, @RequestParam(required = false) LinkedHashSet<Integer> ctagsId, @RequestParam(required = false) LinkedHashSet<Integer> ktagsId, @RequestParam(defaultValue = Ty.DEFAULT_PAGE) String page, @RequestParam(defaultValue = Ty.DEFAULT_PAGESIZE) String pageSize) throws Exception {
+        if (CollectionUtils.isNotEmpty(ctagsId)) {
+            List<RsQueRefChapter> ctags = Lists.newArrayListWithCapacity(ctagsId.size());
+            ctagsId.forEach(cid -> ctags.add(new RsQueRefChapter().setChptId(cid)));
+            queBank.setCtags(ctags);
+        }
+
+        if (CollectionUtils.isNotEmpty(ktagsId)) {
+            List<RsQueRefKnowledge> ktags = Lists.newArrayListWithCapacity(ktagsId.size());
+            ktagsId.forEach(kid -> ktags.add(new RsQueRefKnowledge().setKid(kid)));
+            queBank.setKtags(ktags);
+        }
         return AjaxResult.success(queBankService.query(queBank, page, pageSize));
     }
 

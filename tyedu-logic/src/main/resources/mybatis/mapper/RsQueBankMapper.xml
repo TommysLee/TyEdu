@@ -36,6 +36,22 @@
             <if test="difficulty != null">
                 and t.difficulty=#{difficulty}
             </if>
+            <if test="ktags != null and ktags.size() > 0">
+                and t.qid IN (
+                    SELECT qid FROM t_rs_que_ref_knowledge WHERE kid IN
+                    <foreach collection="ktags" item="item" open="(" close=")" separator=",">
+                        #{item.kid}
+                    </foreach>
+                )
+            </if>
+            <if test="ctags != null and ctags.size() > 0">
+                and t.qid IN (
+                    SELECT qid FROM t_rs_que_ref_chapter WHERE chpt_id IN
+                    <foreach collection="ctags" item="item" open="(" close=")" separator=",">
+                        #{item.chptId}
+                    </foreach>
+                )
+            </if>
         </where>
     </sql>
 

@@ -194,12 +194,12 @@ public class RsQueBankServiceImpl implements RsQueBankService {
             Set<Integer> qidSet = queList.stream().map(RsQueBank::getQid).collect(Collectors.toSet());
 
             // 查询知识点标签数据后，按题目ID分组
-            List<RsQueRefKnowledge> queRefKnowledgeList = queRefKnowledgeService.getFullAll(qidSet);
-            Map<Integer,List<RsQueRefKnowledge>> queRefKnowledgeMap = queRefKnowledgeList.stream().collect(Collectors.groupingBy(RsQueRefKnowledge::getQid));
+            List<RsQueRefKnowledge> ktags = queRefKnowledgeService.getFullAll(qidSet);
+            Map<Integer,List<RsQueRefKnowledge>> ktagsMap = ktags.stream().collect(Collectors.groupingBy(RsQueRefKnowledge::getQid));
 
             // 将知识点标签数据，添加到题目对象中
             for (RsQueBank q : queList) {
-                q.setRefKnowledgeList(queRefKnowledgeMap.getOrDefault(q.getQid(), Lists.newArrayListWithCapacity(0)));
+                q.setKtags(ktagsMap.getOrDefault(q.getQid(), Lists.newArrayListWithCapacity(0)));
             }
         }
     }

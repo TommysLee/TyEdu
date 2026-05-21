@@ -55,5 +55,8 @@ public class RsQueBank extends BaseBO {
      */
 
     // 知识点标签数据集合
-    private List<RsQueRefKnowledge> refKnowledgeList;
+    private List<RsQueRefKnowledge> ktags;
+
+    // 章节标数据集合
+    private List<RsQueRefChapter> ctags;
 }

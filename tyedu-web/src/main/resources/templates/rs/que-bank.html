@@ -59,7 +59,7 @@
                   </template>
                   <v-sheet border="opacity-100 success thin" class="v-fill-half-width">
                     <v-row dense class="ma-0">
-                      <v-col cols="1" class="text-grey-darken-1 line-height-40">
+                      <v-col cols="auto" class="text-grey-darken-1 line-height-40">
                         {{$t('版本')}}:
                       </v-col>
                       <v-col>
@@ -75,7 +75,7 @@
                       </v-col>
                     </v-row>
                     <v-row dense class="ma-0">
-                      <v-col cols="1" class="text-grey-darken-1 line-height-40">
+                      <v-col cols="auto" class="text-grey-darken-1 line-height-40">
                         {{$t('教材')}}:
                       </v-col>
                       <v-col>
@@ -92,30 +92,28 @@
                     </v-row>
                   </v-sheet>
                 </v-menu>
-                <v-treeview v-model:activated="selectedChpt" items-registration="props" activatable color="teal" density="compact" item-value="chptId" item-title="chptName" :items="chptTreeData" class="bg-transparent treeview-break">
+                <v-treeview v-model:activated="selectedChpt" items-registration="props" activatable color="teal" density="compact" item-value="chptId" item-title="chptName" :items="chptTreeData" class="bg-transparent treeview-break" @update:activated="doQuery">
                 </v-treeview>
               </v-sheet>
 
               <!-- 知识点树 -->
               <v-sheet v-else>
-                <v-treeview v-model:activated="selectedKnowledge" items-registration="props" activatable color="teal" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent treeview-break">
+                <v-treeview v-model:activated="selectedKnowledge" items-registration="props" activatable color="teal" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="bg-transparent treeview-break" @update:activated="doQuery">
                 </v-treeview>
               </v-sheet>
             </v-navigation-drawer>
 
             <!-- 题目区域 -->
-            <v-card-zoom ref="qcontainer" flat tile color="grey-lighten-3" class="fill-height pa-4 overflow-auto" :loading="loading">
+            <v-card-zoom ref="qcontainer" flat tile color="grey-lighten-3" class="d-block fill-height pa-4 overflow-auto" :loading="loading">
               <!-- 搜索条件 -->
-              <v-list class="mb-2">
-                <v-list-item class="font-weight-bold">
-                  <template v-slot:prepend>
-                    {{$t('题型')}}:
-                  </template>
+              <v-row class="bg-white ma-0 mb-2">
+                <v-col cols="auto" class="mt-1 pr-0 font-weight-bold">{{$t('题型')}}:</v-col>
+                <v-col>
                   <v-btn-toggle v-model="param.type" density="comfortable" color="teal" variant="plain" class="flex-wrap h-auto" @click="doQuery">
-                    <v-btn v-for="item in qtypeList" :value="item.value">{{item.title}}</v-btn>
+                    <v-btn v-for="item in qtypeList" :value="item.value" :key="item.value">{{item.title}}</v-btn>
                   </v-btn-toggle>
-                </v-list-item>
-              </v-list>
+                </v-col>
+              </v-row>
 
               <!-- 题目列表 -->
               <v-card hover class="mb-2" v-for="item in dataList">
@@ -126,7 +124,8 @@
                     <v-icon icon="mdi-star" size="x-small" color="yellow" v-for="i in item.difficulty"></v-icon>
                   </v-card-title>
                   <v-card-subtitle>
-                    {{qtypeMap[item.type]}} <span class="px-2 opacity-40">|</span> 知识点
+                    {{qtypeMap[item.type]}} <span class="px-2 opacity-40">|</span>
+                    <span v-for="k in item.ktags" :key="k.kid" class="mr-3">{{k.kname}}</span>
                   </v-card-subtitle>
                 </v-card-item>
                 <v-card-text class="v-rich-text" @click="item.show = !item.show">
