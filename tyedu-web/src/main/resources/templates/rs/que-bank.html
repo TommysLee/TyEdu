@@ -4,11 +4,12 @@
   <!--/* 共用JS与CSS */-->
   <th:block th:replace="~{assets/include :: katex}"/>
   <th:block th:replace="~{assets/include :: scriptcss('题库')}"/>
+  <link rel="stylesheet" th:href="@{/js/lib/fluent-editor/fluent-editor.min.css}"/>
   <style>
-    .que-item .v-popconfirm:not(.op-deleting) {
+    .ql-editor .v-popconfirm:not(.op-deleting) {
       visibility: hidden;
     }
-    .que-item:hover .v-popconfirm {
+    .ql-editor:hover .v-popconfirm {
       visibility: visible;
     }
   </style>
@@ -124,7 +125,7 @@
               </v-row>
 
               <!-- 题目列表 -->
-              <v-card hover class="mb-2 que-item" v-for="item in dataList" :key="item.qid">
+              <v-card hover class="mb-2 ql-editor ql-readonly" v-for="item in dataList" :key="item.qid">
                 <v-card-item>
                   <v-card-title class="mb-1 d-flex align-center">
                     <v-btn color="primary" variant="tonal" :ripple="false">{{item.index}}.</v-btn>
