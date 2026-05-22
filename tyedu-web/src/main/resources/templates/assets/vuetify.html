@@ -12,7 +12,7 @@
   <template id="v-popconfirm-template">
     <v-menu location="top" :close-on-content-click="false" :disabled="disabled" v-model="visible">
       <template v-slot:activator="{ props }">
-        <a v-bind="props" :class="fclass" ref="button">
+        <a v-bind="props" :class="fclass" class="v-popconfirm" ref="button">
           <slot>{{$t('删除')}}</slot>
         </a>
       </template>

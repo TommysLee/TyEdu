@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.ty.api.model.rs.RsQueBank;
 import com.ty.api.model.rs.RsQueRefKnowledge;
 import com.ty.api.rs.service.RsQueBankService;
+import com.ty.api.rs.service.RsQueRefChapterService;
 import com.ty.api.rs.service.RsQueRefKnowledgeService;
 import com.ty.cm.utils.DateUtils;
 import com.ty.logic.rs.dao.RsQueBankDao;
@@ -43,6 +44,9 @@ public class RsQueBankServiceImpl implements RsQueBankService {
 
     @Autowired
     private RsQueRefKnowledgeService queRefKnowledgeService;
+
+    @Autowired
+    private RsQueRefChapterService queRefChapterService;
 
     /**
      * 根据条件查询所有题库数据
@@ -180,6 +184,11 @@ public class RsQueBankServiceImpl implements RsQueBankService {
     public int delete(Integer id) throws Exception {
         int n = 0;
         if (Objects.nonNull(id)) {
+            // 先删除打标数据
+            queRefKnowledgeService.delete(id);
+            queRefChapterService.delete(id);
+
+            // 再删除题目
             n = queBankDao.delRsQueBank(id);
         }
         return n;

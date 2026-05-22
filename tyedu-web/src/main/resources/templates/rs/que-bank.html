@@ -4,6 +4,14 @@
   <!--/* 共用JS与CSS */-->
   <th:block th:replace="~{assets/include :: katex}"/>
   <th:block th:replace="~{assets/include :: scriptcss('题库')}"/>
+  <style>
+    .que-item .v-popconfirm:not(.op-deleting) {
+      visibility: hidden;
+    }
+    .que-item:hover .v-popconfirm {
+      visibility: visible;
+    }
+  </style>
 </head>
 <body>
   <div id="app" v-cloak>
@@ -116,10 +124,13 @@
               </v-row>
 
               <!-- 题目列表 -->
-              <v-card hover class="mb-2" v-for="item in dataList">
+              <v-card hover class="mb-2 que-item" v-for="item in dataList" :key="item.qid">
                 <v-card-item>
                   <v-card-title class="mb-1 d-flex align-center">
                     <v-btn color="primary" variant="tonal" :ripple="false">{{item.index}}.</v-btn>
+                    <v-popconfirm clazz="ml-2" :data="item.qid" @confirm="doDelete">
+                      <v-btn icon="mdi-delete" variant="text" color="pink"></v-btn>
+                    </v-popconfirm>
                     <v-spacer></v-spacer>
                     <v-icon icon="mdi-star" size="x-small" color="yellow" v-for="i in item.difficulty"></v-icon>
                   </v-card-title>
@@ -158,6 +169,7 @@
 
   <!-- 导入Vuetify扩展组件 -->
   <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
+  <th:block th:replace="~{assets/vuetify :: v-popconfirm}"/>
 
   <!-- 业务js -->
   <script type="text/javascript" th:src="@{/js/rs/que-bank.js}"></script>

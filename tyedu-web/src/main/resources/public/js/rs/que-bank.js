@@ -241,6 +241,21 @@ const app = Vue.createApp({
     },
 
     /*
+     * 删除题目
+     */
+    doDelete(qid) {
+      this.method = "del";
+      doAjaxGet(this.url(`/rs/que/del/${qid}`), null, (result) => {
+        if (result.state) {
+          this.toast("操作成功");
+          this.doQuery();
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      });
+    },
+
+    /*
      * 前往编辑页面（新增/修改）
      */
     goEdit(qid) {
