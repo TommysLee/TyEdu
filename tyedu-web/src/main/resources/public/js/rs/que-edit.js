@@ -89,9 +89,9 @@ const app = Vue.createApp({
      * 初始化编辑器
      */
     initEditor() {
-      this.stemEditor = TinyEditor.init('#stemEditor');
-      this.answerEditor = TinyEditor.init('#answerEditor');
-      this.analysisEditor = TinyEditor.init('#analysisEditor');
+      this.stemEditor = Vue.markRaw(TinyEditor.init('#stemEditor'));
+      this.answerEditor = Vue.markRaw(TinyEditor.init('#answerEditor'));
+      this.analysisEditor = Vue.markRaw(TinyEditor.init('#analysisEditor'));
     },
 
     /*
@@ -146,13 +146,13 @@ const app = Vue.createApp({
      */
     setEditorsContent() {
       if (this.formData.stem) {
-        this.stemEditor.root.innerHTML = TinyEditor.resolveHtml(this.formData.stem);
+        TinyEditor.setContent(this.stemEditor, this.formData.stem);
       }
       if (this.formData.answer) {
-        this.answerEditor.root.innerHTML = TinyEditor.resolveHtml(this.formData.answer);
+        TinyEditor.setContent(this.answerEditor, this.formData.answer);
       }
       if (this.formData.analysis) {
-        this.analysisEditor.root.innerHTML = TinyEditor.resolveHtml(this.formData.analysis);
+        TinyEditor.setContent(this.analysisEditor, this.formData.analysis);
       }
     }
   }

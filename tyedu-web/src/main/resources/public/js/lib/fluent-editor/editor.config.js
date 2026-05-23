@@ -13,7 +13,7 @@ class TinyEditor {
     ['bold', 'italic', 'strike', 'underline', 'divider'],
     [{ color: [] }, { background: [] }],
     [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-    [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+    [{ list: 'bullet' }],
     [{ script: 'sub' }, { script: 'super' }],
     [{ indent: '-1' }, { indent: '+1' }],
     [{ direction: 'rtl' }],
@@ -63,5 +63,12 @@ class TinyEditor {
       html = doc.body.innerHTML;
     }
     return html || '';
+  }
+
+  /*
+   * 设置编辑器内容（回显内容）
+   */
+  static setContent(editor, html) {
+    editor && editor.clipboard.dangerouslyPasteHTML(TinyEditor.resolveHtml(html))
   }
 }
