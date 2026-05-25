@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.bbd.dao.StudentDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="StudentMap" type="Student">
+        <result property="sid" column="sid" />
+        <result property="school" column="school" />
+        <result property="name" column="name" />
+        <result property="stage" column="stage" />
+        <result property="grade" column="grade" />
+        <result property="gradeTitle" column="grade_title" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询结果集 -->
+    <select id="findStudent" parameterType="Student" resultMap="StudentMap">
+        SELECT
+            t.sid,
+            t.school,
+            t.name,
+            t.stage,
+            t.grade,
+            t.grade_title,
+            t.create_time,
+            t.update_time
+        FROM
+            t_student t
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveStudent" parameterType="Student">
+        INSERT INTO t_student
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="school != null">school,</if>
+            <if test="name != null">name,</if>
+            <if test="stage != null">stage,</if>
+            <if test="grade != null">grade,</if>
+            <if test="gradeTitle != null">grade_title,</if>
+            create_time,
+            update_time,
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="school != null">#{school},</if>
+            <if test="name != null">#{name},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="gradeTitle != null">#{gradeTitle},</if>
+            #{createTime},
+            #{createTime}
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateStudent" parameterType="Student">
+        UPDATE t_student
+        <set>
+            <if test="school != null">school=#{school},</if>
+            <if test="name != null">name=#{name},</if>
+            <if test="stage != null">stage=#{stage},</if>
+            <if test="grade != null">grade=#{grade},</if>
+            <if test="gradeTitle != null">grade_title=#{gradeTitle},</if>
+            update_time=#{updateTime}
+        </set>
+        WHERE sid = #{sid}
+    </update>
+</mapper>

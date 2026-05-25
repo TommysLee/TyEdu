@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.sch.dao.ExamDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="ExamMap" type="Exam">
+        <result property="examId" column="exam_id" />
+        <result property="title" column="title" />
+        <result property="examType" column="exam_type" />
+        <result property="examTime" column="exam_time" />
+        <result property="stage" column="stage" />
+        <result property="subject" column="subject" />
+        <result property="grade" column="grade" />
+        <result property="maxScore" column="max_score" />
+        <result property="score" column="score" />
+        <result property="published" column="published" />
+        <result property="reviewed" column="reviewed" />
+        <result property="remark" column="remark" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_exam">
+        <where>
+            <if test="examId != null">
+                and t.exam_id=#{examId}
+            </if>
+            <if test="title != null and title != ''">
+                and t.title LIKE CONCAT('%',#{title},'%')
+            </if>
+            <if test="examType != null and examType != ''">
+                and t.exam_type=#{examType}
+            </if>
+            <if test="examTime != null and examTime != ''">
+                and t.exam_time=#{examTime}
+            </if>
+            <if test="stage != null and stage != ''">
+                and t.stage=#{stage}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject=#{subject}
+            </if>
+            <if test="grade != null and grade != ''">
+                and t.grade=#{grade}
+            </if>
+            <if test="published != null">
+                and t.published=#{published}
+            </if>
+            <if test="reviewed != null">
+                and t.reviewed=#{reviewed}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findExamCount" parameterType="Exam" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_exam t
+        <include refid="condition_exam" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findExam" parameterType="Exam" resultMap="ExamMap">
+        SELECT
+            t.exam_id,
+            t.title,
+            t.exam_type,
+            t.exam_time,
+            t.stage,
+            t.subject,
+            t.grade,
+            t.max_score,
+            t.score,
+            t.published,
+            t.reviewed,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_exam t
+        <include refid="condition_exam" />
+        ORDER BY t.exam_id DESC
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findExamById" parameterType="java.lang.Integer" resultMap="ExamMap">
+        SELECT
+            t.exam_id,
+            t.title,
+            t.exam_type,
+            t.exam_time,
+            t.stage,
+            t.subject,
+            t.grade,
+            t.max_score,
+            t.score,
+            t.published,
+            t.reviewed,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_exam t
+        WHERE t.exam_id = #{examId}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveExam" parameterType="Exam">
+        INSERT INTO t_exam
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="examType != null">exam_type,</if>
+            <if test="examTime != null">exam_time,</if>
+            <if test="stage != null">stage,</if>
+            <if test="subject != null">subject,</if>
+            <if test="grade != null">grade,</if>
+            <if test="maxScore != null">max_score,</if>
+            <if test="score != null">score,</if>
+            <if test="published != null">published,</if>
+            <if test="reviewed != null">reviewed,</if>
+            <if test="remark != null">remark,</if>
+            create_time,
+            update_time
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="examType != null">#{examType},</if>
+            <if test="examTime != null">#{examTime},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="maxScore != null">#{maxScore},</if>
+            <if test="score != null">#{score},</if>
+            <if test="published != null">#{published},</if>
+            <if test="reviewed != null">#{reviewed},</if>
+            <if test="remark != null">#{remark},</if>
+            #{createTime},
+            #{createTime}
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateExam" parameterType="Exam">
+        UPDATE t_exam
+        <set>
+            <if test="title != null">title=#{title},</if>
+            <if test="examType != null">exam_type=#{examType},</if>
+            <if test="examTime != null">exam_time=#{examTime},</if>
+            <if test="stage != null">stage=#{stage},</if>
+            <if test="subject != null">subject=#{subject},</if>
+            <if test="grade != null">grade=#{grade},</if>
+            <if test="maxScore != null">max_score=#{maxScore},</if>
+            <if test="score != null">score=#{score},</if>
+            <if test="published != null">published=#{published},</if>
+            <if test="reviewed != null">reviewed=#{reviewed},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            update_time=#{updateTime}
+        </set>
+        WHERE exam_id = #{examId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delExam" parameterType="java.lang.Integer">
+        DELETE FROM t_exam WHERE exam_id = #{examId}
+    </delete>
+</mapper>
