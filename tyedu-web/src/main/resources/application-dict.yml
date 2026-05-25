@@ -5,6 +5,26 @@ ty:
     { title: 初中, value: CZ },
     { title: 高中, value: GZ }
   ]
+  # 年级
+  dict-grade-map:
+    XX: [
+      { title: 一年级, value: G1 },
+      { title: 二年级, value: G2 },
+      { title: 三年级, value: G3 },
+      { title: 四年级, value: G4 },
+      { title: 五年级, value: G5 },
+      { title: 六年级, value: G6 }
+    ]
+    CZ: [
+      { title: 七年级, value: G7 },
+      { title: 八年级, value: G8 },
+      { title: 九年级, value: G9 }
+    ]
+    GZ: [
+      { title: 高一, value: G10 },
+      { title: 高二, value: G11 },
+      { title: 高三, value: G12 }
+    ]
   # 难度
   dict-difficulty-list: [
     { title: 容易, value: 1 },
@@ -12,6 +32,16 @@ ty:
     { title: 适中, value: 3 },
     { title: 较难, value: 4 },
     { title: 困难, value: 5 }
+  ]
+  # 考试类型
+  dict-exam-type-list: [
+    { title: 自测, value: SE },
+    { title: 随堂测验, value: Q },
+    { title: 单元测试, value: UT },
+    { title: 月考, value: ME },
+    { title: 模拟考试, value: MK },
+    { title: 期中考试, value: MT },
+    { title: 期末考试, value: FE }
   ]
   # 学科
   dict-subject-map:

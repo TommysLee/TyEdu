@@ -30,11 +30,27 @@ public class DictionaryController {
     }
 
     /**
+     * 获取字典列表【年级】
+     */
+    @GetMapping("/grade/{stage}")
+    public AjaxResult gradeList(@PathVariable String stage) throws Exception {
+        return AjaxResult.success(dictionaryService.gradeList(stage));
+    }
+
+    /**
      * 获取字典列表【难度】
      */
     @GetMapping("/difficulty")
     public AjaxResult difficultyList() throws Exception {
         return AjaxResult.success(dictionaryService.difficultyList());
+    }
+
+    /**
+     * 获取字典列表【考试类型】
+     */
+    @GetMapping("/exam_type")
+    public AjaxResult examTypeList() throws Exception {
+        return AjaxResult.success(dictionaryService.examTypeList());
     }
 
     /**

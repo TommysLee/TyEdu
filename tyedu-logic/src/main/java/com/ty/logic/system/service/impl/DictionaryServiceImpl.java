@@ -36,6 +36,30 @@ public class DictionaryServiceImpl implements DictionaryService {
     }
 
     /**
+     * 获取字典列表【年级】
+     *
+     * @return List<DictionaryItem>
+     */
+    @Override
+    public List<DictionaryItem> gradeList() {
+        List<DictionaryItem> list = Lists.newArrayList();
+        tyProperties.getDictGradeMap().values().forEach(list::addAll);
+        return list;
+    }
+
+    /**
+     * 获取字典列表【年级】
+     *
+     * @param stage 学段
+     * @return List<DictionaryItem>
+     */
+    @Override
+    public List<DictionaryItem> gradeList(String stage) {
+        stage = stage.toUpperCase();
+        return tyProperties.getDictGradeMap().getOrDefault(stage, Lists.newArrayList());
+    }
+
+    /**
      * 获取字典列表【难度】
      *
      * @return List<DictionaryItem>
@@ -43,6 +67,16 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Override
     public List<DictionaryItem> difficultyList() {
         return tyProperties.getDictDifficultyList();
+    }
+
+    /**
+     * 获取字典列表【考试类型】
+     *
+     * @return List<DictionaryItem>
+     */
+    @Override
+    public List<DictionaryItem> examTypeList() {
+        return tyProperties.getDictExamTypeList();
     }
 
     /**

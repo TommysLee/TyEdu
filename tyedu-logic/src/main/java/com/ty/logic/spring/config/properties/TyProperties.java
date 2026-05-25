@@ -31,8 +31,14 @@ public class TyProperties {
     /** 字典【学段】 **/
     private List<DictionaryItem> dictStageList = Lists.newArrayList();
 
+    /** 字典【年级】 **/
+    private Map<String, List<DictionaryItem>> dictGradeMap = Maps.newLinkedHashMap();
+
     /** 字典【难度】 **/
     private List<DictionaryItem> dictDifficultyList = Lists.newArrayList();
+
+    /** 字典【考试类型】 **/
+    private List<DictionaryItem> dictExamTypeList = Lists.newArrayList();
 
     /** 字典【学科】 **/
     private Map<String, List<DictionaryItem>> dictSubjectMap = Maps.newLinkedHashMap();

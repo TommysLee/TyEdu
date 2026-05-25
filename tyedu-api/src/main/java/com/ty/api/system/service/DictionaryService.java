@@ -21,11 +21,33 @@ public interface DictionaryService {
     List<DictionaryItem> stageList();
 
     /**
+     * 获取字典列表【年级】
+     *
+     * @return List<DictionaryItem>
+     */
+    List<DictionaryItem> gradeList();
+
+    /**
+     * 获取字典列表【年级】
+     *
+     * @param stage 学段
+     * @return List<DictionaryItem>
+     */
+    List<DictionaryItem> gradeList(String stage);
+
+    /**
      * 获取字典列表【难度】
      *
      * @return List<DictionaryItem>
      */
     List<DictionaryItem> difficultyList();
+
+    /**
+     * 获取字典列表【考试类型】
+     *
+     * @return List<DictionaryItem>
+     */
+    List<DictionaryItem> examTypeList();
 
     /**
      * 获取字典列表【学科】
