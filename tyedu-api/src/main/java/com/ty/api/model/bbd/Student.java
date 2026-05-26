@@ -34,4 +34,14 @@ public class Student extends BaseBO {
 
     /** 年级显示名称 **/
     private String gradeTitle;
+
+    /**
+     * 数据前置处理
+     */
+    @Override
+    public Student precheck() {
+        this.stage = null == this.stage? null : this.stage.toUpperCase();
+        this.grade = null == this.grade? null : this.grade.toUpperCase();
+        return this;
+    }
 }

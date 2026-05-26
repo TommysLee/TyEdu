@@ -16,7 +16,7 @@ import java.util.Set;
 public interface RsQueRefKnowledgeDao {
 
     /**
-     * 根据题目ID查询所有题目知识点标签数据
+     * 根据题目ID查询所有知识点标签数据
      *
      * @param qid 题目ID
      * @return List<RsQueRefKnowledge>

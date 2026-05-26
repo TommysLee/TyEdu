@@ -35,11 +35,18 @@ public class BaseBO implements Serializable {
     private Boolean isLike;
 
     /**
-     * 置空不重要的属性值
+     * 数据清洗
      */
     public BaseBO clean() {
         this.setCreateTime(null);
         this.setUpdateTime(null);
+        return this;
+    }
+
+    /**
+     * 数据前置处理
+     */
+    public BaseBO precheck() {
         return this;
     }
 }

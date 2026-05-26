@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.sch.dao.ExamQueRefChapterDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="ExamQueRefChapterMap" type="ExamQueRefChapter">
+        <result property="qid" column="qid" />
+        <result property="chptId" column="chpt_id" />
+        <result property="chptName" column="chpt_name" />
+    </resultMap>
+
+    <!-- 查询结果集 -->
+    <select id="findExamQueRefChapter" parameterType="java.lang.Integer" resultMap="ExamQueRefChapterMap">
+        SELECT
+            t.qid,
+            t.chpt_id,
+            t.chpt_name
+        FROM
+            t_exam_que_ref_chapter t
+        WHERE
+            t.qid=#{qid}
+    </select>
+
+    <!-- 批量保存 -->
+    <insert id="saveMultiExamQueRefChapter" parameterType="java.util.List">
+        INSERT INTO t_exam_que_ref_chapter(qid, chpt_id, chpt_name)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.qid}, #{item.chptId}, #{item.chptName})
+        </foreach>
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="delExamQueRefChapter" parameterType="java.lang.Integer">
+        DELETE FROM t_exam_que_ref_chapter WHERE qid = #{qid}
+    </delete>
+</mapper>

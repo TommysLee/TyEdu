@@ -2,7 +2,12 @@ package com.ty.logic.sch.service.impl;
 
 import com.github.pagehelper.Page;
 import com.ty.api.model.sch.Exam;
+import com.ty.api.model.sch.ExamQue;
+import com.ty.api.sch.service.ExamQueService;
 import com.ty.api.sch.service.ExamService;
+import com.ty.cm.constant.enums.PublishType;
+import com.ty.cm.constant.enums.ReviewType;
+import com.ty.cm.exception.CustomException;
 import com.ty.cm.utils.DateUtils;
 import com.ty.logic.sch.dao.ExamDao;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.ty.cm.constant.Messages.RELATED_DATA_DELETE;
+import static com.ty.cm.constant.Numbers.ZERO;
 import static com.ty.cm.constant.Ty.DATA;
 import static com.ty.cm.constant.Ty.PAGES;
 import static com.ty.cm.constant.Ty.TOTAL;
@@ -33,6 +40,9 @@ public class ExamServiceImpl implements ExamService {
 
     @Autowired
     private ExamDao examDao;
+
+    @Autowired
+    private ExamQueService examQueService;
 
     /**
      * 根据条件查询所有考试数据
@@ -174,7 +184,61 @@ public class ExamServiceImpl implements ExamService {
     public int delete(Integer id) throws Exception {
         int n = 0;
         if (null != id) {
+            // 判断待删除的数据，是否存在依赖关系
+            if (examQueService.getCount(new ExamQue().setExamId(id)) > ZERO) {
+                throw new CustomException(RELATED_DATA_DELETE);
+            }
+
+            // 执行删除操作
             n = examDao.delExam(id);
+        }
+        return n;
+    }
+
+    /**
+     * 更新考试的发布状态
+     *
+     * @param examId 考试ID
+     * @param status 状态值
+     * @return int
+     */
+    @Override
+    public int updatePublishStatus(Integer examId, int status) throws Exception {
+        int n = 0;
+        if (null != examId) {
+            Exam exam = new Exam().setExamId(examId).setPublished(status);
+
+            // 统计卷面分
+            if (PublishType.PUBLISHED.eq(status)) {
+                exam.setMaxScore(examQueService.calcMaxScore(examId));
+            }
+
+            // 执行更新
+            return this.update(exam);
+        }
+        return n;
+    }
+
+    /**
+     * 更新考试的批阅状态
+     *
+     * @param examId 考试ID
+     * @param status 状态值
+     * @return int
+     */
+    @Override
+    public int updateReviewStatus(Integer examId, int status) throws Exception {
+        int n = 0;
+        if (null != examId) {
+            Exam exam = new Exam().setExamId(examId).setReviewed(status);
+
+            // 统计得分
+            if (ReviewType.REVIEWED.eq(status)) {
+                exam.setScore(examQueService.calcScore(examId));
+            }
+
+            // 执行更新
+            return this.update(exam);
         }
         return n;
     }

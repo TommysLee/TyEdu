@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.sch.dao.ExamQueRefKnowledgeDao">
+
+    <!-- 查询结果集 -->
+    <select id="findExamQueRefKnowledge" parameterType="java.lang.Integer" resultType="ExamQueRefKnowledge">
+        SELECT
+            t.qid,
+            t.kid,
+            t.kname
+        FROM
+            t_exam_que_ref_knowledge t
+        WHERE
+            t.qid=#{qid}
+    </select>
+
+    <!-- 批量保存 -->
+    <insert id="saveMultiExamQueRefKnowledge" parameterType="java.util.List">
+        INSERT INTO t_exam_que_ref_knowledge(qid, kid, kname)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.qid}, #{item.kid}, #{item.kname})
+        </foreach>
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="delExamQueRefKnowledge" parameterType="java.lang.Integer">
+        DELETE FROM t_exam_que_ref_knowledge WHERE qid = #{qid}
+    </delete>
+</mapper>

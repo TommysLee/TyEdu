@@ -19,20 +19,11 @@ public interface StudentService {
     Student getOne() throws Exception;
 
     /**
-     * 保存学生数据
+     * 保存或更新学生数据
      *
      * @param student 学生
      * @return int 返回受影响的行数
      * @throws Exception
      */
-    int save(Student student) throws Exception;
-
-    /**
-     * 更新学生数据
-     *
-     * @param student 学生
-     * @return int 返回受影响的行数
-     * @throws Exception
-     */
-    int update(Student student) throws Exception;
+    int saveOrUpdate(Student student) throws Exception;
 }

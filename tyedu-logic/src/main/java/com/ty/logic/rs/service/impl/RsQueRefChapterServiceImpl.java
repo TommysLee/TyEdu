@@ -81,7 +81,7 @@ public class RsQueRefChapterServiceImpl implements RsQueRefChapterService {
         if (CollectionUtils.isNotEmpty(list)) {
             Integer qid = list.get(0).getQid();
 
-            // 先删除原知识点标签
+            // 先删除原章节标签数据
             this.delete(qid);
 
             // 再新增

@@ -6,7 +6,6 @@ import com.ty.api.model.bbd.Student;
 import com.ty.cm.utils.DateUtils;
 import com.ty.logic.bbd.dao.StudentDao;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,39 +38,27 @@ public class StudentServiceImpl implements StudentService {
     }
 
     /**
-     * 保存学生数据
+     * 保存或更新学生数据
      *
      * @param student 学生
      * @return int 返回受影响的行数
      * @throws Exception
      */
     @Override
-    public int save(Student student) throws Exception {
+    public int saveOrUpdate(Student student) throws Exception {
         int n = 0;
         if (null != student) {
-            student.setStage(StringUtils.upperCase(student.getStage()));
-            student.setGrade(StringUtils.upperCase(student.getGrade()));
-            student.setCreateTime(DateUtils.nowText());
-            n = studentDao.saveStudent(student);
-        }
-        return n;
-    }
+            student.precheck().setCreateTime(DateUtils.nowText());
+            student.setUpdateTime(student.getCreateTime());
 
-    /**
-     * 更新学生数据
-     *
-     * @param student 学生
-     * @return int 返回受影响的行数
-     * @throws Exception
-     */
-    @Override
-    public int update(Student student) throws Exception {
-        int n = 0;
-        if (null != student) {
-            student.setStage(StringUtils.upperCase(student.getStage()));
-            student.setGrade(StringUtils.upperCase(student.getGrade()));
-            student.setUpdateTime(DateUtils.nowText());
-            n = studentDao.updateStudent(student);
+            // 若系统已有学生数据，则获取学生ID，并更新数据
+            Student existStu = this.getOne();
+            if (null != existStu) {
+                student.setSid(existStu.getSid());
+                n = studentDao.updateStudent(student);
+            } else {
+                n = studentDao.saveStudent(student);
+            }
         }
         return n;
     }

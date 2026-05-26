@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.sch.dao.ExamQueDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="ExamQueMap" type="ExamQue">
+        <result property="qid" column="qid" />
+        <result property="examId" column="exam_id" />
+        <result property="stage" column="stage" />
+        <result property="subject" column="subject" />
+        <result property="type" column="type" />
+        <result property="difficulty" column="difficulty" />
+        <result property="stem" column="stem" />
+        <result property="answer" column="answer" />
+        <result property="analysis" column="analysis" />
+        <result property="chptMarked" column="chpt_marked" />
+        <result property="knowledgeMarked" column="knowledge_marked" />
+        <result property="maxScore" column="max_score" />
+        <result property="score" column="score" />
+        <result property="response" column="response" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_examQue">
+        <where>
+            <if test="qid != null">
+                and t.qid=#{qid}
+            </if>
+            <if test="examId != null">
+                and t.exam_id=#{examId}
+            </if>
+            <if test="stage != null and stage != ''">
+                and t.stage=#{stage}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject=#{subject}
+            </if>
+            <if test="type != null and type != ''">
+                and t.type=#{type}
+            </if>
+            <if test="difficulty != null">
+                and t.difficulty=#{difficulty}
+            </if>
+            <if test="chptMarked != null">
+                and t.chpt_marked=#{chptMarked}
+            </if>
+            <if test="knowledgeMarked != null">
+                and t.knowledge_marked=#{knowledgeMarked}
+            </if>
+            <if test="maxScore != null">
+                and t.max_score=#{maxScore}
+            </if>
+            <if test="score != null">
+                and t.score=#{score}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findExamQueCount" parameterType="ExamQue" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_exam_que t
+        <include refid="condition_examQue" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findExamQue" parameterType="ExamQue" resultMap="ExamQueMap">
+        SELECT
+            t.qid,
+            t.exam_id,
+            t.stage,
+            t.subject,
+            t.type,
+            t.difficulty,
+            t.stem,
+            t.answer,
+            t.analysis,
+            t.chpt_marked,
+            t.knowledge_marked,
+            t.max_score,
+            t.score,
+            t.response,
+            t.create_time,
+            t.update_time
+        FROM
+            t_exam_que t
+        <include refid="condition_examQue" />
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findExamQueById" parameterType="java.lang.Integer" resultMap="ExamQueMap">
+        SELECT
+            t.qid,
+            t.exam_id,
+            t.stage,
+            t.subject,
+            t.type,
+            t.difficulty,
+            t.stem,
+            t.answer,
+            t.analysis,
+            t.chpt_marked,
+            t.knowledge_marked,
+            t.max_score,
+            t.score,
+            t.response,
+            t.create_time,
+            t.update_time
+        FROM
+            t_exam_que t
+        WHERE t.qid = #{qid}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveExamQue" parameterType="ExamQue">
+        INSERT INTO t_exam_que
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="qid != null">qid,</if>
+            <if test="examId != null">exam_id,</if>
+            <if test="stage != null">stage,</if>
+            <if test="subject != null">subject,</if>
+            <if test="type != null">type,</if>
+            <if test="difficulty != null">difficulty,</if>
+            <if test="stem != null">stem,</if>
+            <if test="answer != null">answer,</if>
+            <if test="analysis != null">analysis,</if>
+            <if test="chptMarked != null">chpt_marked,</if>
+            <if test="knowledgeMarked != null">knowledge_marked,</if>
+            <if test="maxScore != null">max_score,</if>
+            <if test="score != null">score,</if>
+            <if test="response != null">response,</if>
+            create_time,
+            update_time,
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="qid != null">#{qid},</if>
+            <if test="examId != null">#{examId},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="type != null">#{type},</if>
+            <if test="difficulty != null">#{difficulty},</if>
+            <if test="stem != null">#{stem},</if>
+            <if test="answer != null">#{answer},</if>
+            <if test="analysis != null">#{analysis},</if>
+            <if test="chptMarked != null">#{chptMarked},</if>
+            <if test="knowledgeMarked != null">#{knowledgeMarked},</if>
+            <if test="maxScore != null">#{maxScore},</if>
+            <if test="score != null">#{score},</if>
+            <if test="response != null">#{response},</if>
+            #{createTime},
+            #{createTime}
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateExamQue" parameterType="ExamQue">
+        UPDATE t_exam_que
+        <set>
+            <if test="examId != null">exam_id=#{examId},</if>
+            <if test="stage != null">stage=#{stage},</if>
+            <if test="subject != null">subject=#{subject},</if>
+            <if test="type != null">type=#{type},</if>
+            <if test="difficulty != null">difficulty=#{difficulty},</if>
+            <if test="stem != null">stem=#{stem},</if>
+            <if test="answer != null">answer=#{answer},</if>
+            <if test="analysis != null">analysis=#{analysis},</if>
+            <if test="chptMarked != null">chpt_marked=#{chptMarked},</if>
+            <if test="knowledgeMarked != null">knowledge_marked=#{knowledgeMarked},</if>
+            <if test="maxScore != null">max_score=#{maxScore},</if>
+            <if test="score != null">score=#{score},</if>
+            <if test="response != null">response=#{response},</if>
+            update_time=#{updateTime}
+        </set>
+        WHERE qid = #{qid}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delExamQue" parameterType="java.lang.Integer">
+        DELETE FROM t_exam_que WHERE qid = #{qid}
+    </delete>
+
+    <!-- 计算考试科目的卷面分 -->
+    <select id="calcMaxScore" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT SUM(t.max_score) FROM t_exam_que t WHERE t.exam_id = #{examId}
+    </select>
+
+    <!-- 计算考试科目的得分 -->
+    <select id="calcScore" parameterType="java.lang.Integer" resultType="java.lang.Double">
+        SELECT SUM(t.score) FROM t_exam_que t WHERE t.exam_id = #{examId}
+    </select>
+</mapper>

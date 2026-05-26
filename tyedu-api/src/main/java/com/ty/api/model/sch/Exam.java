@@ -2,6 +2,7 @@ package com.ty.api.model.sch;
 
 import com.ty.api.model.BaseBO;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 
@@ -12,6 +13,7 @@ import java.io.Serial;
  * @Date 2026/05/26
  */
 @Data
+@Accessors(chain = true)
 public class Exam extends BaseBO {
 
     @Serial
@@ -39,7 +41,7 @@ public class Exam extends BaseBO {
     private String grade;
 
     /** 卷面分 **/
-    private Double maxScore;
+    private Integer maxScore;
 
     /** 得分 **/
     private Double score;
@@ -49,4 +51,14 @@ public class Exam extends BaseBO {
 
     /** 批阅状态（0=未批阅；1=已批阅） **/
     private Integer reviewed;
+
+    /**
+     * 数据清洗
+     */
+    @Override
+    public Exam clean() {
+        this.maxScore = this.published = this.reviewed = null;
+        this.score = null;
+        return this;
+    }
 }
