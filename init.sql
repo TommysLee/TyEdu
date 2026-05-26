@@ -84,6 +84,8 @@ CREATE TABLE t_exam (
     grade       TEXT NOT NULL,
     max_score   REAL,
     score       REAL,
+	grade_rank  INTEGER,
+	class_rank  INTEGER,
     published   INTEGER NOT NULL DEFAULT 0,
     reviewed    INTEGER NOT NULL DEFAULT 0,
     remark      TEXT,

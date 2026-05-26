@@ -13,6 +13,8 @@
         <result property="grade" column="grade" />
         <result property="maxScore" column="max_score" />
         <result property="score" column="score" />
+        <result property="gradeRank" column="grade_rank" />
+        <result property="classRank" column="class_rank" />
         <result property="published" column="published" />
         <result property="reviewed" column="reviewed" />
         <result property="remark" column="remark" />
@@ -71,6 +73,8 @@
             t.grade,
             t.max_score,
             t.score,
+            t.grade_rank,
+            t.class_rank,
             t.published,
             t.reviewed,
             t.remark,
@@ -94,6 +98,8 @@
             t.grade,
             t.max_score,
             t.score,
+            t.grade_rank,
+            t.class_rank,
             t.published,
             t.reviewed,
             t.remark,
@@ -117,6 +123,8 @@
             <if test="grade != null">grade,</if>
             <if test="maxScore != null">max_score,</if>
             <if test="score != null">score,</if>
+            <if test="gradeRank != null">grade_rank,</if>
+            <if test="classRank != null">class_rank,</if>
             <if test="published != null">published,</if>
             <if test="reviewed != null">reviewed,</if>
             <if test="remark != null">remark,</if>
@@ -135,6 +143,8 @@
             <if test="grade != null">#{grade},</if>
             <if test="maxScore != null">#{maxScore},</if>
             <if test="score != null">#{score},</if>
+            <if test="gradeRank != null">#{gradeRank},</if>
+            <if test="classRank != null">#{classRank},</if>
             <if test="published != null">#{published},</if>
             <if test="reviewed != null">#{reviewed},</if>
             <if test="remark != null">#{remark},</if>
@@ -156,6 +166,8 @@
             <if test="grade != null">grade=#{grade},</if>
             <if test="maxScore != null">max_score=#{maxScore},</if>
             <if test="score != null">score=#{score},</if>
+            <if test="gradeRank != null">grade_rank=#{gradeRank},</if>
+            <if test="classRank != null">class_rank=#{classRank},</if>
             <if test="published != null">published=#{published},</if>
             <if test="reviewed != null">reviewed=#{reviewed},</if>
             <if test="remark != null">remark=#{remark},</if>

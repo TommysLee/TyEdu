@@ -46,6 +46,12 @@ public class Exam extends BaseBO {
     /** 得分 **/
     private Double score;
 
+    /** 年级排名 **/
+    private Integer gradeRank;
+
+    /** 班级排名 **/
+    private Integer classRank;
+
     /** 发布状态（0=未发布；1=已发布） **/
     private Integer published;
 

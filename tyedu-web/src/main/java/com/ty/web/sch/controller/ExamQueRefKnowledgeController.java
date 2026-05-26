@@ -8,8 +8,8 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -39,7 +39,7 @@ public class ExamQueRefKnowledgeController extends BaseController {
      * 增加考试题目知识点标签
      */
     @PostMapping("/save/{qid}")
-    public AjaxResult save(@PathVariable Integer qid, @RequestParam List<ExamQueRefKnowledge> list) throws Exception {
+    public AjaxResult save(@PathVariable Integer qid, @RequestBody List<ExamQueRefKnowledge> list) throws Exception {
         int n = 0;
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(k -> {

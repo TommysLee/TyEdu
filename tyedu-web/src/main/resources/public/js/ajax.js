@@ -41,7 +41,7 @@ function doAjax(url, params, callback, method, errCallback, ignore=false, opts={
     }, opts);
     if ("GET" !== method) {
       options.params = null;
-      options.data = params instanceof FormData? params : queryStringify(params);
+      options.data = (params instanceof FormData || options.body)? params : queryStringify(params);
     }
 
     // 发起请求
@@ -121,6 +121,13 @@ function doAjaxGet(url, params, callback, errCallback) {
  */
 function doAjaxPost(url, params, callback, errCallback) {
   return doAjax(url, params, callback, null, errCallback)
+}
+
+/**
+ * Ajax Post请求：以 RequestBody 发送数据
+ */
+function doAjaxBody(url, data, callback, errCallback) {
+  return doAjax(url, data, callback, null, errCallback, false, {body: true})
 }
 
 /**
