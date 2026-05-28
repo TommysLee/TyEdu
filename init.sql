@@ -108,6 +108,7 @@ CREATE TABLE t_exam_que (
     max_score        REAL,
     score            REAL,
 	response		 TEXT,
+	seq              INTEGER DEFAULT 0,
     create_time      TEXT,
     update_time      TEXT,
     FOREIGN KEY (exam_id) REFERENCES t_exam(exam_id) ON DELETE CASCADE ON UPDATE CASCADE

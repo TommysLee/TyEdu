@@ -18,6 +18,7 @@
         <result property="maxScore" column="max_score" />
         <result property="score" column="score" />
         <result property="response" column="response" />
+        <result property="seq" column="seq" />
         <result property="createTime" column="create_time" />
         <result property="updateTime" column="update_time" />
     </resultMap>
@@ -81,6 +82,7 @@
             t.max_score,
             t.score,
             t.response,
+            t.seq,
             t.create_time,
             t.update_time
         FROM
@@ -105,6 +107,7 @@
             t.max_score,
             t.score,
             t.response,
+            t.seq,
             t.create_time,
             t.update_time
         FROM
@@ -131,6 +134,7 @@
             <if test="maxScore != null">max_score,</if>
             <if test="score != null">score,</if>
             <if test="response != null">response,</if>
+            <if test="seq != null">seq,</if>
             create_time,
             update_time,
         </trim>
@@ -152,6 +156,7 @@
             <if test="maxScore != null">#{maxScore},</if>
             <if test="score != null">#{score},</if>
             <if test="response != null">#{response},</if>
+            <if test="seq != null">#{seq},</if>
             #{createTime},
             #{createTime}
         </trim>
@@ -175,6 +180,7 @@
             <if test="maxScore != null">max_score=#{maxScore},</if>
             <if test="score != null">score=#{score},</if>
             <if test="response != null">response=#{response},</if>
+            <if test="seq != null">seq=#{seq},</if>
             update_time=#{updateTime}
         </set>
         WHERE qid = #{qid}

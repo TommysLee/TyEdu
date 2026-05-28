@@ -61,6 +61,9 @@ public class ExamQue extends BaseBO {
     /** 学生作答 **/
     private String response;
 
+    /** 排序号 **/
+    private Integer seq;
+
     /**
      * 数据前置处理
      */
