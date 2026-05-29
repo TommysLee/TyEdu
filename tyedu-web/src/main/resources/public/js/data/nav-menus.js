@@ -10,5 +10,11 @@ const navMenus = [
     "menuName": "知识体系",
     "icon": "mdi-graph",
     "url": "/adm/rs/knowledge/view"
+  },
+  {
+    "menuId": "3",
+    "menuName": "学生档案",
+    "icon": "mdi-school-outline",
+    "url": "/adm/bbd/student/view"
   }
 ]

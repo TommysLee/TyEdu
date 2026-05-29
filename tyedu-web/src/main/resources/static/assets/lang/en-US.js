@@ -21,6 +21,7 @@ loadLocaleMessages("en-US", Object.assign({
     "女": "Female",
     "昨天": "Yesterday",
     "今天": "Today",
+    "返回": "Back",
     "首页": "Home",
     "机构": "Company",
     "关联": "Related",
@@ -169,6 +170,9 @@ loadLocaleMessages("en-US", Object.assign({
     "题库": "Question Bank",
     "考试": "Examination",
     "我的错题": "Mistake Notebook",
+    "教材管理": "Book Management",
+    "知识体系": "Kowledge System",
+    "学生档案": "Student Profile",
     "教材名称": "Book Name",
     "学科": "Subject",
     "版本": "Edition",
@@ -177,7 +181,13 @@ loadLocaleMessages("en-US", Object.assign({
     "打标": "Tagging",
     "新增题目": "New",
     "修改题目": "Modify",
-    "答案": "Answer"
+    "答案": "Answer",
+    "学段": "Stage",
+    "学校": "School",
+    "年级": "Grade",
+    "小学": "Elementary",
+    "初中": "Middle School",
+    "高中": "High School"
 }, {
     validations: {
         "_default": "The {0} is not valid",

@@ -6,3 +6,4 @@ ty:
     "[/adm/index]": "adm/rs/book"
     "[/adm/rs/book/view]": "adm/rs/book"
     "[/adm/rs/knowledge/view]": "adm/rs/knowledge"
+    "[/adm/bbd/student/view]": "adm/bbd/student"

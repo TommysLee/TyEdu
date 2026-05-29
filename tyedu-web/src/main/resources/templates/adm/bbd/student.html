@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 前端数据 */-->
+  <th:block th:replace="~{assets/include :: data}"/>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: scriptcss_default('学生档案')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app class="v-admin">
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(vadmin=true)}"/>
+      </v-app-bar>
+
+      <!-- 左侧区域::导航菜单 -->
+      <th:block th:replace="~{assets/include :: navMenu}"/>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid>
+          <v-card class="pa-6 pb-3 v-fill-height overflow-auto d-flex flex-column align-center" style="--ty-assist-gap-height: 0" :loading="loading">
+            <p class="text-h4 font-weight-bold text-center mb-3">
+              {{$t('学生档案')}}
+            </p>
+            <tform as="v-form" ref="dataForm" class="w-100 w-md-66" @submit="doSubmit">
+              <tfield v-model.trim="stage" name="学段" v-slot="{ field, errors }" rules="required">
+                <v-radio-group v-bind="field" :model-value="field.value" :error-messages="errors" inline density=“comfortable”>
+                  <template #prepend>
+                    {{$t('学段')}}:
+                  </template>
+                  <v-radio v-for="item in stageList" :label="$t(item.title)" :value="item.value" class="mr-5"></v-radio>
+                </v-radio-group>
+              </tfield>
+              <tfield v-model.trim="formData.school" name="学校" v-slot="{ field, errors }" rules="required|max:50">
+                <v-text-field v-bind="field" :model-value="field.value" clearable v-blank type="text" :error-messages="errors" :label="$t('学校')"></v-text-field>
+              </tfield>
+              <tfield v-model.trim="formData.name" name="姓名" v-slot="{ field, errors }" rules="required|max:30">
+                <v-text-field v-bind="field" :model-value="field.value" clearable v-blank type="text" :error-messages="errors" :label="$t('姓名')" class="mt-1"></v-text-field>
+              </tfield>
+              <tfield v-model.trim="formData.grade" name="年级" v-slot="{ field, errors }" rules="required">
+                <v-select v-bind="field" :model-value="field.value" clearable :error-messages="errors" :items="gradeList" :label="$t('年级')"></v-select>
+              </tfield>
+              <div class="text-center">
+                <v-btn class="w-100 w-md-66" size="large" color="teal" type="submit" :disabled="loading" :loading="posting">{{$t('保存')}}</v-btn>
+              </div>
+            </tform>
+          </v-card>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 业务js -->
+  <script type="text/javascript" th:src="@{/js/adm/bbd/student.js?_t=#buildtime#}"></script>
+</body>
+</html>
