@@ -5,6 +5,7 @@ const app = Vue.createApp({
     return {
       menuName: 'QueBank',
       vnode: null,
+      backUrl: '/',
 
       // 查询条件
       param: {

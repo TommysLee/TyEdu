@@ -1,7 +1,8 @@
 ty:
   view-mapping:
     #前台
-    "[/rs/que-bank]": "rs/que-bank"
+    "[/rs/que-bank/view]": "rs/que-bank"
+    "[/sch/exam/view]": "sch/exam"
     #后台管理
     "[/adm/index]": "adm/rs/book"
     "[/adm/rs/book/view]": "adm/rs/book"

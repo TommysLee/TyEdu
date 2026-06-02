@@ -187,7 +187,11 @@ loadLocaleMessages("en-US", Object.assign({
     "年级": "Grade",
     "小学": "Elementary",
     "初中": "Middle School",
-    "高中": "High School"
+    "高中": "High School",
+    "总分": "Total Score",
+    "成绩": "Score",
+    "年级排名": "Grade Rank",
+    "班级排名": "ClassRank",
 }, {
     validations: {
         "_default": "The {0} is not valid",

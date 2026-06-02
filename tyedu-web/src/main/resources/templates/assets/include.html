@@ -127,7 +127,7 @@
     </v-subheader>
 
     <v-spacer></v-spacer>
-    <v-chip-group th:if="${vadmin}" mandatory selected-class="text-primary" v-model="stage">
+    <v-chip-group th:if="${(vadmin?:false) || (showStage?:false)}" mandatory selected-class="text-primary" v-model="stage">
       <v-chip
           filter
           variant="text"

@@ -4,7 +4,7 @@ const app = Vue.createApp({
   data() {
     return {
       menuName: 'QueBank',
-      backUrl: '/rs/que-bank',
+      backUrl: '/rs/que-bank/view',
 
       // 参数
       stage: _stage,

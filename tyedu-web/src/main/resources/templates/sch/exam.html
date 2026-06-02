@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: scriptcss_default('考试列表')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app>
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(back=true, showStage=true)}"/>
+      </v-app-bar>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid class="pa-0">
+          <v-sheet ref="container" theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
+            <v-sheet :height="64" class="d-flex justify-end align-center px-5 mx-n3 mb-3">
+              <v-btn color="teal" @click="openFormDialog('新增考试')">
+                <v-icon size="small">mdi-plus</v-icon>
+                {{$t('新增')}}
+              </v-btn>
+            </v-sheet>
+
+            <!-- 搜索条件 -->
+            <v-row class="bg-white ma-0 mb-2">
+              <v-col cols="auto" class="mt-1 pr-0 font-weight-bold">{{$t('学科')}}:</v-col>
+              <v-col>
+                <v-btn-toggle v-model="param.subject" density="comfortable" :disabled="loading" color="teal" variant="plain" class="flex-wrap h-auto" @click="doQuery">
+                  <v-btn v-for="item in subjectList" :value="item.value" :key="item.value">{{item.title}}</v-btn>
+                </v-btn-toggle>
+              </v-col>
+            </v-row>
+            <v-row class="bg-white ma-0 mb-2">
+              <v-col cols="auto" class="mt-1 pr-0 font-weight-bold">{{$t('考试类型')}}:</v-col>
+              <v-col>
+                <v-btn-toggle v-model="param.examType" density="comfortable" :disabled="loading" color="teal" variant="plain" class="flex-wrap h-auto" @click="doQuery">
+                  <v-btn v-for="item in examTypeList" :value="item.value" :key="item.value">{{item.title}}</v-btn>
+                </v-btn-toggle>
+              </v-col>
+            </v-row>
+            <v-row class="bg-white ma-0 mb-2">
+              <v-col cols="auto" class="mt-1 pr-0 font-weight-bold">{{$t('年级')}}:</v-col>
+              <v-col>
+                <v-btn-toggle v-model="param.grade" density="comfortable" :disabled="loading" color="teal" variant="plain" class="flex-wrap h-auto" @click="doQuery">
+                  <v-btn v-for="item in gradeList" :value="item.value" :key="item.value">{{item.title}}</v-btn>
+                </v-btn-toggle>
+              </v-col>
+            </v-row>
+
+            <!-- 数据列表 -->
+            <v-card hover class="mb-2 pop-container" v-for="item in dataList" :key="item.qid" v-show="!loading">
+              <v-card-item>
+                <v-card-title class="mb-1 d-flex align-center">
+                  <v-btn color="primary" variant="tonal" :ripple="false">{{item.index}}.</v-btn>
+                  <span class="pl-2 text-subtitle-1 opacity-50">{{subjectMap[item.subject]}}</span>
+                  <span class="pl-2 text-subtitle-1 opacity-50">{{examTypeMap[item.examType]}}</span>
+                  <span class="pl-2 text-subtitle-1 opacity-50">{{gradeMap[item.grade]}}</span>
+                  <v-popconfirm :data="item.examId" @confirm="doDelete">
+                    <v-btn icon="mdi-delete" variant="text" color="pink"></v-btn>
+                  </v-popconfirm>
+                  <v-spacer></v-spacer>
+                  <v-icon icon="mdi-circle-medium" size="small" :color="item.published? 'success' : 'grey'" v-tooltip:bottom="$t('发布状态')"></v-icon>
+                  <v-icon icon="mdi-circle-medium" size="small" :color="item.reviewed? 'success' : 'grey'" v-tooltip:bottom="$t('批阅状态')" class="mr-2"></v-icon>
+                  <span class="text-subtitle-2 opacity-50">{{item.examTime}}</span>
+                </v-card-title>
+              </v-card-item>
+              <v-card-text class="text-subtitle-1">
+                {{item.title}}
+              </v-card-text>
+              <v-card-actions class="justify-end border-t-thin">
+                <span class="pl-2 text-subtitle-1 opacity-50">{{$t('总分')}}：{{item.maxScore?? placeholder}}</span>
+                <span class="pl-2 text-subtitle-1 opacity-50">{{$t('成绩')}}：{{item.score?? placeholder}}</span>
+                <span class="pl-2 text-subtitle-1 opacity-50">{{$t('班级排名')}}：{{item.classRank?? placeholder}}</span>
+                <v-spacer></v-spacer>
+                <v-btn color="teal">{{$t('进入')}}</v-btn>
+                <v-btn color="teal" @click="openFormDialog('修改考试', item.examId)">{{$t('修改')}}</v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-skeleton-loader type="article,actions" color="transparent" v-if="loading"></v-skeleton-loader>
+            <v-pagination class="pagebar" v-model="pagination.page" :total-visible="pagination.vp" :length="pagination.pageCount" :disabled="loading" v-show="dataList?.length > 0"></v-pagination>
+
+            <!-- No Data Tips -->
+            <v-empty-state class="hm-auto height-350" :headline="noDataText" v-if="!loading && (!dataList || dataList?.length === 0)"></v-empty-state>
+
+            <!-- 数据表单模态窗口 -->
+            <v-dialog v-model="winDialog" persistent :fullscreen="isMobile" width="800">
+              <tform as="v-form" ref="dataForm" class="fill-height" @submit="doSubmit">
+                <v-card :loading="posting">
+                  <v-toolbar color="indigo" :title="$t(dialogTitle)">
+                    <v-btn icon="mdi-close" @click="closeFormDialog"></v-btn>
+                  </v-toolbar>
+                  <v-card-text class="overflow-auto">
+                    <!-- 数据表单 -->
+                    <tfield v-model.trim="formData.title" name="考试名称" v-slot="{ field, errors }" rules="required|max:50">
+                      <v-text-field v-bind="field" :model-value="field.value" clearable v-blank type="text" :error-messages="errors" :label="$t('考试名称')" class="mt-1"></v-text-field>
+                    </tfield>
+                    <tfield v-model.trim="formData.examTime" name="考试时间" v-slot="{ field, errors }" rules="required">
+                      <v-date-picker-select v-bind="field" :model-value="field.value" clearable :hide-details="false" :error-messages="errors" :label="$t('考试时间')" class="mt-1"></v-date-picker-select>
+                    </tfield>
+                    <tfield v-model.trim="formData.subject" name="学科" v-slot="{ field, errors }" rules="required">
+                      <v-select v-bind="field" :model-value="field.value" clearable :error-messages="errors" :items="subjectList" :label="$t('学科')"></v-select>
+                    </tfield>
+                    <tfield v-model.trim="formData.examType" name="考试类型" v-slot="{ field, errors }" rules="required">
+                      <v-select v-bind="field" :model-value="field.value" clearable :error-messages="errors" :items="examTypeList" :label="$t('考试类型')"></v-select>
+                    </tfield>
+                    <tfield v-model.trim="formData.grade" name="年级" v-slot="{ field, errors }" rules="required">
+                      <v-select v-bind="field" :model-value="field.value" clearable :error-messages="errors" :items="gradeList" :label="$t('年级')"></v-select>
+                    </tfield>
+                    <v-number-input v-model="formData.classRank" control-variant="stacked" inset variant="outlined" :label="$t('班级排名')"></v-number-input>
+                  </v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions>
+                    <v-btn size="large" variant="elevated" color="primary" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </tform>
+            </v-dialog>
+          </v-sheet>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 导入Vuetify扩展组件 -->
+  <th:block th:replace="~{assets/vuetify :: v-popconfirm}"/>
+  <th:block th:replace="~{assets/vuetify :: v-date-picker-select}"/>
+
+  <!-- 业务js -->
+  <script type="text/javascript" th:src="@{/js/sch/exam.js}"></script>
+</body>
+</html>
