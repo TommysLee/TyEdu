@@ -2,8 +2,6 @@ package com.ty.logic.sch.service.impl;
 
 import com.github.pagehelper.Page;
 import com.ty.api.model.sch.ExamQue;
-import com.ty.api.sch.service.ExamQueRefChapterService;
-import com.ty.api.sch.service.ExamQueRefKnowledgeService;
 import com.ty.api.sch.service.ExamQueService;
 import com.ty.cm.utils.DateUtils;
 import com.ty.logic.sch.dao.ExamQueDao;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +34,6 @@ public class ExamQueServiceImpl implements ExamQueService {
 
     @Autowired
     private ExamQueDao examQueDao;
-
-    @Autowired
-    private ExamQueRefKnowledgeService examQueRefKnowledgeService;
-
-    @Autowired
-    private ExamQueRefChapterService examQueRefChapterService;
 
     /**
      * 根据条件获取考试题目的总记录数
@@ -69,7 +62,9 @@ public class ExamQueServiceImpl implements ExamQueService {
         if (null == examQue) {
             examQue = new ExamQue();
         }
-        return examQueDao.findExamQue(examQue);
+        List<ExamQue> list = examQueDao.findExamQue(examQue);
+        list.sort(Comparator.comparing(ExamQue::getSeq, Comparator.nullsLast(Comparator.naturalOrder())));
+        return list;
     }
 
     /**
@@ -191,11 +186,6 @@ public class ExamQueServiceImpl implements ExamQueService {
     public int delete(Integer id) throws Exception {
         int n = 0;
         if (null != id) {
-            // 先删除打标数据
-            examQueRefKnowledgeService.delete(id);
-            examQueRefChapterService.delete(id);
-
-            // 再执行删除
             n = examQueDao.delExamQue(id);
         }
         return n;

@@ -111,7 +111,7 @@ CREATE TABLE t_exam_que (
 	seq              INTEGER DEFAULT 0,
     create_time      TEXT,
     update_time      TEXT,
-    FOREIGN KEY (exam_id) REFERENCES t_exam(exam_id) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (exam_id) REFERENCES t_exam(exam_id) ON UPDATE CASCADE
 );
 
 CREATE TABLE t_exam_que_ref_chapter (
