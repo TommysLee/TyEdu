@@ -2,7 +2,6 @@ package com.ty.logic.sch.service.impl;
 
 import com.github.pagehelper.Page;
 import com.ty.api.model.sch.Exam;
-import com.ty.api.model.sch.ExamQue;
 import com.ty.api.sch.service.ExamQueService;
 import com.ty.api.sch.service.ExamService;
 import com.ty.cm.constant.enums.PublishType;
@@ -14,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.ty.cm.constant.Messages.RELATED_DATA_DELETE;
-import static com.ty.cm.constant.Numbers.ZERO;
 import static com.ty.cm.constant.Ty.DATA;
 import static com.ty.cm.constant.Ty.PAGES;
 import static com.ty.cm.constant.Ty.TOTAL;
@@ -184,13 +184,11 @@ public class ExamServiceImpl implements ExamService {
     public int delete(Integer id) throws Exception {
         int n = 0;
         if (null != id) {
-            // 判断待删除的数据，是否存在依赖关系
-            if (examQueService.getCount(new ExamQue().setExamId(id)) > ZERO) {
+            try {
+                n = examDao.delExam(id);
+            } catch (UncategorizedSQLException e) {
                 throw new CustomException(RELATED_DATA_DELETE);
             }
-
-            // 执行删除操作
-            n = examDao.delExam(id);
         }
         return n;
     }

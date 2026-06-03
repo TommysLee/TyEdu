@@ -1,25 +1,23 @@
 package com.ty.logic.sch.service.impl;
 
-import com.github.pagehelper.Page;
+import com.google.common.collect.Lists;
 import com.ty.api.model.sch.ExamQue;
+import com.ty.api.model.sch.ExamQueRefKnowledge;
+import com.ty.api.sch.service.ExamQueRefKnowledgeService;
 import com.ty.api.sch.service.ExamQueService;
 import com.ty.cm.utils.DateUtils;
 import com.ty.logic.sch.dao.ExamQueDao;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.RowBounds;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.ty.cm.constant.Ty.DATA;
-import static com.ty.cm.constant.Ty.PAGES;
-import static com.ty.cm.constant.Ty.TOTAL;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 考试题目业务逻辑实现
@@ -35,20 +33,8 @@ public class ExamQueServiceImpl implements ExamQueService {
     @Autowired
     private ExamQueDao examQueDao;
 
-    /**
-     * 根据条件获取考试题目的总记录数
-     *
-     * @param examQue 考试题目
-     * @return int
-     * @throws Exception
-     */
-    @Override
-    public int getCount(ExamQue examQue) throws Exception {
-        if (null == examQue) {
-            examQue = new ExamQue();
-        }
-        return examQueDao.findExamQueCount(examQue);
-    }
+    @Autowired
+    private ExamQueRefKnowledgeService queRefKnowledgeService;
 
     /**
      * 根据条件查询所有考试题目数据
@@ -64,44 +50,8 @@ public class ExamQueServiceImpl implements ExamQueService {
         }
         List<ExamQue> list = examQueDao.findExamQue(examQue);
         list.sort(Comparator.comparing(ExamQue::getSeq, Comparator.nullsLast(Comparator.naturalOrder())));
+        this.getQueRefKnowledges(list);
         return list;
-    }
-
-    /**
-     * 根据条件分页查询考试题目数据
-     *
-     * @param examQue 考试题目
-     * @param pageNum 页码
-     * @param pageSize 每页显示条数
-     * @return Map<String, Object> 返回满足条件的数据集合与记录数
-     * @throws Exception
-     */
-    @Override
-    public Map<String, Object> query(ExamQue examQue, String pageNum, String pageSize) throws Exception {
-        Page<ExamQue> page = (Page<ExamQue>) this.queryData(examQue, pageNum, pageSize);
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put(TOTAL, page.getTotal());
-        resultMap.put(PAGES, page.getPages());
-        resultMap.put(DATA, page);
-        return resultMap;
-    }
-
-    /**
-     * 根据条件分页查询考试题目数据
-     *
-     * @param examQue 考试题目
-     * @param pageNum 页码
-     * @param pageSize 每页显示条数
-     * @return List<ExamQue> 返回满足条件的数据集合
-     * @throws Exception
-     */
-    @Override
-    public List<ExamQue> queryData(ExamQue examQue, String pageNum, String pageSize) throws Exception {
-        Page<ExamQue> page = new Page<>();
-        if (StringUtils.isNumeric(pageNum) && StringUtils.isNumeric(pageSize)) {
-            page = examQueDao.findExamQue(new RowBounds(Integer.parseInt(pageNum), Integer.parseInt(pageSize)), examQue);
-        }
-        return page;
     }
 
     /**
@@ -217,5 +167,24 @@ public class ExamQueServiceImpl implements ExamQueService {
             return examQueDao.calcScore(examId);
         }
         return null;
+    }
+
+    /*
+     * 获取题目的知识点标签数据
+     */
+    void getQueRefKnowledges(List<ExamQue> list) throws Exception {
+        if (CollectionUtils.isNotEmpty(list)) {
+            // 抽取题目ID集合
+            Set<Integer> qidSet = list.stream().map(ExamQue::getQid).collect(Collectors.toSet());
+
+            // 查询知识点标签数据后，按题目ID分组
+            List<ExamQueRefKnowledge> ktags = queRefKnowledgeService.getAll(qidSet);
+            Map<Integer,List<ExamQueRefKnowledge>> ktagsMap = ktags.stream().collect(Collectors.groupingBy(ExamQueRefKnowledge::getQid));
+
+            // 将知识点标签数据，添加到题目对象中
+            for (ExamQue q : list) {
+                q.setKtags(ktagsMap.getOrDefault(q.getQid(), Lists.newArrayListWithCapacity(0)));
+            }
+        }
     }
 }

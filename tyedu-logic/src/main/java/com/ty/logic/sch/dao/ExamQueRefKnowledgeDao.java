@@ -4,6 +4,7 @@ import com.ty.api.model.sch.ExamQueRefKnowledge;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 考试题目知识点标签数据访问层
@@ -17,10 +18,10 @@ public interface ExamQueRefKnowledgeDao {
     /**
      * 根据题目ID查询所有知识点标签数据
      *
-     * @param qid 考试题目ID
+     * @param qids 题目ID集合
      * @return List<ExamQueRefKnowledge>
      */
-    List<ExamQueRefKnowledge> findExamQueRefKnowledge(Integer qid);
+    List<ExamQueRefKnowledge> findExamQueRefKnowledge(Set<Integer> qids);
 
     /**
      * 批量保存考试题目知识点标签数据

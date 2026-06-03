@@ -36,10 +36,10 @@ public class ExamQueRefChapterController extends BaseController {
     }
 
     /**
-     * 增加考试题目章节标签
+     * 增加或修改考试题目章节标签
      */
-    @PostMapping("/save/{qid}")
-    public AjaxResult save(@PathVariable Integer qid, @RequestBody List<ExamQueRefChapter> list) throws Exception {
+    @PostMapping("/upsert/{qid}")
+    public AjaxResult upsert(@PathVariable Integer qid, @RequestBody List<ExamQueRefChapter> list) throws Exception {
         int n = 0;
         if (CollectionUtils.isNotEmpty(list)) {
             list.forEach(c -> {

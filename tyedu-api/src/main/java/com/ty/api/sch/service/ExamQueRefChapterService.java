@@ -21,4 +21,13 @@ public interface ExamQueRefChapterService extends BaseService<ExamQueRefChapter>
      * @throws Exception
      */
     List<ExamQueRefChapter> getAll(Integer qid) throws Exception;
+
+    /**
+     * 根据题目ID查询所有章节标签数据，以JSON格式返回
+     *
+     * @param qid 题目ID
+     * @return String - JSON Format
+     * @throws Exception
+     */
+    String getSimpleAllForJson(Integer qid) throws Exception;
 }

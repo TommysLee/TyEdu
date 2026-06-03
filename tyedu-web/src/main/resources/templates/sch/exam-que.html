@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: katex}"/>
+  <th:block th:replace="~{assets/include :: scriptcss('考试题目列表')}"/>
+  <link rel="stylesheet" th:href="@{/js/lib/fluent-editor/fluent-editor.min.css}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app>
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(back=true)}"/>
+      </v-app-bar>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid class="pa-0">
+          <v-sheet ref="container" theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
+            <v-sheet :height="64" class="mx-n3 mb-3">
+              <v-row align="center" class="ma-0 fill-height">
+                <v-col class="text-center text-h4">
+                  {{title}}
+                </v-col>
+                <v-col cols="auto">
+                  <v-btn color="teal" @click="goEdit">
+                    <v-icon size="small">mdi-plus</v-icon>
+                    {{$t('录题')}}
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-sheet>
+
+            <!-- 数据列表 -->
+            <v-card hover class="mb-2 pop-container" v-for="item in dataList" :key="item.qid" v-show="!loading">
+              <v-card-item>
+                <v-card-title class="mb-1 d-flex align-center">
+                  <v-btn color="primary" variant="tonal" :ripple="false">{{item.index}}.</v-btn>
+                  <span class="pl-2 text-subtitle-1 opacity-60">{{qtypeMap[item.type]}}</span>
+                  <v-popconfirm :data="item.qid" @confirm="doDelete">
+                    <v-btn icon="mdi-delete" variant="text" color="pink"></v-btn>
+                  </v-popconfirm>
+                  <v-spacer></v-spacer>
+                  <v-icon icon="mdi-star" size="x-small" color="yellow" v-for="i in item.difficulty"></v-icon>
+                </v-card-title>
+                <v-card-subtitle>
+                  <span v-for="k in item.ktags" :key="k.kid" class="mr-3">{{k.kname}}</span>
+                </v-card-subtitle>
+              </v-card-item>
+              <v-card-text class="v-rich-text text-subtitle-1" @click="item.show = !item.show">
+                <div v-katex v-html="item.stem"></div>
+                <v-expand-transition>
+                  <div class="border-t-thin mt-4 pt-4" v-if="item.show">
+                    <p class="font-weight-bold">【{{$t('我的答案')}}】</p>
+                    <div class="pl-4" v-katex v-html="item.response"></div>
+                    <p class="font-weight-bold mt-4">【{{$t('参考答案')}}】</p>
+                    <div class="pl-4" v-katex v-html="item.answer"></div>
+                    <p class="font-weight-bold mt-4">【{{$t('解析')}}】</p>
+                    <div class="pl-4" v-katex v-html="item.analysis"></div>
+                  </div>
+                </v-expand-transition>
+              </v-card-text>
+              <v-card-actions class="justify-end border-t-thin">
+                <span class="pl-2 text-subtitle-1 text-teal">{{$t('分值')}}：{{item.maxScore?? placeholder}}</span>
+                <span class="pl-2 text-subtitle-1 text-teal">{{$t('得分')}}：{{item.score?? placeholder}}</span>
+                <v-spacer></v-spacer>
+                <v-btn color="teal" @click="goMarked(item.qid)">
+                  <v-badge bordered floating location="top right" color="teal" icon="mdi-check" :model-value="item.chptMarked && item.knowledgeMarked">
+                    {{$t('打标')}}
+                  </v-badge>
+                </v-btn>
+                <v-btn color="teal" @click="goEdit(item.qid)">{{$t('修改')}}</v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-skeleton-loader type="article,actions" color="transparent" v-if="loading"></v-skeleton-loader>
+
+            <!-- No Data Tips -->
+            <v-empty-state class="hm-auto height-350" :headline="noDataText" v-if="!loading && (!dataList || dataList?.length === 0)"></v-empty-state>
+          </v-sheet>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 导入Vuetify扩展组件 -->
+  <th:block th:replace="~{assets/vuetify :: v-popconfirm}"/>
+  <th:block th:replace="~{assets/vuetify :: v-date-picker-select}"/>
+
+  <!-- 业务js -->
+  <script type="text/javascript">
+    const _stage = "[[${exam?.stage}]]";
+    const _subject = "[[${exam?.subject}]]";
+    const _examId = "[[${exam?.examId}]]";
+    const _title = "[[${exam?.title}]]";
+  </script>
+  <script type="text/javascript" th:src="@{/js/sch/exam-que.js}"></script>
+</body>
+</html>

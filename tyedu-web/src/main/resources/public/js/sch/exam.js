@@ -185,6 +185,13 @@ const app = Vue.createApp({
           this.toast(result.message, 'warning');
         }
       });
+    },
+
+    /*
+     * 进入考试题目列表页
+     */
+    goExamQueView(examId) {
+      window.location.href = this.url(`/sch/exam/que/${examId}/view`);
     }
   }
 });

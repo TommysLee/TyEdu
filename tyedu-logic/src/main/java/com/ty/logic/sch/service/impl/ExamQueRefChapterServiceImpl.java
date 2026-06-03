@@ -5,6 +5,7 @@ import com.ty.api.model.sch.ExamQue;
 import com.ty.api.model.sch.ExamQueRefChapter;
 import com.ty.api.sch.service.ExamQueRefChapterService;
 import com.ty.api.sch.service.ExamQueService;
+import com.ty.cm.utils.DataUtil;
 import com.ty.logic.sch.dao.ExamQueRefChapterDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 考试题目章节标签业务逻辑实现
@@ -47,6 +49,23 @@ public class ExamQueRefChapterServiceImpl implements ExamQueRefChapterService {
             list = examQueRefChapterDao.findExamQueRefChapter(qid);
         }
         return list;
+    }
+
+    /**
+     * 根据题目ID查询所有章节标签数据，以JSON格式返回
+     *
+     * @param qid 题目ID
+     * @return String - JSON Format
+     * @throws Exception
+     */
+    @Override
+    public String getSimpleAllForJson(Integer qid) throws Exception {
+        String jsonData = "[]";
+        List<ExamQueRefChapter> list = this.getAll(qid);
+        if (CollectionUtils.isNotEmpty(list)) {
+            jsonData = DataUtil.toJSON(list.stream().map(ExamQueRefChapter::getChptId).collect(Collectors.toList()));
+        }
+        return jsonData;
     }
 
     /**

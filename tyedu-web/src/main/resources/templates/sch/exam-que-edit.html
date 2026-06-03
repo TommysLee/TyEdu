@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!--/* 共用JS与CSS */-->
+  <th:block th:replace="~{assets/include :: katex}"/>
+  <th:block th:replace="~{assets/include :: scriptcss_form_editor('编辑考试题目')}"/>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <v-app>
+      <!-- 顶部功能区 -->
+      <v-app-bar flat>
+        <th:block th:replace="~{assets/include :: header(back=true)}"/>
+      </v-app-bar>
+
+      <!-- 主体部分 -->
+      <v-main>
+        <!-- 主体容器 -->
+        <v-container fluid class="pa-0">
+          <v-app-bar flat theme="light" border="b" color="white" class="px-4">
+            <v-breadcrumbs :items="breadcrumbs" class="font-weight-bold"></v-breadcrumbs>
+            <v-spacer></v-spacer>
+            <v-btn variant='elevated' color="teal" href="https://www.latexlive.com" target="_blank">{{$t('速查公式')}}</v-btn>
+          </v-app-bar>
+
+          <!-- 中间区域（Form表单） -->
+          <tform as="v-form" ref="dataForm" @submit="doSubmit" :on-invalid-submit="onInvalidSubmit">
+            <v-sheet tile theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 164">
+              <tfield v-model="formData.type" name="题型" v-slot="{ field, errors }" rules="required">
+                <v-row align="center" class="ma-0 mb-2 bg-white">
+                  <v-col cols="auto" class="font-weight-bold pl-4 pr-0">
+                    {{$t('题型')}}:
+                  </v-col>
+                  <v-col>
+                    <v-btn-toggle v-model="formData.type" mandatory density="compact" color="teal" variant="plain" class="flex-wrap h-auto hm-10">
+                      <v-btn v-for="item in qtypeList" :value="item.value">{{item.title}}</v-btn>
+                    </v-btn-toggle>
+                    <input v-bind="field" type="hidden"/>
+                  </v-col>
+                </v-row>
+                <span v-show="errors?.length > 0" class="pl-2 text-red">{{errors[0]}}</span>
+              </tfield>
+
+              <v-row dense align="center" class="ma-0 mb-2 bg-white">
+                <v-col cols="auto" class="font-weight-bold pl-4">
+                  {{$t('难度')}}:
+                </v-col>
+                <v-col>
+                  <v-rating v-model="formData.difficulty" hover color="grey" active-color="yellow"></v-rating>
+                </v-col>
+              </v-row>
+
+              <v-row class="ma-0 mb-2 bg-white">
+                <v-col>
+                  <tfield v-model.number="formData.maxScore" name="分值" v-slot="{ field, errors }" rules="required">
+                    <v-number-input v-bind="field" :model-value="field.value" control-variant="stacked" inset density="compact" :error-messages="errors" :hide-details="errors?.length < 1" variant="outlined" :label="$t('分值')">
+                      <template #append-inner>{{$t('分')}}</template>
+                    </v-number-input>
+                  </tfield>
+                </v-col>
+                <v-col>
+                  <tfield v-model.number="formData.seq" name="排序" v-slot="{ field, errors }" rules="required">
+                    <v-number-input v-bind="field" :model-value="field.value" control-variant="stacked" inset density="compact" :error-messages="errors" :hide-details="errors?.length < 1" variant="outlined" :label="$t('排序')"></v-number-input>
+                  </tfield>
+                </v-col>
+              </v-row>
+
+              <v-sheet class="mb-2 px-4 py-1">
+                <p class="font-weight-bold mb-1">{{$t('题目')}}:</p>
+                <div id="stemEditor" class="mb-4 height-350"></div>
+              </v-sheet>
+
+              <v-sheet class="mb-2 px-4 py-1">
+                <p class="font-weight-bold mb-1">{{$t('答案')}}:</p>
+                <div id="answerEditor" class="mb-4 height-350"></div>
+              </v-sheet>
+
+              <v-sheet class="mb-2 px-4 py-1">
+                <p class="font-weight-bold mb-1">{{$t('解析')}}:</p>
+                <div id="analysisEditor" class="mb-4 height-350"></div>
+              </v-sheet>
+            </v-sheet>
+
+            <!-- 页脚 -->
+            <v-footer app theme="light" border="t" class="justify-end">
+              <v-btn color="primary" size="large" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
+            </v-footer>
+          </tform>
+        </v-container>
+      </v-main>
+    </v-app>
+  </div>
+
+  <!-- 业务js -->
+  <script type="text/javascript">
+    const _stage = "[[${exam?.stage}]]";
+    const _subject = "[[${exam?.subject}]]";
+    const _examId = "[[${exam?.examId}]]";
+    const _title = "[[${exam?.title}]]";
+    const _qid = "[[${qid}]]";
+  </script>
+  <script type="text/javascript" th:src="@{/js/sch/exam-que-edit.js?_t=#buildtime#}"></script>
+</body>
+</html>

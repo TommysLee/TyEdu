@@ -1,10 +1,13 @@
 package com.ty.api.model.sch;
 
 import com.ty.api.model.BaseBO;
+import com.ty.api.model.rs.RsQueRefChapter;
+import com.ty.api.model.rs.RsQueRefKnowledge;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * 考试题目实体类
@@ -63,6 +66,16 @@ public class ExamQue extends BaseBO {
 
     /** 排序号 **/
     private Integer seq;
+
+    /*
+     * 辅助字段
+     */
+
+    // 知识点标签数据集合
+    private List<ExamQueRefKnowledge> ktags;
+
+    // 章节标数据集合
+    private List<ExamQueRefChapter> ctags;
 
     /**
      * 数据前置处理

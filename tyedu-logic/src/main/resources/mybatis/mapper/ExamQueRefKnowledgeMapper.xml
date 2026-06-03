@@ -3,7 +3,7 @@
 <mapper namespace="com.ty.logic.sch.dao.ExamQueRefKnowledgeDao">
 
     <!-- 查询结果集 -->
-    <select id="findExamQueRefKnowledge" parameterType="java.lang.Integer" resultType="ExamQueRefKnowledge">
+    <select id="findExamQueRefKnowledge" parameterType="java.util.Set" resultType="ExamQueRefKnowledge">
         SELECT
             t.qid,
             t.kid,
@@ -11,7 +11,10 @@
         FROM
             t_exam_que_ref_knowledge t
         WHERE
-            t.qid=#{qid}
+            t.qid IN
+        <foreach collection="qids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
     <!-- 批量保存 -->

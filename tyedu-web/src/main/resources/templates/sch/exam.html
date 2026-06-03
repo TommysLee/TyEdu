@@ -75,7 +75,7 @@
                 <span class="pl-2 text-subtitle-1 opacity-50">{{$t('成绩')}}：{{item.score?? placeholder}}</span>
                 <span class="pl-2 text-subtitle-1 opacity-50">{{$t('班级排名')}}：{{item.classRank?? placeholder}}</span>
                 <v-spacer></v-spacer>
-                <v-btn color="teal">{{$t('进入')}}</v-btn>
+                <v-btn color="teal" @click="goExamQueView(item.examId)">{{$t('进入')}}</v-btn>
                 <v-btn color="teal" @click="openFormDialog('修改考试', item.examId)">{{$t('修改')}}</v-btn>
               </v-card-actions>
             </v-card>

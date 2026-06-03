@@ -1,10 +1,12 @@
 package com.ty.logic.sch.service.impl;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.ty.api.model.sch.ExamQue;
 import com.ty.api.model.sch.ExamQueRefKnowledge;
 import com.ty.api.sch.service.ExamQueRefKnowledgeService;
 import com.ty.api.sch.service.ExamQueService;
+import com.ty.cm.utils.DataUtil;
 import com.ty.logic.sch.dao.ExamQueRefKnowledgeDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 考试题目知识点标签业务逻辑实现
@@ -44,9 +48,42 @@ public class ExamQueRefKnowledgeServiceImpl implements ExamQueRefKnowledgeServic
     public List<ExamQueRefKnowledge> getAll(Integer qid) throws Exception {
         List<ExamQueRefKnowledge> list = Lists.newArrayList();
         if (null != qid) {
-            list = examQueRefKnowledgeDao.findExamQueRefKnowledge(qid);
+            list = this.getAll(Sets.newHashSet(qid));
         }
         return list;
+    }
+
+    /**
+     * 根据题目ID查询所有知识点标签数据
+     *
+     * @param qids 题目ID集合
+     * @return List<ExamQueRefKnowledge>
+     * @throws Exception
+     */
+    @Override
+    public List<ExamQueRefKnowledge> getAll(Set<Integer> qids) throws Exception {
+        List<ExamQueRefKnowledge> list = Lists.newArrayList();
+        if (CollectionUtils.isNotEmpty(qids)) {
+            list = examQueRefKnowledgeDao.findExamQueRefKnowledge(qids);
+        }
+        return list;
+    }
+
+    /**
+     * 根据题目ID查询所有知识点标签数据，以JSON格式返回
+     *
+     * @param qid 题目ID
+     * @return String - JSON Format
+     * @throws Exception
+     */
+    @Override
+    public String getSimpleAllForJson(Integer qid) throws Exception {
+        String jsonData = "[]";
+        List<ExamQueRefKnowledge> list = this.getAll(qid);
+        if (CollectionUtils.isNotEmpty(list)) {
+            jsonData = DataUtil.toJSON(list.stream().map(ExamQueRefKnowledge::getKid).collect(Collectors.toList()));
+        }
+        return jsonData;
     }
 
     /**
