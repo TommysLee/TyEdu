@@ -188,6 +188,20 @@ const app = Vue.createApp({
     },
 
     /*
+     * 发布考试
+     */
+    doPublished(examId) {
+      doAjaxGet(this.url(`${prefix}/${examId}/ustatus/publish/1`), null, (result) => {
+        if (result.state) {
+          this.toast("操作成功");
+          this.doQuery();
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      });
+    },
+
+    /*
      * 进入考试题目列表页
      */
     goExamQueView(examId) {

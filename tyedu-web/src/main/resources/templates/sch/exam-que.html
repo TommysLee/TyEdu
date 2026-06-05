@@ -25,7 +25,13 @@
                   {{title}}
                 </v-col>
                 <v-col cols="auto">
-                  <v-btn color="teal" @click="goEdit">
+                  <v-popconfirm v-if="published" message="所有题目是否已批阅完毕?">
+                    <v-btn color="pink">
+                      <v-icon size="small">mdi-archive-edit-outline</v-icon>
+                      {{$t('批阅完成')}}
+                    </v-btn>
+                  </v-popconfirm>
+                  <v-btn v-else color="teal" @click="goEdit">
                     <v-icon size="small">mdi-plus</v-icon>
                     {{$t('录题')}}
                   </v-btn>
@@ -71,7 +77,8 @@
                     {{$t('打标')}}
                   </v-badge>
                 </v-btn>
-                <v-btn color="teal" @click="goEdit(item.qid)">{{$t('修改')}}</v-btn>
+                <v-btn v-if="!published" color="teal" @click="goEdit(item.qid)">{{$t('修改')}}</v-btn>
+                <v-btn v-else color="teal">{{$t('作答')}}</v-btn>
               </v-card-actions>
             </v-card>
             <v-skeleton-loader type="article,actions" color="transparent" v-if="loading"></v-skeleton-loader>
@@ -94,6 +101,8 @@
     const _subject = "[[${exam?.subject}]]";
     const _examId = "[[${exam?.examId}]]";
     const _title = "[[${exam?.title}]]";
+    const _published = [[${exam?.published ?: 0}]];
+    const _reviewed = [[${exam?.reviewed ?: 0}]];
   </script>
   <script type="text/javascript" th:src="@{/js/sch/exam-que.js}"></script>
 </body>

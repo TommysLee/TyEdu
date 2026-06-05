@@ -329,7 +329,7 @@ textarea {
 }
 
 /** PopConfirm 样式 **/
-.pop-container .v-popconfirm:not(.op-deleting) {
+.pop-container .v-popconfirm:not(.op-deleting,.show) {
   visibility: hidden;
 }
 .pop-container:hover .v-popconfirm {

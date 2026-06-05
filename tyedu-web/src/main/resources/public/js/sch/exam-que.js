@@ -7,6 +7,8 @@ const app = Vue.createApp({
       vnode: null,
       backUrl: '/sch/exam/view',
       title: _title,
+      published: _published,
+      reviewed: _reviewed,
 
       // 数据
       dataList: [],
