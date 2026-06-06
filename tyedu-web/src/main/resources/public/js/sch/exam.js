@@ -76,21 +76,23 @@ const app = Vue.createApp({
      * 执行条件查询
      */
     doQuery() {
-      this.loading = true;
-      this.param.stage = this.stage;
-      this.param.page = this.pagination.page;
-      this.param.pageSize = this.pagination.pageSize;
-      saveQueryParam(this.menuName, this.param);
-      doAjaxPost(this.url(`${prefix}/${this.stage}/list`), this.param, result => {
-        if (result.state) {
-          let pageData = result.data;
-          this.pagination.pageCount = pageData.pages; // 总页数
-          this.dataList = addIndexPropForArray(pageData.data, this.pagination); // 数据集合
-          this.scrollTop();
-        } else {
-          this.toast(result.message, 'warning');
-        }
-      })
+      if (!this.loading) {
+        this.loading = true;
+        this.param.stage = this.stage;
+        this.param.page = this.pagination.page;
+        this.param.pageSize = this.pagination.pageSize;
+        saveQueryParam(this.menuName, this.param);
+        doAjaxPost(this.url(`${prefix}/${this.stage}/list`), this.param, result => {
+          if (result.state) {
+            let pageData = result.data;
+            this.pagination.pageCount = pageData.pages; // 总页数
+            this.dataList = addIndexPropForArray(pageData.data, this.pagination); // 数据集合
+            this.scrollTop();
+          } else {
+            this.toast(result.message, 'warning');
+          }
+        })
+      }
     },
 
     /*

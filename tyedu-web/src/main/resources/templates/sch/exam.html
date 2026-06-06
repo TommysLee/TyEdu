@@ -36,9 +36,9 @@
             <v-row class="bg-white ma-0 mb-2">
               <v-col cols="auto" class="mt-1 pr-0 font-weight-bold">{{$t('考试类型')}}:</v-col>
               <v-col>
-                <v-btn-toggle v-model="param.examType" density="comfortable" :disabled="loading" color="teal" variant="plain" class="flex-wrap h-auto" @click="doQuery">
-                  <v-btn v-for="item in examTypeList" :value="item.value" :key="item.value">{{item.title}}</v-btn>
-                </v-btn-toggle>
+                <v-chip-group v-model="param.examType" column :disabled="loading" color="teal" variant="plain" class="py-0" selected-class="opacity-100" @click="doQuery">
+                  <v-chip label density="comfortable" v-for="item in examTypeList" :key="item.value" :value="item.value" class="my-0">{{item.title}}</v-chip>
+                </v-chip-group>
               </v-col>
             </v-row>
             <v-row class="bg-white ma-0 mb-2">

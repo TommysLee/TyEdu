@@ -140,8 +140,8 @@
                     <span v-for="k in item.ktags" :key="k.kid" class="mr-3">{{k.kname}}</span>
                   </v-card-subtitle>
                 </v-card-item>
-                <v-card-text class="v-rich-text" @click="item.show = !item.show">
-                  <div v-katex v-html="item.stem"></div>
+                <v-card-text class="v-rich-text">
+                  <div v-katex v-html="item.stem" @click="item.show = !item.show"></div>
                   <v-expand-transition>
                     <div class="border-t-thin mt-4 pt-4" v-if="item.show">
                       <p class="font-weight-bold">{{$t('答案')}}:</p>

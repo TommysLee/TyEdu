@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -115,6 +117,24 @@ public class ExamQueController extends BaseController {
     @GetMapping("/{examId}/del/{qid}")
     public AjaxResult del(@PathVariable Integer qid) throws Exception {
         int n = examQueService.delete(qid);
+        return AjaxResult.success(n);
+    }
+
+    /**
+     * 更新考试题目学生作答
+     */
+    @PostMapping("/{examId}/upsert/resp/{qid}")
+    public AjaxResult upsertResponse(@PathVariable Integer qid, @RequestParam String response) throws Exception {
+        int n = examQueService.update(new ExamQue().setQid(qid).setResponse(response));
+        return AjaxResult.success(n);
+    }
+
+    /**
+     * 更新考试题目得分
+     */
+    @RequestMapping("/{examId}/upsert/socre/{qid}/{score}")
+    public AjaxResult upsertScore(@PathVariable Integer qid, @PathVariable Double score) throws Exception {
+        int n = examQueService.update(new ExamQue().setQid(qid).setScore(score));
         return AjaxResult.success(n);
     }
 

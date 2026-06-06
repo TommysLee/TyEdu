@@ -370,6 +370,13 @@ function isNotBlank(obj) {
 }
 
 /**
+ * 延迟执行函数
+ */
+function lazy(func, timeout) {
+  setTimeout(func, timeout || 500);
+}
+
+/**
  * 文本前缀相似度（比较：文本在目标文本的占比，即与目标文本前缀的连续相似度）
  *
  * @param text        文本

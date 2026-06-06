@@ -3,8 +3,7 @@
 <head>
   <!--/* 共用JS与CSS */-->
   <th:block th:replace="~{assets/include :: katex}"/>
-  <th:block th:replace="~{assets/include :: scriptcss('考试题目列表')}"/>
-  <link rel="stylesheet" th:href="@{/js/lib/fluent-editor/fluent-editor.min.css}"/>
+  <th:block th:replace="~{assets/include :: scriptcss_form_editor('考试题目列表')}"/>
 </head>
 <body>
   <div id="app" v-cloak>
@@ -25,13 +24,13 @@
                   {{title}}
                 </v-col>
                 <v-col cols="auto">
-                  <v-popconfirm v-if="published" message="所有题目是否已批阅完毕?">
+                  <v-popconfirm v-if="published && !reviewed" message="所有题目是否已批阅完毕?" @confirm="doReviewed">
                     <v-btn color="pink">
                       <v-icon size="small">mdi-archive-edit-outline</v-icon>
                       {{$t('批阅完成')}}
                     </v-btn>
                   </v-popconfirm>
-                  <v-btn v-else color="teal" @click="goEdit">
+                  <v-btn v-if="!published" color="teal" @click="goEdit">
                     <v-icon size="small">mdi-plus</v-icon>
                     {{$t('录题')}}
                   </v-btn>
@@ -55,8 +54,8 @@
                   <span v-for="k in item.ktags" :key="k.kid" class="mr-3">{{k.kname}}</span>
                 </v-card-subtitle>
               </v-card-item>
-              <v-card-text class="v-rich-text text-subtitle-1" @click="item.show = !item.show">
-                <div v-katex v-html="item.stem"></div>
+              <v-card-text class="v-rich-text text-subtitle-1">
+                <div v-katex v-html="item.stem" @click="item.show = !item.show"></div>
                 <v-expand-transition>
                   <div class="border-t-thin mt-4 pt-4" v-if="item.show">
                     <p class="font-weight-bold">【{{$t('我的答案')}}】</p>
@@ -78,7 +77,7 @@
                   </v-badge>
                 </v-btn>
                 <v-btn v-if="!published" color="teal" @click="goEdit(item.qid)">{{$t('修改')}}</v-btn>
-                <v-btn v-else color="teal">{{$t('作答')}}</v-btn>
+                <v-btn v-else color="teal" @click="openWinDrawer(item)">{{$t('作答')}}</v-btn>
               </v-card-actions>
             </v-card>
             <v-skeleton-loader type="article,actions" color="transparent" v-if="loading"></v-skeleton-loader>
@@ -86,6 +85,34 @@
             <!-- No Data Tips -->
             <v-empty-state class="hm-auto height-350" :headline="noDataText" v-if="!loading && (!dataList || dataList?.length === 0)"></v-empty-state>
           </v-sheet>
+
+          <!-- 抽屉窗口：作答&批阅 -->
+          <v-navigation-drawer :order="-1" theme="light" v-model="winDrawer" persistent temporary floating location="right" :width="winDrawerWidth">
+            <v-layout full-height>
+              <v-container class="overflow-auto">
+                <v-app-bar flat color="indigo-darken-2">
+                  <v-toolbar-title class="text-subtitle-1 font-weight-bold">{{drawerTitle}}</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn icon="mdi-close" @click="closeWinDrawer"></v-btn>
+                </v-app-bar>
+                <v-sheet class="pt-16 fill-height">
+                  <div class="font-weight-bold">
+                    {{$t('学生作答')}}
+                    <v-btn v-if="!reviewed" variant="text" color="primary" density="compact" icon="mdi-content-save" class="mt-n1" :loading="posting" @click="doSubmitResponse"></v-btn>
+                  </div>
+                  <div id="editor" class="h-50"></div>
+                  <div v-if="!reviewed">
+                    <div class="font-weight-bold mt-3">{{$t('得分')}}</div>
+                    <v-chip-group v-model="formData.score" color="teal" mandatory column @update:model-value="doSubmitScore">
+                      <v-chip filter label variant="outlined" :value="0" class="px-4" base-color="pink" color="pink">{{$t('零分')}}</v-chip>
+                      <v-chip filter label variant="outlined" :value="formData.maxScore" class="px-4" base-color="teal">{{$t('满分')}}</v-chip>
+                      <v-chip filter label variant="outlined" v-for="i in formData.maxScore" :value="i" :text="i" class="px-4"></v-chip>
+                    </v-chip-group>
+                  </div>
+                </v-sheet>
+              </v-container>
+            </v-layout>
+          </v-navigation-drawer>
         </v-container>
       </v-main>
     </v-app>

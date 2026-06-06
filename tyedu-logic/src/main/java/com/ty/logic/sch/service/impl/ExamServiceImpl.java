@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import static com.ty.cm.constant.Messages.NOT_YET_REVIEWED;
 import static com.ty.cm.constant.Messages.RELATED_DATA_DELETE;
 import static com.ty.cm.constant.Ty.DATA;
 import static com.ty.cm.constant.Ty.PAGES;
@@ -232,7 +234,11 @@ public class ExamServiceImpl implements ExamService {
 
             // 统计得分
             if (ReviewType.REVIEWED.eq(status)) {
-                exam.setScore(examQueService.calcScore(examId));
+                Double score = examQueService.calcScore(examId);
+                if (Objects.isNull(score)) {
+                    throw new CustomException(NOT_YET_REVIEWED);
+                }
+                exam.setScore(score);
             }
 
             // 执行更新

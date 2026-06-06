@@ -10,6 +10,23 @@ const app = Vue.createApp({
       published: _published,
       reviewed: _reviewed,
 
+      // 抽屉窗口
+      winDrawer: false,
+      winDrawerWidth: 800,
+      drawerTitle: '',
+
+      // 编辑器
+      editor: null,
+
+      // 表单数据
+      formData: {
+        qid: null,
+        response: null,
+        score: null,
+        maxScore: 1
+      },
+      queItem: null,
+
       // 数据
       dataList: [],
 
@@ -26,6 +43,9 @@ const app = Vue.createApp({
     this.doQuery();
     this.doQueryQTypes();
     this.vnode = this.$refs.container;
+    this.$nextTick(() => {
+      this.initEditor();
+    });
   },
   methods: {
     /*
@@ -65,6 +85,73 @@ const app = Vue.createApp({
           this.toast(result.message, 'warning');
         }
       });
+    },
+
+    /*
+     * 更新批阅状态
+     */
+    doReviewed() {
+      doAjaxGet(this.url(`/sch/exam/${_examId}/ustatus/review/1`), null, (result) => {
+        if (result.state) {
+          this.toast("操作成功");
+          lazy(() => {
+            window.location.reload();
+          })
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      });
+    },
+
+    /*
+     * 提交学生作答
+     */
+    doSubmitResponse() {
+      const response = this.editor.getSemanticHTML();
+      doAjaxPost(this.url(`${prefix}/${_examId}/upsert/resp/${this.formData.qid}`), {response}, result => {
+          if (result.state) {
+            this.toast("操作成功");
+            this.queItem.response = response;
+          } else {
+            this.toast(result.message, 'warning');
+          }
+      })
+    },
+
+    /*
+     * 提交单题成绩
+     */
+    doSubmitScore() {
+      doAjaxGet(this.url(`${prefix}/${_examId}/upsert/socre/${this.formData.qid}/${this.formData.score}`), null, result => {
+        if (result.state) {
+          this.toast("操作成功");
+          this.queItem.score = this.formData.score;
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      })
+    },
+
+    // 打开抽屉窗口
+    openWinDrawer(que) {
+      this.winDrawer = true;
+      this.drawerTitle = this.$t('作答') + this.$t('与') + this.$t('批阅') + ' (' + this.$t('题号') + ': ' + que.index + ')';
+      this.mergeValue(this.formData, que || {});
+      this.queItem = que;
+      TinyEditor.setContent(this.editor, this.formData.response);
+    },
+
+    // 关闭抽屉窗口
+    closeWinDrawer() {
+      this.winDrawer = false;
+      this.resetValue(this.formData);
+    },
+
+    /*
+     * 初始化编辑器
+     */
+    initEditor() {
+      this.editor = Vue.markRaw(TinyEditor.init('#editor'));
     },
 
     /*

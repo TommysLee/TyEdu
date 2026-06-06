@@ -356,6 +356,11 @@ const baseApp = {
       this.$snackbar && this.$snackbar.clear();
     },
 
+    // 重置对象属性值
+    resetValue(obj) {
+      Object.keys(obj).forEach(p => obj[p] = null);
+    },
+
     // 合并属性值：将 Source 的属性值 复制到 Target (只复制Target存在的属性)
     mergeValue(target, source) {
       Object.keys(source).filter(p => p in target).forEach(p => target[p] = source[p])

@@ -74,6 +74,6 @@ public interface Messages {
     /** 网关未启用提示 **/
     String GATEWAY_IS_DISABLE = "网关未启用，请先启用网关";
 
-    /** Dashboard模板标识已存在 **/
-    String EXISTS_TEMPLATE_NUM = "模板标识已存在，请修改";
+    /** 批阅未完成 **/
+    String NOT_YET_REVIEWED = "还没有进行批阅，请继续";
 }
