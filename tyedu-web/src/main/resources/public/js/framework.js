@@ -637,12 +637,22 @@ if ('undefined' !== typeof(VeeValidate)) {
 if ('undefined' !== typeof(Vue3Snackbar)) {
   baseApp.components['vue3-snackbar'] = Vue3Snackbar.Vue3Snackbar;
 }
+if ('undefined' !== typeof VueApexChartsCore) {
+  baseApp.components['apexchart'] = VueApexChartsCore;
+  baseApp.computed['APEX_THEME'] = function() {
+    // return this.vdark? 'dark' : 'light';
+    return 'light';
+  }
+}
 
 /**
  * Vue3指令注册
  */
 if (typeof(renderMathInElement) === 'function') {
   baseApp.directives['katex'] = vkatex;
+}
+if ('undefined' !== typeof VueApexChartsCore) {
+  baseApp.directives['apex-theme'] = v_apex_theme;
 }
 
 /**

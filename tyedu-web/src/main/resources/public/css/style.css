@@ -232,39 +232,30 @@ textarea {
 }
 
 /* v-card-zoom字号样式 */
-.v-application .v-card--max .zoom-font {
-  line-height: 100% !important;
+.v-application .v-card--max .font-zoom {
+  line-height: 1em !important;
+}
+.v-application .v-card--max .font-zoom-1 {
+  font-size: 1.25em !important;
+}
+.v-application .v-card--max .font-zoom-2 {
+  font-size: 1.5em !important;
+}
+.v-application .v-card--max .font-zoom-3 {
+  font-size: 2em !important;
+}
+.v-application .v-card--max .font-zoom-4 {
+  font-size: 3em !important;
+}
+.v-application .v-card--max .font-zoom-5 {
+  font-size: 4em !important;
+}
+.v-application .v-card--max .font-zoom-6 {
+  font-size: 5em !important;
 }
 
-.v-application .v-card--max .zoom-font-5x {
-  font-size: 500% !important;
-}
-
-.v-application .v-card--max .zoom-font-4x {
-  font-size: 400% !important;
-}
-
-.v-application .v-card--max .zoom-font-3x {
-  font-size: 300% !important;
-}
-
-.v-application .v-card--max .zoom-font-2x {
-  font-size: 200% !important;
-}
-
-.v-application .v-card--max .zoom-font-1p5x {
-  font-size: 150% !important;
-}
-
-.v-application .v-card--max .zoom-font-1p25x {
-  font-size: 125% !important;
-}
-
-/* v-card 作为版块时的标题样式 */
-.card-title {
-  border-left: 8px solid #1890FF;
-  font-size: 0.9rem;
-  line-height: 1.5rem;
+.v-application .v-card--max .font-zoom .apexcharts-graphical text.apexcharts-datalabel {
+  font-size: 1em;
 }
 
 /* 时间控件 */

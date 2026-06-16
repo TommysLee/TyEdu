@@ -3,7 +3,28 @@
 <head>
   <!--/* 共用JS与CSS */-->
   <th:block th:replace="~{assets/include :: katex}"/>
-  <th:block th:replace="~{assets/include :: scriptcss_form_editor('考试题目列表')}"/>
+  <th:block th:replace="~{assets/include :: scriptcss_form_editor_chart('考试题目列表')}"/>
+  <th:block th:replace="~{assets/include :: vueuse}"/>
+  <link rel="stylesheet" th:href="@{/css/fonts.css?_t=#buildtime#}">
+  <style>
+    .h-md {
+      height: 350px;
+    }
+    .h-lg {
+      height: 450px;
+    }
+    .tags-table {
+      --v-border-color: var(--v-theme-primary) !important;
+      --v-border-opacity: 0.3 !important;
+      --padding: 55px;
+    }
+    .tags-table .v-table__wrapper {
+      height: 100%;
+    }
+    .tags-table thead th {
+      background: rgba(var(--v-theme-primary), .08) !important;
+    }
+  </style>
 </head>
 <body>
   <div id="app" v-cloak>
@@ -38,13 +59,112 @@
               </v-row>
             </v-sheet>
 
+            <v-row v-if="reviewed" no-gutters class="mb-3">
+              <v-col cols="12">
+                <v-card>
+                  <v-card-item>
+                    <v-row>
+                      <v-col cols="6" md="4" class="px-8 py-6">
+                        <v-sheet rounded="lg" class="bg-gradient-yellow text-center py-6">
+                          <v-avatar color="yellow-accent-4" rounded="lg" class="mb-3 text-white">
+                            <v-icon icon="mdi-file-document"></v-icon>
+                          </v-avatar>
+                          <p class="mb-1">{{$t('卷面分')}}</p>
+                          <p class="text-h3 text-amber font-ds">{{maxScore}}</p>
+                        </v-sheet>
+                      </v-col>
+                      <v-col cols="6" md="4" class="px-8 py-6">
+                        <v-sheet rounded="lg" class="bg-gradient-red text-center py-6">
+                          <v-avatar color="pink-lighten-2" rounded="lg" class="mb-3">
+                            <v-icon icon="mdi-target"></v-icon>
+                          </v-avatar>
+                          <p class="mb-1">{{$t('成绩')}}</p>
+                          <p class="text-h3 text-pink font-ds">{{score}}</p>
+                        </v-sheet>
+                      </v-col>
+                      <v-col cols="12" md="4" class="px-8 py-6">
+                        <v-sheet rounded="lg" class="bg-gradient-green text-center py-6">
+                          <v-avatar color="green-accent-4" rounded="lg" class="mb-3 text-white">
+                            <v-icon icon="mdi-percent"></v-icon>
+                          </v-avatar>
+                          <p class="mb-1">{{$t('得分率')}}</p>
+                          <p class="text-h3 text-green font-ds">{{scoreRate}}%</p>
+                        </v-sheet>
+                      </v-col>
+                    </v-row>
+                  </v-card-item>
+                </v-card>
+              </v-col>
+              <v-col cols="12" class="mt-3">
+                <v-row class="ma-0" no-gutters>
+                  <v-col cols="12" md="6" class="h-md pr-md-1">
+                    <v-card-zoom flat rounded class="fill-height" :loading="loading">
+                      <!-- 试卷题型 -->
+                      <div class="d-flex border-s-xl-blue pl-2 mt-2 ml-2 mr-7">
+                        <span class="font-weight-bold">{{$t('试卷题型')}}</span>
+                        <v-spacer></v-spacer>
+                        <span class="">{{$t('共计')}} {{dataList?.length}} {{$t('题')}}</span>
+                      </div>
+                      <div class="fill-height-p font-zoom">
+                        <apexchart v-apex-theme type="bar" height="100%" :options="stypesChartOptions" :series="stypesSeries"></apexchart>
+                      </div>
+                    </v-card-zoom>
+                  </v-col>
+                  <v-col cols="12" md="6" class="h-md pl-md-1 pt-3 pt-md-0">
+                    <!-- 题型得分率 -->
+                    <v-card-zoom flat rounded class="fill-height" :loading="loading">
+                      <div class="border-s-xl-blue pl-2 mt-2 ml-2 font-weight-bold">{{$t('题型得分率')}}</div>
+                      <div class="fill-height-p font-zoom">
+                        <apexchart v-apex-theme type="bar" height="100%" :options="stypesRateChartOptions" :series="stypesRateSeries"></apexchart>
+                      </div>
+                    </v-card-zoom>
+                  </v-col>
+                  <v-col cols="12" md="6" class="h-md pr-md-1 pt-3">
+                    <!-- 易错知识点 -->
+                    <v-card-zoom flat rounded class="fill-height" :loading="loading">
+                      <div id="yctop5" class="border-s-xl-blue pl-2 mt-2 ml-2 font-weight-bold">{{$t('易错知识点')}}TOP5</div>
+                      <v-table density="comfortable" hover fixed-header class="tags-table fill-height-p ma-5 mb-0 font-zoom-1">
+                        <template #default>
+                          <thead>
+                            <tr>
+                              <th class="text-center border">{{$t('序号')}}</th>
+                              <th class="text-center border border border-s-0">{{$t('知识点')}}</th>
+                              <th class="text-center border border border-s-0">{{$t('对应题号')}}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(item, index) in sktags.slice(0,5)" :key="item.kid">
+                              <td class="border border-t-0 text-center">{{ index + 1 }}</td>
+                              <td class="border border-t-0 border-s-0">{{ item.kname }}</td>
+                              <td class="border border-t-0 border-s-0">
+                                <v-for v-for="i in item.qindexList">
+                                  <a class="mr-3" :href="'#q-' + i">{{i}}</a>
+                                </v-for>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-table>
+                    </v-card-zoom>
+                  </v-col>
+                  <v-col cols="12" md="6" class="h-md pl-md-1 pt-3">
+                    <!-- 知识点掌握情况 -->
+                    <v-card-zoom flat rounded class="fill-height" :loading="loading" @zoom="toggleRadarLabel">
+                      <div class="border-s-xl-blue pl-2 mt-2 ml-2 font-weight-bold">{{$t('知识点掌握情况')}}</div>
+                      <apexchart class="mt-n8" v-apex-theme type="radar" height="100%" :options="sktagsChartOptions" :series="sktagsSeries"></apexchart>
+                    </v-card-zoom>
+                  </v-col>
+                </v-row>
+              </v-col>
+            </v-row>
+
             <!-- 数据列表 -->
             <v-card hover class="mb-2 pop-container" v-for="item in dataList" :key="item.qid" v-show="!loading">
-              <v-card-item>
+              <v-card-item :id="'q-'+item.index">
                 <v-card-title class="mb-1 d-flex align-center">
-                  <v-btn color="primary" variant="tonal" :ripple="false">{{item.index}}.</v-btn>
-                  <span class="pl-2 text-subtitle-1 opacity-60">{{qtypeMap[item.type]}}</span>
-                  <v-popconfirm :data="item.qid" @confirm="doDelete">
+                  <v-btn color="primary" variant="tonal" :ripple="false" href="#yctop5">{{item.index}}.</v-btn>
+                  <span class="pl-2 text-subtitle-1 opacity-60">{{qtypeMap[item.type]}}（{{item.maxScore?? placeholder}}分）</span>
+                  <v-popconfirm v-if="!reviewed" :data="item.qid" @confirm="doDelete">
                     <v-btn icon="mdi-delete" variant="text" color="pink"></v-btn>
                   </v-popconfirm>
                   <v-spacer></v-spacer>
@@ -68,8 +188,7 @@
                 </v-expand-transition>
               </v-card-text>
               <v-card-actions class="justify-end border-t-thin">
-                <span class="pl-2 text-subtitle-1 text-teal">{{$t('分值')}}：{{item.maxScore?? placeholder}}</span>
-                <span class="pl-2 text-subtitle-1 text-teal">{{$t('得分')}}：{{item.score?? placeholder}}</span>
+                <span class="pl-2 text-subtitle-2 text-red font-weight-bold">{{$t('得分')}}：{{item.score?? placeholder}}</span>
                 <v-spacer></v-spacer>
                 <v-btn color="teal" @click="goMarked(item.qid)">
                   <v-badge bordered floating location="top right" color="teal" icon="mdi-check" :model-value="item.chptMarked && item.knowledgeMarked">
@@ -87,7 +206,7 @@
           </v-sheet>
 
           <!-- 抽屉窗口：作答&批阅 -->
-          <v-navigation-drawer :order="-1" theme="light" v-model="winDrawer" persistent temporary floating location="right" :width="winDrawerWidth">
+          <v-navigation-drawer :order="-1" theme="light" v-model="winDrawer" :persistent="!reviewed" temporary floating location="right" :width="winDrawerWidth">
             <v-layout full-height>
               <v-container class="overflow-auto">
                 <v-app-bar flat color="indigo-darken-2">
@@ -119,6 +238,7 @@
   </div>
 
   <!-- 导入Vuetify扩展组件 -->
+  <th:block th:replace="~{assets/vuetify :: v-card-zoom}"/>
   <th:block th:replace="~{assets/vuetify :: v-popconfirm}"/>
   <th:block th:replace="~{assets/vuetify :: v-date-picker-select}"/>
 
@@ -128,9 +248,12 @@
     const _subject = "[[${exam?.subject}]]";
     const _examId = "[[${exam?.examId}]]";
     const _title = "[[${exam?.title}]]";
+    const _maxScore = "[[${exam?.maxScore}]]";
+    const _score = "[[${exam?.score}]]";
     const _published = [[${exam?.published ?: 0}]];
     const _reviewed = [[${exam?.reviewed ?: 0}]];
   </script>
+  <script type="text/javascript" th:src="@{/js/sch/eaa.js}"></script>
   <script type="text/javascript" th:src="@{/js/sch/exam-que.js}"></script>
 </body>
 </html>

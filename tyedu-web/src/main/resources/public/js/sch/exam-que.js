@@ -29,14 +29,121 @@ const app = Vue.createApp({
 
       // 数据
       dataList: [],
+      stypes: [],
+      sktags: [],
+
+      // 分析助手
+      eaa: null,
+
+      // 图表
+      stypesChartOptions: ApexBuilder.Bar.options('stypes', {
+        dataLabels: {
+          formatter(value) {
+            return value + '道';
+          }
+        },
+        tooltip: {
+          y: { formatter: value => value + '道' }
+        }
+      }),
+      stypesRateChartOptions: ApexBuilder.Bar.options('stypesRate', {
+        dataLabels: {
+          formatter(value) {
+            return value + '%';
+          }
+        },
+        colors: [function({ value }) {
+          if (value < 60) {
+            return '#FF4560';
+          }
+          return '#00BFA5';
+        }],
+        tooltip: {
+          y: { formatter: value => value + '%' }
+        }
+      }),
+      sktagsChartOptions: ApexBuilder.Radar.options('sktags', {
+        chart: {
+          toolbar: {
+            offsetX: -30
+          }
+        },
+        colors: ['#F9C80E'],
+        xaxis: {
+          labels: { show: false }
+        },
+        yaxis: {
+          stepSize: 20,
+          min: 0,
+          max: 100
+        },
+        plotOptions: {
+          radar: {
+            polygons: {
+              fill: { colors: ['#f8f8f8', '#fff'] }
+            }
+          }
+        },
+        tooltip: {
+          y: { formatter: value => value + '%' }
+        }
+      }),
 
       // 数据字典
       qtypeList: []
     }
   },
+  setup() {
+    const maxScore = _maxScore, score = _score;
+    const scoreRateVal = Vue.ref(0);
+    const animatedScoreRate = VueUse.useTransition(scoreRateVal, { duration: 1000 });
+    scoreRateVal.value = Math.round(score / maxScore * 100);
+    const scoreRate = Vue.computed(() => Math.round(animatedScoreRate.value));
+    return {maxScore, score, scoreRate};
+  },
   computed: {
     qtypeMap() {
       return toMap(this.qtypeList)
+    },
+    // scoreRate() {
+    //   return Math.round(this.score / this.maxScore * 100);
+    // },
+    stypesSeries() {
+      if (!this.stypes || this.stypes?.length === 0) {
+        return [];
+      }
+      return [{
+        name: '题数',
+        data: this.stypes,
+        parsing: {
+          x: 'title',
+          y: 'count'
+        }
+      }]
+    },
+    stypesRateSeries() {
+      if (!this.stypes || this.stypes?.length === 0) {
+        return [];
+      }
+      return [{
+        name: '得分率',
+        data: this.stypes,
+        parsing: {
+          x: 'title',
+          y: 'rate'
+        }
+      }]
+    },
+    sktagsSeries() {
+      if (!this.sktags || this.sktags?.length === 0) return [];
+      return [{
+        name: "掌握情况",
+        data: this.sktags,
+        parsing: {
+          x: 'kname',
+          y: 'rate'
+        }
+      }]
     }
   },
   mounted() {
@@ -57,6 +164,7 @@ const app = Vue.createApp({
         if (result.state) {
           this.dataList = addIndexPropForArray(result.data);
           this.scrollTop();
+          this.initEAA();
         } else {
           this.toast(result.message, 'warning');
         }
@@ -152,6 +260,27 @@ const app = Vue.createApp({
      */
     initEditor() {
       this.editor = Vue.markRaw(TinyEditor.init('#editor'));
+    },
+
+    /*
+     * 初始化分析助手
+     */
+    initEAA() {
+      if (this.reviewed) {
+        this.$nextTick(() => {
+          this.eaa = new ExamAnalysisAssistant(this.dataList, this.qtypeMap);
+          this.stypes = this.eaa.getTypes();
+          this.sktags = this.eaa.getKtags();
+        })
+      }
+    },
+
+    /*
+     * 切换雷达图标签显隐
+     */
+    toggleRadarLabel(isMax) {
+      this.sktagsChartOptions.xaxis.labels.show = isMax;
+      this.sktagsChartOptions = {...this.sktagsChartOptions};
     },
 
     /*

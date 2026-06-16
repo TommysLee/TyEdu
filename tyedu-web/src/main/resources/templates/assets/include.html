@@ -12,13 +12,31 @@
     <script type="text/javascript" th:src="@{/js/data/nav-menus.js?_t=#buildtime#}"></script>
   </th:block>
 
+  <!-- ########################### -->
+  <!--/* Vue3 组合式API 的实用工具集合 */-->
+  <!-- ########################### -->
+  <th:block th:fragment="vueuse">
+    <script type="text/javascript" th:src="@{/js/lib/vueuse/vueuse-shared.iife.min.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vueuse/vueuse-core.iife.min.js?_t=#buildtime#}"></script>
+  </th:block>
+
   <!-- ################## -->
   <!--/* kaTex 公式渲染库 */-->
   <!-- ##################-->
   <th:block th:fragment="katex">
-    <link rel="stylesheet" th:href="@{/js/lib/katex/katex.min.css}">
-    <script type="text/javascript" th:src="@{/js/lib/katex/katex.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/lib/katex/auto-render.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/js/lib/katex/katex.min.css?_t=#buildtime#}">
+    <script type="text/javascript" th:src="@{/js/lib/katex/katex.min.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/katex/auto-render.min.js?_t=#buildtime#}"></script>
+  </th:block>
+
+  <!-- #################### -->
+  <!--/* ApexCharts 图表库 */-->
+  <!-- #################### -->
+  <th:block th:fragment="chart">
+    <link rel="stylesheet" th:href="@{/css/apexcharts.css?_t=#buildtime#}">
+    <script type="text/javascript" th:src="@{/js/lib/apexcharts/apexcharts.min.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/apexcharts/vue3-apexcharts-core.umd.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/apexcharts/apex-builder.js?_t=#buildtime#}"></script>
   </th:block>
 
   <!-- ################## -->
@@ -73,6 +91,7 @@
     <script type="text/javascript" th:src="@{/js/lib/vue3-snackbar.iife.js?_t=#buildtime#}"></script>
     <script type="text/javascript" th:src="@{/js/lib/axios.min.js?_t=#buildtime#}"></script>
     <script type="text/javascript" th:src="@{/js/lib/qs.min.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/lodash.min.js?_t=#buildtime#}"></script>
   </th:block>
 
   <!-- #################### -->
@@ -97,11 +116,24 @@
   <!--/* 共用JS与CSS（含Form验证框架、FluentEditor富文本编辑器） */-->
   <!-- #################################################### -->
   <th:block th:fragment="scriptcss_form_editor(title)">
-    <link rel="stylesheet" th:href="@{/js/lib/fluent-editor/fluent-editor.min.css}"/>
-    <script type="text/javascript" th:src="@{/js/lib/lodash.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/lib/fluent-editor/fluent-editor.umd.js}"></script>
-    <script type="text/javascript" th:src="@{/js/lib/fluent-editor/editor.config.js}"></script>
+    <link rel="stylesheet" th:href="@{/js/lib/fluent-editor/fluent-editor.min.css?_t=#buildtime#}"/>
+    <script type="text/javascript" th:src="@{/js/lib/fluent-editor/fluent-editor.umd.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/fluent-editor/editor.config.js?_t=#buildtime#}"></script>
     <th:block th:replace="~{:: scriptcss_form(${title})}"/>
+  </th:block>
+
+  <!-- ################################################################ -->
+  <!--/* 共用JS与CSS（含Form验证框架、FluentEditor富文本编辑器、Chart图表库） */-->
+  <!-- ################################################################ -->
+  <th:block th:fragment="scriptcss_form_editor_chart(title)">
+    <th:block th:replace="~{:: scriptcss_base(${title})}"/>
+    <link rel="stylesheet" th:href="@{/js/lib/fluent-editor/fluent-editor.min.css?_t=#buildtime#}"/>
+    <script type="text/javascript" th:src="@{/js/lib/fluent-editor/fluent-editor.umd.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/fluent-editor/editor.config.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vee-validate/vee-validate.iife.prod.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vee-validate/vee-validate-rules.iife.min.js?_t=#buildtime#}"></script>
+    <th:block th:replace="~{:: chart}"/>
+    <th:block th:replace="~{:: sysjslib}"/>
   </th:block>
 
   <!-- #################### -->
