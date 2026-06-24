@@ -137,8 +137,8 @@
                               <td class="border border-t-0 text-center">{{ index + 1 }}</td>
                               <td class="border border-t-0 border-s-0">{{ item.kname }}</td>
                               <td class="border border-t-0 border-s-0">
-                                <v-for v-for="i in item.qindexList">
-                                  <a class="mr-3" :href="'#q-' + i">{{i}}</a>
+                                <v-for v-for="i in item.qList">
+                                  <a class="mr-3" :href="'#q-' + i.qid">{{i.index}}</a>
                                 </v-for>
                               </td>
                             </tr>
@@ -160,7 +160,7 @@
 
             <!-- 数据列表 -->
             <v-card hover class="mb-2 pop-container" v-for="item in dataList" :key="item.qid" v-show="!loading">
-              <v-card-item :id="'q-'+item.index">
+              <v-card-item :id="'q-'+item.qid">
                 <v-card-title class="mb-1 d-flex align-center">
                   <v-btn color="primary" variant="tonal" :ripple="false" href="#yctop5">{{item.index}}.</v-btn>
                   <span class="pl-2 text-subtitle-1 opacity-60">{{qtypeMap[item.type]}}（{{item.maxScore?? placeholder}}分）</span>

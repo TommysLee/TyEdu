@@ -3,6 +3,7 @@ ty:
     #前台
     "[/rs/que-bank/view]": "rs/que-bank"
     "[/sch/exam/view]": "sch/exam"
+    "[/sch/wrong/que-bank/view]": "sch/wrong-que-bank"
     #后台管理
     "[/adm/index]": "adm/rs/book"
     "[/adm/rs/book/view]": "adm/rs/book"

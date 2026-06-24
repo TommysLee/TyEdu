@@ -109,11 +109,24 @@ const app = Vue.createApp({
   },
   mounted() {
     clearQueryParam();
-    this.selectedMenu = this.param.selectedMenu || 'chpt';
-    this.stage = this.param.stage || 'XX';
     this.vnode = this.$refs.qcontainer;
+    this.selectedMenu = this.param.selectedMenu || 'chpt';
+    this.stage = this.param.stage?? this.stage;
+    if (!this.stage) {
+      this.doQueryStu();
+    }
   },
   methods: {
+    /*
+     * 查询学生信息
+     */
+    doQueryStu() {
+      doAjaxGetSimple(this.url(`/bbd/stu/info`), null , result => {
+        const stu = result.data || {};
+        this.stage = stu.stage || 'XX';
+      })
+    },
+
     /*
      * 执行条件查询
      */

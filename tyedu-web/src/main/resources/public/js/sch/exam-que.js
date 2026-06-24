@@ -105,9 +105,6 @@ const app = Vue.createApp({
     qtypeMap() {
       return toMap(this.qtypeList)
     },
-    // scoreRate() {
-    //   return Math.round(this.score / this.maxScore * 100);
-    // },
     stypesSeries() {
       if (!this.stypes || this.stypes?.length === 0) {
         return [];

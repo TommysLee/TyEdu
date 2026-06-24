@@ -116,6 +116,18 @@ form.v-form > .v-card > .v-card__text {
   }
 }
 
+.v-card--reveal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.75);
+}
+
 /*更改Vuetify数据表格样式*/
 .v-theme--light.v-data-table th.v-data-table__th {
   color: #000 !important;
@@ -256,11 +268,6 @@ textarea {
 
 .v-application .v-card--max .font-zoom .apexcharts-graphical text.apexcharts-datalabel {
   font-size: 1em;
-}
-
-/* 时间控件 */
-.v-theme--dark.v-date-picker-select {
-  background: #011222 !important;
 }
 
 /* Button按钮组样式 */

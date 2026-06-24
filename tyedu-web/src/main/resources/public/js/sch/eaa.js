@@ -62,11 +62,10 @@ function ExamAnalysisAssistant(data, typesMap) {
       if (ktags && ktags?.length > 0) {
         for (let tag of ktags) {
           let key = tag.kid;
-          let targetItem = acc[key] || {kid: key, kname: tag.kname, maxScore: 0, score: 0, maxRate: -100, rate: 0, count: 0, qidList: [], qindexList: []};
+          let targetItem = acc[key] || {kid: key, kname: tag.kname, maxScore: 0, score: 0, maxRate: -100, rate: 0, count: 0, qList: []};
           targetItem.maxScore += (item.maxScore ?? 0);
           targetItem.score += (item.score ?? 0);
-          targetItem.qidList.push(item.qid);
-          targetItem.qindexList.push(item.index);
+          targetItem.qList.push({index: item.index, qid: item.qid});
           targetItem.count++;
           acc[key] = targetItem;
         }

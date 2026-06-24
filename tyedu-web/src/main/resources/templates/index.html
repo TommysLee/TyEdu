@@ -31,10 +31,32 @@
               </v-card>
             </v-col>
             <v-col cols="12" md="4">
-              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="pink-accent-2" href="#">
+              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="pink-accent-2" th:href="@{/sch/wrong/que-bank/view}">
                 <v-icon icon="mdi-text-box-remove-outline"></v-icon>
                 {{$t('我的错题')}}
               </v-card>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-hover v-slot="{ isHovering, props }">
+                <v-card v-bind="props" hover :height="260" class="d-flex justify-center align-center text-h5" color="cyan-darken-2">
+                  <v-expand-transition>
+                    <div v-if="isHovering" class="text-h4 v-card--reveal">敬请期待...</div>
+                  </v-expand-transition>
+                  <v-icon icon="mdi-chart-box-multiple-outline"></v-icon>
+                  {{$t('学情分析')}}
+                </v-card>
+              </v-hover>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-hover v-slot="{ isHovering, props }">
+                <v-card v-bind="props" hover :height="260" class="d-flex justify-center align-center text-h5 text-white" color="lime-darken-2">
+                  <v-expand-transition>
+                    <div v-if="isHovering" class="text-h4 v-card--reveal">敬请期待...</div>
+                  </v-expand-transition>
+                  <v-icon icon="mdi-library-outline"></v-icon>
+                  {{$t('技巧库')}}
+                </v-card>
+              </v-hover>
             </v-col>
           </v-row>
         </v-container>
