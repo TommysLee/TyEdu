@@ -162,7 +162,9 @@
             <v-card hover class="mb-2 pop-container" v-for="item in dataList" :key="item.qid" v-show="!loading">
               <v-card-item :id="'q-'+item.qid">
                 <v-card-title class="mb-1 d-flex align-center">
-                  <v-btn color="primary" variant="tonal" :ripple="false" href="#yctop5">{{item.index}}.</v-btn>
+                  <v-btn :color="item.wrongMarked? 'pink' : 'primary'" variant="tonal" :ripple="false" href="#yctop5">
+                    {{item.index}}.
+                  </v-btn>
                   <span class="pl-2 text-subtitle-1 opacity-60">{{qtypeMap[item.type]}}（{{item.maxScore?? placeholder}}分）</span>
                   <v-popconfirm v-if="!reviewed" :data="item.qid" @confirm="doDelete">
                     <v-btn icon="mdi-delete" variant="text" color="pink"></v-btn>
@@ -190,6 +192,9 @@
               <v-card-actions class="justify-end border-t-thin">
                 <span class="pl-2 text-subtitle-2 text-red font-weight-bold">{{$t('得分')}}：{{item.score?? placeholder}}</span>
                 <v-spacer></v-spacer>
+                <v-popconfirm v-if="reviewed && !item.wrongMarked" :data="item" message="确定加入到错题集？" @confirm="copyToWrong">
+                  <v-btn color="teal">{{$t('加入错题集')}}</v-btn>
+                </v-popconfirm>
                 <v-btn color="teal" @click="goMarked(item.qid)">
                   <v-badge bordered floating location="top right" color="teal" icon="mdi-check" :model-value="item.chptMarked && item.knowledgeMarked">
                     {{$t('打标')}}

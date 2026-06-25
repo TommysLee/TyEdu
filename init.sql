@@ -108,6 +108,7 @@ CREATE TABLE t_exam_que (
     analysis         TEXT,
     chpt_marked      INTEGER DEFAULT 0,
     knowledge_marked INTEGER DEFAULT 0,
+	wrong_marked     INTEGER DEFAULT 0,
     max_score        REAL,
     score            REAL,
 	response		 TEXT,

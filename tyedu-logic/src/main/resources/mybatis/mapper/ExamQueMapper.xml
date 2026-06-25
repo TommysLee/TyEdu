@@ -15,6 +15,7 @@
         <result property="analysis" column="analysis" />
         <result property="chptMarked" column="chpt_marked" />
         <result property="knowledgeMarked" column="knowledge_marked" />
+        <result property="wrongMarked" column="wrong_marked" />
         <result property="maxScore" column="max_score" />
         <result property="score" column="score" />
         <result property="response" column="response" />
@@ -79,6 +80,7 @@
             t.analysis,
             t.chpt_marked,
             t.knowledge_marked,
+            t.wrong_marked,
             t.max_score,
             t.score,
             t.response,
@@ -104,6 +106,7 @@
             t.analysis,
             t.chpt_marked,
             t.knowledge_marked,
+            t.wrong_marked,
             t.max_score,
             t.score,
             t.response,
@@ -177,6 +180,7 @@
             <if test="analysis != null">analysis=#{analysis},</if>
             <if test="chptMarked != null">chpt_marked=#{chptMarked},</if>
             <if test="knowledgeMarked != null">knowledge_marked=#{knowledgeMarked},</if>
+            <if test="wrongMarked != null">wrong_marked=#{wrongMarked},</if>
             <if test="maxScore != null">max_score=#{maxScore},</if>
             <if test="score != null">score=#{score},</if>
             <if test="response != null">response=#{response},</if>

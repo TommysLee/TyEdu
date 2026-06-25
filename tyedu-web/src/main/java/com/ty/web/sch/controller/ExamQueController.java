@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -135,6 +134,15 @@ public class ExamQueController extends BaseController {
     @RequestMapping("/{examId}/upsert/socre/{qid}/{score}")
     public AjaxResult upsertScore(@PathVariable Integer qid, @PathVariable Double score) throws Exception {
         int n = examQueService.update(new ExamQue().setQid(qid).setScore(score));
+        return AjaxResult.success(n);
+    }
+
+    /**
+     * 将题目加入到错题集
+     */
+    @GetMapping("/{examId}/copy/{qid}/{index}")
+    public AjaxResult copyToWrong(@PathVariable Integer qid, @PathVariable Integer index) throws Exception {
+        int n = examQueService.copyToWrong(qid, index);
         return AjaxResult.success(n);
     }
 

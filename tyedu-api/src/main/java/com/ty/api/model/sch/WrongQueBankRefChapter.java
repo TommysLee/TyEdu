@@ -25,4 +25,19 @@ public class WrongQueBankRefChapter implements Serializable {
 
     /** 章节名称 **/
     private String chptName;
+
+    /**
+     * 从考试题目章节标中拷贝数据
+     *
+     * @param examQueRefChapter 考试题目章节标
+     * @return WrongQueBankRefChapter
+     */
+    public WrongQueBankRefChapter copyFrom(ExamQueRefChapter examQueRefChapter) {
+        if (null != examQueRefChapter) {
+            this.qid = examQueRefChapter.getQid();
+            this.chptId = examQueRefChapter.getChptId();
+            this.chptName = examQueRefChapter.getChptName();
+        }
+        return this;
+    }
 }

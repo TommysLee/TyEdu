@@ -2,8 +2,10 @@ package com.ty.api.model.sch;
 
 import com.ty.api.model.BaseBO;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
+import java.util.List;
 
 /**
  * 错题集题目实体类
@@ -12,6 +14,7 @@ import java.io.Serial;
  * @Date 2026/06/25
  */
 @Data
+@Accessors(chain = true)
 public class WrongQueBank extends BaseBO {
 
     @Serial
@@ -64,4 +67,41 @@ public class WrongQueBank extends BaseBO {
 
     /** 原题目索引号 **/
     private Integer oriIndex;
+
+    /*
+     * 辅助字段
+     */
+
+    // 知识点标签数据集合
+    private List<WrongQueBankRefKnowledge> ktags;
+
+    /**
+     * 从考试与考试题目中拷贝数据
+     *
+     * @param exam      考试
+     * @param examQue   考试题目
+     * @param index     显示的顺序号
+     * @return WrongQueBank
+     */
+    public WrongQueBank copyFrom(Exam exam, ExamQue examQue, Integer index) {
+        if (null != exam && null != examQue) {
+            this.qid = examQue.getQid();
+            this.stage = examQue.getStage();
+            this.subject = examQue.getSubject();
+            this.grade = exam.getGrade();
+            this.type = examQue.getType();
+            this.difficulty = examQue.getDifficulty();
+            this.stem = examQue.getStem();
+            this.answer = examQue.getAnswer();
+            this.analysis = examQue.getAnalysis();
+            this.chptMarked = examQue.getChptMarked();
+            this.knowledgeMarked = examQue.getKnowledgeMarked();
+            this.response = examQue.getResponse();
+            this.sourceId = exam.getExamId();
+            this.sourceName = exam.getTitle();
+            this.sourceType = exam.getExamType();
+            this.oriIndex = index;
+        }
+        return this;
+    }
 }

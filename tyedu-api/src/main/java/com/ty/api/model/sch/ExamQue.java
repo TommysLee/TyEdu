@@ -1,8 +1,6 @@
 package com.ty.api.model.sch;
 
 import com.ty.api.model.BaseBO;
-import com.ty.api.model.rs.RsQueRefChapter;
-import com.ty.api.model.rs.RsQueRefKnowledge;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -54,6 +52,9 @@ public class ExamQue extends BaseBO {
 
     /** 知识点标 **/
     private Integer knowledgeMarked;
+
+    /** 已加入错题集的标记 **/
+    private Integer wrongMarked;
 
     /** 题目分值 **/
     private Integer maxScore;

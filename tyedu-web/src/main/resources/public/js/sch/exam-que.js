@@ -281,6 +281,20 @@ const app = Vue.createApp({
     },
 
     /*
+     * 将题目拷贝到错题集
+     */
+    copyToWrong(item, confirm) {
+      doAjaxGet(this.url(`${prefix}/${_examId}/copy/${item.qid}/${item.index}`), null, result => {
+        if (result.state) {
+          this.toast("操作成功");
+        } else {
+          this.toast(result.message, 'warning');
+        }
+        confirm.loading = false;
+      })
+    },
+
+    /*
      * 前往编辑页面（新增/修改）
      */
     goEdit(qid) {

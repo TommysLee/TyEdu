@@ -1,6 +1,7 @@
 package com.ty.api.model.sch;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @Date 2026/06/25
  */
 @Data
+@Accessors(chain = true)
 public class WrongQueBankRefKnowledge implements Serializable {
 
     @Serial
@@ -25,4 +27,19 @@ public class WrongQueBankRefKnowledge implements Serializable {
 
     /** 知识点名称 **/
     private String kname;
+
+    /**
+     * 从考试题目知识点标签中拷贝数据
+     *
+     * @param examQueRefKnowledge 试题目知识点标签
+     * @return WrongQueBankRefKnowledge
+     */
+    public WrongQueBankRefKnowledge copyFrom(ExamQueRefKnowledge examQueRefKnowledge) {
+        if (null != examQueRefKnowledge) {
+            this.qid = examQueRefKnowledge.getQid();
+            this.kid = examQueRefKnowledge.getKid();
+            this.kname = examQueRefKnowledge.getKname();
+        }
+        return this;
+    }
 }

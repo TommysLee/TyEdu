@@ -60,6 +60,14 @@
             <if test="sourceType != null and sourceType != ''">
                 and t.source_type=#{sourceType}
             </if>
+            <if test="ktags != null and ktags.size() > 0">
+                and t.qid IN (
+                    SELECT qid FROM t_wrong_que_bank_ref_knowledge WHERE kid IN
+                    <foreach collection="ktags" item="item" open="(" close=")" separator=",">
+                        #{item.kid}
+                    </foreach>
+                )
+            </if>
         </where>
     </sql>
 

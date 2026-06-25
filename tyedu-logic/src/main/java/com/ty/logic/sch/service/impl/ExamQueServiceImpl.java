@@ -1,15 +1,26 @@
 package com.ty.logic.sch.service.impl;
 
 import com.google.common.collect.Lists;
+import com.ty.api.model.sch.Exam;
 import com.ty.api.model.sch.ExamQue;
+import com.ty.api.model.sch.ExamQueRefChapter;
 import com.ty.api.model.sch.ExamQueRefKnowledge;
+import com.ty.api.model.sch.WrongQueBank;
+import com.ty.api.model.sch.WrongQueBankRefChapter;
+import com.ty.api.model.sch.WrongQueBankRefKnowledge;
+import com.ty.api.sch.service.ExamQueRefChapterService;
 import com.ty.api.sch.service.ExamQueRefKnowledgeService;
 import com.ty.api.sch.service.ExamQueService;
+import com.ty.api.sch.service.ExamService;
+import com.ty.api.sch.service.WrongQueBankRefChapterService;
+import com.ty.api.sch.service.WrongQueBankRefKnowledgeService;
+import com.ty.api.sch.service.WrongQueBankService;
 import com.ty.cm.utils.DateUtils;
 import com.ty.logic.sch.dao.ExamQueDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +46,25 @@ public class ExamQueServiceImpl implements ExamQueService {
 
     @Autowired
     private ExamQueRefKnowledgeService queRefKnowledgeService;
+
+    @Autowired
+    private ExamQueRefChapterService examQueRefChapterService;
+
+    @Autowired
+    @Lazy
+    private ExamService examService;
+
+    @Autowired
+    @Lazy
+    private WrongQueBankService wrongQueService;
+
+    @Autowired
+    @Lazy
+    private WrongQueBankRefChapterService wrongQueRefChapterService;
+
+    @Autowired
+    @Lazy
+    private WrongQueBankRefKnowledgeService wrongQueRefKnowledgeService;
 
     /**
      * 根据条件查询所有考试题目数据
@@ -125,6 +155,20 @@ public class ExamQueServiceImpl implements ExamQueService {
     }
 
     /**
+     * 更新题目的错题集标记
+     *
+     * @param qid    题目ID
+     * @param marked 标记值
+     * @return Integer
+     * @throws Exception
+     */
+    @Transactional
+    @Override
+    public Integer updateWrongMarked(Integer qid, Integer marked) throws Exception {
+        return this.update(new ExamQue().setQid(qid).setWrongMarked(marked));
+    }
+
+    /**
      * 根据ID删除考试题目数据
      *
      * @param id 考试题目ID
@@ -167,6 +211,51 @@ public class ExamQueServiceImpl implements ExamQueService {
             return examQueDao.calcScore(examId);
         }
         return null;
+    }
+
+    /**
+     * 将题目加入到错题集
+     *
+     * @param qid   考试题目ID
+     * @param index 考试题目的显示顺序号
+     * @return Integer
+     * @throws Exception
+     */
+    @Transactional
+    @Override
+    public Integer copyToWrong(Integer qid, Integer index) throws Exception {
+        int n = 0;
+        if (null != qid && null != index) {
+            // 判断错题集中是否已存在此题目，若不存在则执行
+            if (wrongQueService.getCount(new WrongQueBank().setQid(qid)) == 0) {
+                ExamQue examQue = this.getById(qid);
+                if (null != examQue) {
+                    // 复制题目到错题集
+                    Exam exam = examService.getById(examQue.getExamId());
+                    n = wrongQueService.save(new WrongQueBank().copyFrom(exam, examQue, index));
+
+                    // 复制章节标到错题集
+                    List<ExamQueRefChapter> chptList = examQueRefChapterService.getAll(qid);
+                    List<WrongQueBankRefChapter> wrongChptList = Lists.newArrayListWithCapacity(chptList.size());
+                    for(ExamQueRefChapter c : chptList) {
+                        wrongChptList.add(new WrongQueBankRefChapter().copyFrom(c));
+                    }
+                    wrongQueRefChapterService.saveBatch(wrongChptList);
+
+                    // 复制知识点标到错题集
+                    List<ExamQueRefKnowledge> kList = queRefKnowledgeService.getAll(qid);
+                    List<WrongQueBankRefKnowledge> wrongKList = Lists.newArrayListWithCapacity(kList.size());
+                    for (ExamQueRefKnowledge k : kList) {
+                        wrongKList.add(new WrongQueBankRefKnowledge().copyFrom(k));
+                    }
+                    wrongQueRefKnowledgeService.saveBatch(wrongKList);
+
+                    // 更新此题目的错题集标记
+                    this.updateWrongMarked(qid, 1);
+                }
+            }
+        }
+        return n;
     }
 
     /*

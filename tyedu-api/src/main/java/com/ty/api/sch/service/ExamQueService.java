@@ -26,4 +26,24 @@ public interface ExamQueService extends BaseService<ExamQue> {
      * @return Integer
      */
     Double calcScore(Integer examId);
+
+    /**
+     * 更新题目的错题集标记
+     *
+     * @param qid    题目ID
+     * @param marked 标记值
+     * @return Integer
+     * @throws Exception
+     */
+    Integer updateWrongMarked(Integer qid, Integer marked) throws Exception;
+
+    /**
+     * 将题目加入到错题集
+     *
+     * @param qid   考试题目ID
+     * @param index 考试题目的显示顺序号
+     * @return Integer
+     * @throws Exception
+     */
+    Integer copyToWrong(Integer qid, Integer index) throws Exception;
 }
