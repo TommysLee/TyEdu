@@ -9,6 +9,8 @@ const app = Vue.createApp({
 
       // 查询条件
       param: {
+        source: null,
+        grade: null,
         type: null
       },
 
@@ -20,11 +22,14 @@ const app = Vue.createApp({
 
       // 数据字典
       dictConfig: {
-        "stage": "stageList"
+        "stage": "stageList",
+        "exam_type": "sourceList"
       },
       stage: null,
       subjectList: [],
-      selectedSubject: []
+      selectedSubject: [],
+      sourceList: [],
+      gradeList: []
     }
   },
   computed: {
@@ -50,7 +55,10 @@ const app = Vue.createApp({
   watch: {
     stage() {
       this.selectedSubject = [];
+      this.param.source = null;
+      this.param.grade = null;
       this.doQuerySubject();
+      this.doQueryGrade();
     },
     selectedSubject(val) {
       if (val?.length) {
@@ -115,6 +123,17 @@ const app = Vue.createApp({
             this.selectedSubject = selected;
           }
           this.clearParam();
+        })
+      }
+    },
+
+    /*
+     * 查询年级列表
+     */
+    doQueryGrade() {
+      if (this.stage) {
+        this.loadDict(`grade/${this.stage}`, result => {
+          this.gradeList = result.data || [];
         })
       }
     },

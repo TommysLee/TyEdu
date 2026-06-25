@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.sch.dao.WrongQueBankRefChapterDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="WrongQueBankRefChapterMap" type="WrongQueBankRefChapter">
+        <result property="qid" column="qid" />
+        <result property="chptId" column="chpt_id" />
+        <result property="chptName" column="chpt_name" />
+    </resultMap>
+
+    <!-- 查询结果集 -->
+    <select id="findWrongQueBankRefChapter" parameterType="java.lang.Integer" resultMap="WrongQueBankRefChapterMap">
+        SELECT
+            t.qid,
+            t.chpt_id,
+            t.chpt_name
+        FROM
+            t_wrong_que_bank_ref_chapter t
+        WHERE
+            t.qid IN
+        <foreach collection="qids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 批量保存 -->
+    <insert id="saveMultiWrongQueBankRefChapter" parameterType="java.util.List">
+        INSERT INTO t_wrong_que_bank_ref_chapter(qid, chpt_id, chpt_name)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.qid}, #{item.chptId}, #{item.chptName})
+        </foreach>
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="delWrongQueBankRefChapter" parameterType="java.lang.Integer">
+        DELETE FROM t_wrong_que_bank_ref_chapter WHERE qid = #{qid}
+    </delete>
+</mapper>

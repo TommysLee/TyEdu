@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.sch.dao.WrongQueBankDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="WrongQueBankMap" type="WrongQueBank">
+        <result property="qid" column="qid" />
+        <result property="stage" column="stage" />
+        <result property="subject" column="subject" />
+        <result property="grade" column="grade" />
+        <result property="type" column="type" />
+        <result property="difficulty" column="difficulty" />
+        <result property="stem" column="stem" />
+        <result property="answer" column="answer" />
+        <result property="analysis" column="analysis" />
+        <result property="chptMarked" column="chpt_marked" />
+        <result property="knowledgeMarked" column="knowledge_marked" />
+        <result property="response" column="response" />
+        <result property="sourceId" column="source_id" />
+        <result property="sourceName" column="source_name" />
+        <result property="sourceType" column="source_type" />
+        <result property="oriIndex" column="ori_index" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_wrongQueBank">
+        <where>
+            <if test="qid != null">
+                and t.qid=#{qid}
+            </if>
+            <if test="stage != null and stage != ''">
+                and t.stage=#{stage}
+            </if>
+            <if test="subject != null and subject != ''">
+                and t.subject=#{subject}
+            </if>
+            <if test="grade != null and grade != ''">
+                and t.grade=#{grade}
+            </if>
+            <if test="type != null and type != ''">
+                and t.type=#{type}
+            </if>
+            <if test="difficulty != null">
+                and t.difficulty=#{difficulty}
+            </if>
+            <if test="chptMarked != null">
+                and t.chpt_marked=#{chptMarked}
+            </if>
+            <if test="knowledgeMarked != null">
+                and t.knowledge_marked=#{knowledgeMarked}
+            </if>
+            <if test="sourceId != null">
+                and t.source_id=#{sourceId}
+            </if>
+            <if test="sourceName != null and sourceName != ''">
+                and t.source_name=#{sourceName}
+            </if>
+            <if test="sourceType != null and sourceType != ''">
+                and t.source_type=#{sourceType}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findWrongQueBankCount" parameterType="WrongQueBank" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_wrong_que_bank t
+        <include refid="condition_wrongQueBank" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findWrongQueBank" parameterType="WrongQueBank" resultMap="WrongQueBankMap">
+        SELECT
+            t.qid,
+            t.stage,
+            t.subject,
+            t.grade,
+            t.type,
+            t.difficulty,
+            t.stem,
+            t.answer,
+            t.analysis,
+            t.chpt_marked,
+            t.knowledge_marked,
+            t.response,
+            t.source_id,
+            t.source_name,
+            t.source_type,
+            t.ori_index,
+            t.create_time,
+            t.update_time
+        FROM
+            t_wrong_que_bank t
+        <include refid="condition_wrongQueBank" />
+        ORDER BY t.qid DESC
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findWrongQueBankById" parameterType="java.lang.Integer" resultMap="WrongQueBankMap">
+        SELECT
+            t.qid,
+            t.stage,
+            t.subject,
+            t.grade,
+            t.type,
+            t.difficulty,
+            t.stem,
+            t.answer,
+            t.analysis,
+            t.chpt_marked,
+            t.knowledge_marked,
+            t.response,
+            t.source_id,
+            t.source_name,
+            t.source_type,
+            t.ori_index,
+            t.create_time,
+            t.update_time
+        FROM
+            t_wrong_que_bank t
+        WHERE t.qid = #{qid}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveWrongQueBank" parameterType="WrongQueBank">
+        INSERT INTO t_wrong_que_bank
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="qid != null">qid,</if>
+            <if test="stage != null">stage,</if>
+            <if test="subject != null">subject,</if>
+            <if test="grade != null">grade,</if>
+            <if test="type != null">type,</if>
+            <if test="difficulty != null">difficulty,</if>
+            <if test="stem != null">stem,</if>
+            <if test="answer != null">answer,</if>
+            <if test="analysis != null">analysis,</if>
+            <if test="chptMarked != null">chpt_marked,</if>
+            <if test="knowledgeMarked != null">knowledge_marked,</if>
+            <if test="response != null">response,</if>
+            <if test="sourceId != null">source_id,</if>
+            <if test="sourceName != null">source_name,</if>
+            <if test="sourceType != null">source_type,</if>
+            <if test="oriIndex != null">ori_index,</if>
+            create_time,
+            update_time
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="qid != null">#{qid},</if>
+            <if test="stage != null">#{stage},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="grade != null">#{grade},</if>
+            <if test="type != null">#{type},</if>
+            <if test="difficulty != null">#{difficulty},</if>
+            <if test="stem != null">#{stem},</if>
+            <if test="answer != null">#{answer},</if>
+            <if test="analysis != null">#{analysis},</if>
+            <if test="chptMarked != null">#{chptMarked},</if>
+            <if test="knowledgeMarked != null">#{knowledgeMarked},</if>
+            <if test="response != null">#{response},</if>
+            <if test="sourceId != null">#{sourceId},</if>
+            <if test="sourceName != null">#{sourceName},</if>
+            <if test="sourceType != null">#{sourceType},</if>
+            <if test="oriIndex != null">#{oriIndex},</if>
+            #{createTime},
+            #{createTime}
+        </trim>
+        )
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="delWrongQueBank" parameterType="java.lang.Integer">
+        DELETE FROM t_wrong_que_bank WHERE qid = #{qid}
+    </delete>
+</mapper>

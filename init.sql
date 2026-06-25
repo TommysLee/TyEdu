@@ -9,6 +9,9 @@ DROP TABLE IF EXISTS t_exam_que;
 DROP TABLE IF EXISTS t_exam_que_ref_chapter;
 DROP TABLE IF EXISTS t_exam_que_ref_knowledge;
 DROP TABLE IF EXISTS t_student;
+DROP TABLE IF EXISTS t_wrong_que_bank_ref_knowledge;
+DROP TABLE IF EXISTS t_wrong_que_bank_ref_chapter;
+DROP TABLE IF EXISTS t_wrong_que_bank;
 
 CREATE TABLE t_rs_book (
     bid         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -139,4 +142,41 @@ CREATE TABLE t_student (
     grade_title  TEXT,
     create_time  TEXT,
     update_time  TEXT
+);
+
+CREATE TABLE t_wrong_que_bank (
+    qid              INTEGER PRIMARY KEY AUTOINCREMENT,
+    stage            TEXT NOT NULL,
+    subject          TEXT NOT NULL,
+    grade            TEXT NOT NULL,
+    type             TEXT,
+    difficulty       INTEGER,
+    stem             TEXT,
+    answer           TEXT,
+    analysis         TEXT,
+    chpt_marked      INTEGER DEFAULT 0,
+    knowledge_marked INTEGER DEFAULT 0,
+    response         TEXT,
+    source_id        INTEGER NOT NULL,
+    source_name      TEXT NOT NULL,
+    source_type      TEXT NOT NULL,
+    ori_index        INTEGER DEFAULT 0,
+    create_time      TEXT,
+    update_time      TEXT
+);
+
+CREATE TABLE t_wrong_que_bank_ref_chapter (
+    qid         INTEGER NOT NULL,
+    chpt_id     INTEGER NOT NULL,
+    chpt_name   TEXT,
+    PRIMARY KEY (qid, chpt_id),
+    FOREIGN KEY (qid) REFERENCES t_wrong_que_bank(qid) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE t_wrong_que_bank_ref_knowledge (
+    qid         INTEGER NOT NULL,
+    kid         INTEGER NOT NULL,
+    kname       TEXT,
+    PRIMARY KEY (qid, kid),
+    FOREIGN KEY (qid) REFERENCES t_wrong_que_bank(qid) ON DELETE CASCADE ON UPDATE CASCADE
 );
