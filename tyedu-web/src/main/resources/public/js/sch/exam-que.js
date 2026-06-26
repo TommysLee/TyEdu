@@ -4,6 +4,7 @@ const app = Vue.createApp({
   data() {
     return {
       menuName: 'Exam',
+      menuDisplayName: '考试',
       vnode: null,
       backUrl: '/sch/exam/view',
       title: _title,

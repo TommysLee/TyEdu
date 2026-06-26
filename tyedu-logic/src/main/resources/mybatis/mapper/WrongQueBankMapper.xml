@@ -101,7 +101,7 @@
         FROM
             t_wrong_que_bank t
         <include refid="condition_wrongQueBank" />
-        ORDER BY t.qid DESC
+        ORDER BY t.create_time DESC, t.qid DESC
     </select>
 
     <!-- 根据ID查询记录 -->

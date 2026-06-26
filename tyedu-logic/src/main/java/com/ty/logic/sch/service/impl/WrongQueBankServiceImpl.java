@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.google.common.collect.Lists;
 import com.ty.api.model.sch.WrongQueBank;
 import com.ty.api.model.sch.WrongQueBankRefKnowledge;
+import com.ty.api.sch.service.ExamQueService;
 import com.ty.api.sch.service.WrongQueBankRefKnowledgeService;
 import com.ty.api.sch.service.WrongQueBankService;
 import com.ty.cm.utils.DateUtils;
@@ -13,6 +14,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +45,10 @@ public class WrongQueBankServiceImpl implements WrongQueBankService {
 
     @Autowired
     private WrongQueBankRefKnowledgeService wrongQueRefKnowledgeService;
+
+    @Autowired
+    @Lazy
+    private ExamQueService examQueService;
 
     /**
      * 该方法用于获取符合条件的总记录数
@@ -108,7 +114,7 @@ public class WrongQueBankServiceImpl implements WrongQueBankService {
     public List<WrongQueBank> queryData(WrongQueBank wrongQueBank, String pageNum, String pageSize) throws Exception {
         Page<WrongQueBank> page = new Page<>();
         if (StringUtils.isNumeric(pageNum) && StringUtils.isNumeric(pageSize)) {
-            page = wrongQueBankDao.findWrongQueBank(new RowBounds(Integer.parseInt(pageNum), Integer.parseInt(pageSize)), wrongQueBank);
+            page = wrongQueBankDao.findWrongQueBank(new RowBounds(Integer.parseInt(pageNum), Integer.parseInt(pageSize)), wrongQueBank.precheck());
         }
         return page;
     }
@@ -178,6 +184,7 @@ public class WrongQueBankServiceImpl implements WrongQueBankService {
         int n = 0;
         if (Objects.nonNull(id)) {
             n = wrongQueBankDao.delWrongQueBank(id);
+            examQueService.updateWrongMarked(id, 0);
         }
         return n;
     }

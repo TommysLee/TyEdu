@@ -104,4 +104,16 @@ public class WrongQueBank extends BaseBO {
         }
         return this;
     }
+
+    /**
+     * 数据前置处理
+     */
+    @Override
+    public WrongQueBank precheck() {
+        this.stage = null == this.stage? null : this.stage.toUpperCase();
+        this.subject = null == this.subject? null : this.subject.toUpperCase();
+        this.grade = null == this.grade? null : this.grade.toUpperCase();
+        this.type = null == this.type? null : this.type.toUpperCase();
+        return this;
+    }
 }

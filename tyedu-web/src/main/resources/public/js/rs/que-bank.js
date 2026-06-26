@@ -4,6 +4,7 @@ const app = Vue.createApp({
   data() {
     return {
       menuName: 'QueBank',
+      menuDisplayName: '题库',
       vnode: null,
       backUrl: '/',
 

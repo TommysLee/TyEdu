@@ -1,15 +1,16 @@
-// 初始化Vue
+const prefix = "/sch/wrong/que";
 const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
       menuName: 'WrongQueBank',
+      menuDisplayName: '我的错题',
       vnode: null,
       backUrl: '/',
 
       // 查询条件
       param: {
-        source: null,
+        sourceType: null,
         grade: null,
         type: null
       },
@@ -38,6 +39,12 @@ const app = Vue.createApp({
     },
     subjectMap() {
       return toMap(this.subjectList);
+    },
+    gradeMap() {
+      return toMap(this.gradeList);
+    },
+    sourceMap() {
+      return toMap(this.sourceList);
     },
     qtypeMap() {
       return toMap(this.qtypeList)
@@ -90,13 +97,13 @@ const app = Vue.createApp({
      * 执行条件查询
      */
     doQuery() {
-      saveQueryParam(this.menuName, {stage: this.stage, subject: this.subject});
+      saveQueryParam(this.menuName, {stage: this.stage, subject: this.subject, sourceType: this.param.sourceType});
       this.loading = true;
       this.param.page = this.pagination.page;
       this.param.pageSize = this.pagination.pageSize;
       this.param.ktagsId = this.selectedKnowledge;
 
-      doAjaxPost(this.url(`/rs/que/${this.stage}/${this.subject}/list`), this.param, result => {
+      doAjaxPost(this.url(`${prefix}/${this.stage}/${this.subject}/list`), this.param, result => {
         if (result.state) {
           let pageData = result.data;
           this.pagination.pageCount = pageData.pages; // 总页数
@@ -122,7 +129,6 @@ const app = Vue.createApp({
             }
             this.selectedSubject = selected;
           }
-          this.clearParam();
         })
       }
     },
@@ -161,12 +167,17 @@ const app = Vue.createApp({
     },
 
     /*
-     * 清空查询条件
+     * 删除错题
      */
-    clearParam() {
-      for (let p of Object.keys(this.param)) {
-        this.param[p] = null;
-      }
+    doDelete(qid) {
+      doAjaxGet(`${prefix}/del/${qid}`, null, result => {
+        if (result.state) {
+          this.toast("操作成功");
+          this.doQuery();
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      })
     }
   }
 });

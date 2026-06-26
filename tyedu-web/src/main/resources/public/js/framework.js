@@ -205,6 +205,14 @@ const baseApp = {
       }
       return opened;
     },
+    // 顶部产品名称面包屑
+    productBreadcrumbs() {
+      let arr = [{ title: this.$t('productName'), disabled: false, href: '/' }];
+      if (this.menuDisplayName) {
+        arr.push({ title: this.$t(this.menuDisplayName), disabled: false });
+      }
+      return arr;
+    }
   },
   watch: {
     sysRailStatus(val) {

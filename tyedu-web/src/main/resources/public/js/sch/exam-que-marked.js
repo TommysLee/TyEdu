@@ -4,6 +4,7 @@ const app = Vue.createApp({
   data() {
     return {
       menuName: 'Exam',
+      menuDisplayName: '考试',
       backUrl: `/sch/exam/que/${_examId}/view`,
       qid: _qid,
 

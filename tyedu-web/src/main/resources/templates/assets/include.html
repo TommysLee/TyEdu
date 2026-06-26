@@ -116,10 +116,13 @@
   <!--/* 共用JS与CSS（含Form验证框架、FluentEditor富文本编辑器） */-->
   <!-- #################################################### -->
   <th:block th:fragment="scriptcss_form_editor(title)">
+    <th:block th:replace="~{:: scriptcss_base(${title})}"/>
     <link rel="stylesheet" th:href="@{/js/lib/fluent-editor/fluent-editor.min.css?_t=#buildtime#}"/>
     <script type="text/javascript" th:src="@{/js/lib/fluent-editor/fluent-editor.umd.js?_t=#buildtime#}"></script>
     <script type="text/javascript" th:src="@{/js/lib/fluent-editor/editor.config.js?_t=#buildtime#}"></script>
-    <th:block th:replace="~{:: scriptcss_form(${title})}"/>
+    <script type="text/javascript" th:src="@{/js/lib/vee-validate/vee-validate.iife.prod.js?_t=#buildtime#}"></script>
+    <script type="text/javascript" th:src="@{/js/lib/vee-validate/vee-validate-rules.iife.min.js?_t=#buildtime#}"></script>
+    <th:block th:replace="~{:: sysjslib}"/>
   </th:block>
 
   <!-- ################################################################ -->
@@ -152,10 +155,13 @@
 
     <!-- 产品名称 -->
     <v-subheader class="text-h6 font-weight-bold text-truncate pl-md-2" @dblclick="clearAllToast">
-      <v-btn th:if="${true == back}" icon small depressed class="mr-2" @click="back">
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-      {{$t('productName')}}
+      <v-breadcrumbs :items="productBreadcrumbs">
+        <template v-slot:prepend>
+          <v-btn th:if="${true == back}" icon small depressed class="mr-2" @click="back">
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+        </template>
+      </v-breadcrumbs>
     </v-subheader>
 
     <v-spacer></v-spacer>

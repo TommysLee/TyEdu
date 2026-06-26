@@ -51,7 +51,7 @@
               <v-row class="bg-white ma-0 mb-2">
                 <v-col cols="auto" class="mt-1 pr-0 font-weight-bold">{{$t('来源')}}:</v-col>
                 <v-col>
-                  <v-chip-group v-model="param.source" column :disabled="loading" color="teal" variant="plain" class="py-0" selected-class="opacity-100" @click="doQuery">
+                  <v-chip-group v-model="param.sourceType" column :disabled="loading" color="teal" variant="plain" class="py-0" selected-class="opacity-100" @click="doQuery">
                     <v-chip label density="comfortable" v-for="item in sourceList" :key="item.value" :value="item.value" class="my-0">{{item.title}}</v-chip>
                   </v-chip-group>
                 </v-col>
@@ -78,10 +78,9 @@
                 <v-card-item>
                   <v-card-title class="mb-1 d-flex align-center">
                     <v-btn color="primary" variant="tonal" :ripple="false">{{item.index}}.</v-btn>
-                    <!--<span class="pl-2 text-subtitle-1 opacity-50">{{subjectMap[item.subject]}}</span>
-                    <span class="pl-2 text-subtitle-1 opacity-50">{{examTypeMap[item.examType]}}</span>
-                    <span class="pl-2 text-subtitle-1 opacity-50">{{gradeMap[item.grade]}}</span>-->
-                    <v-popconfirm clazz="ml-2" :data="item.qid">
+                    <span class="pl-2 text-subtitle-1 opacity-50">{{gradeMap[item.grade]}}</span>
+                    <span class="pl-2 text-subtitle-1 opacity-50">{{sourceMap[item.sourceType]}}</span>
+                    <v-popconfirm clazz="ml-2" :data="item.qid" message="确定移出错题集?" @confirm="doDelete">
                       <v-btn icon="mdi-delete" variant="text" color="pink"></v-btn>
                     </v-popconfirm>
                     <v-spacer></v-spacer>
@@ -103,10 +102,14 @@
                     </div>
                   </v-expand-transition>
                 </v-card-text>
-                <v-card-actions class="justify-end border-t-thin">
-                  <span class="text-subtitle-2 opacity-40">{{item.updateTime}}</span>
+                <v-card-actions class="justify-end border-t-thin text-subtitle-2">
+                  <span class="text-teal">{{$t('来源')}}:</span>
+                  <a class="text-teal text-decoration-none" :href="'/sch/exam/que/' + item.sourceId + '/view#q-' + item.qid" target="_blank">
+                    <span>{{item.sourceName}}</span>
+                    <span class="pl-2">第 {{item.oriIndex}} 题</span>
+                  </a>
                   <v-spacer></v-spacer>
-                  <v-btn color="teal">{{$t('移除')}}</v-btn>
+                  <span class="mr-2 opacity-50">{{_.truncate(item.createTime, {length: 10, omission:[]})}}</span>
                 </v-card-actions>
               </v-card>
               <v-skeleton-loader type="article,actions" color="transparent" v-if="loading"></v-skeleton-loader>
