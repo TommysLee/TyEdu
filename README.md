@@ -62,7 +62,7 @@
 
 - **数据库**：SQLite
 
-- 使用 **Shawl** 将应用安装为Windows系统服务，便于开机即可使用。、
+- 使用 **Shawl** 将应用安装为Windows系统服务，便于开机即可使用。
 - 试题推荐核心基础引擎：**Apache Lucene**
 
 ## UI界面
