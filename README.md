@@ -1,3 +1,6 @@
+<p align="center">
+    <img alt="TyFast LOGO" width="130" src="https://raw.githubusercontent.com/TommysLee/TyEdu/refs/heads/main/tyedu-web/src/main/resources/public/images/logo/logo.png">    
+</p>
 <h1 align="center" style="font-weight: bold;">K12 精准教学系统</h1>
 <h4 align="center">让因材施教从理念走向实践 —— 基于数据驱动的个性化学习平台</h4>
 <p align="center">
