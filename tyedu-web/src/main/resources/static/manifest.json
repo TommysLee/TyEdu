@@ -1,0 +1,15 @@
+{
+  "name": "K12精准学",
+  "display": "standalone",
+  "theme_color": "#802BEB",
+  "background_color": "#802BEB",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/images/logo/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

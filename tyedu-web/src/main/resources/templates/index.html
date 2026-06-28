@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>[[${#site.title()}]]</title>
+  <link rel="manifest" href="/manifest.json">
   <!--/* 共用JS与CSS */-->
   <th:block th:replace="~{assets/include :: scriptcss('')}"/>
 </head>

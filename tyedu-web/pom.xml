@@ -124,6 +124,7 @@
                                 <exclude>js/lib/simple-svg/*.js</exclude>
                                 <exclude>js/lib/fluent-editor/*.js</exclude>
                                 <exclude>js/lib/katex/*.js</exclude>
+                                <exclude>js/lib/vueuse/*.js</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -166,6 +167,7 @@
                                 <include>js/lib/simple-svg/*.js</include>
                                 <include>js/lib/fluent-editor/*.js</include>
                                 <include>js/lib/katex/*.js</include>
+                                <include>js/lib/vueuse/*.js</include>
                             </includes>
                             <skipMinify>true</skipMinify>
                         </configuration>
