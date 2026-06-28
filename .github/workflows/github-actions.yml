@@ -38,7 +38,6 @@ jobs:
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v3
         with:
-          files: |
-            tyedu-web/target/tyedu-web*.jar
+          files: tyedu-web/target/tyedu-web.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
