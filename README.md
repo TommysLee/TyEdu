@@ -74,7 +74,7 @@
 
 **说明**：
 
-- 项目是一个标准的多模块Maven项目，技术架构详情可参考开源项目**[TyFast](https://github.com/TommysLee/TyFast)** 
+- 项目是一个标准的多模块Maven项目，技术架构详情可参考开源项目[TyFast](https://github.com/TommysLee/TyFast)
 - 部署时：
   - 若你想复用已有的SQLite数据库，可以执行 `init.sql` 脚本进行数据库初始化；
   - 使用本项目提供的 `data.db` 数据库，可直接Run项目，记住：`data.db` 默认放置目录为：`${user.home}/tyedu`
