@@ -141,7 +141,6 @@ const baseApp = {
       enableMenuInfer: false, // 是否启用Menu智能推断
       storageRailStatusKey: "railStatus", // 存储在LocalStorage中的导航菜单形态状态Key
       vtheme: 'light', // Vuetify主题
-      storageThemeKey: 'vuetifyTheme', // 存储在LocalStorage中的主题数据Key
       storageSlientKey: 'slient', // 存储在LocalStorage中的静音Key
       alarmSilent: false, // 告警静音
       colors: { // 全局色值
@@ -571,15 +570,7 @@ const baseApp = {
     },
 
     // Vuetify主题切换
-    switchTheme(val) {
-      if (val) {
-        val = val[0];
-        this.vtheme = val;
-        localStorage.setItem(this.storageThemeKey, val);
-        this.themeEvent && this.themeEvent();
-      } else {
-        this.vtheme = localStorage.getItem(this.storageThemeKey) || 'dark';
-      }
+    switchTheme() {
       this.$vuetify.theme.change(this.vtheme === 'dark' ? 'dark' : 'light');
     },
 

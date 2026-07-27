@@ -3,6 +3,7 @@ const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
+      vtheme: 'dark',
       enableMenuInfer: true,
       bid: _bid,
       bname: _bname,

@@ -8,7 +8,7 @@
   <div id="app" v-cloak>
     <v-app>
       <!-- 顶部功能区 -->
-      <v-app-bar flat>
+      <v-app-bar flat class="bg-grad-5">
         <th:block th:replace="~{assets/include :: header(back=true, showStage=true)}"/>
       </v-app-bar>
 
@@ -16,9 +16,9 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid class="pa-0">
-          <v-sheet ref="container" theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
+          <v-sheet ref="container" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
             <v-sheet :height="64" class="d-flex justify-end align-center px-5 mx-n3 mb-3">
-              <v-btn color="teal" @click="openFormDialog('新增考试')">
+              <v-btn color="purple" @click="openFormDialog('新增考试')">
                 <v-icon size="small">mdi-plus</v-icon>
                 {{$t('新增')}}
               </v-btn>
@@ -92,7 +92,7 @@
             <v-dialog v-model="winDialog" persistent :fullscreen="isMobile" width="800">
               <tform as="v-form" ref="dataForm" class="fill-height" @submit="doSubmit">
                 <v-card :loading="posting">
-                  <v-toolbar color="indigo" :title="$t(dialogTitle)">
+                  <v-toolbar color="grad-5" :title="$t(dialogTitle)">
                     <v-btn icon="mdi-close" @click="closeFormDialog"></v-btn>
                   </v-toolbar>
                   <v-card-text class="overflow-auto">
@@ -116,7 +116,7 @@
                   </v-card-text>
                   <v-divider></v-divider>
                   <v-card-actions>
-                    <v-btn size="large" variant="elevated" color="primary" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
+                    <v-btn size="large" variant="elevated" color="grad-9" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
                   </v-card-actions>
                 </v-card>
               </tform>

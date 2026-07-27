@@ -10,7 +10,7 @@
   <div id="app" v-cloak>
     <v-app>
       <!-- 顶部功能区 -->
-      <v-app-bar flat>
+      <v-app-bar flat class="bg-grad-5">
         <th:block th:replace="~{assets/include :: header(back=true)}"/>
       </v-app-bar>
 
@@ -18,7 +18,7 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid class="pa-0">
-          <v-sheet ref="container" theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
+          <v-sheet ref="container" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
             <!-- 左侧Tree：知识点树 -->
             <v-navigation-drawer class="pt-4 px-4" :width="350">
               <v-sheet>

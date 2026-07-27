@@ -154,7 +154,7 @@
     <v-app-bar-nav-icon th:if="${vadmin}" @click.stop="toggleSysMenu"></v-app-bar-nav-icon>
 
     <!-- 产品名称 -->
-    <v-subheader class="text-h6 font-weight-bold text-truncate pl-md-2" @dblclick="clearAllToast">
+    <v-subheader class="text-grad text-h6 font-weight-bold text-truncate pl-md-2 position-absolute" @dblclick="clearAllToast">
       <v-breadcrumbs :items="productBreadcrumbs">
         <template v-slot:prepend>
           <v-btn th:if="${true == back}" icon small depressed class="mr-2" @click="back">
@@ -164,8 +164,8 @@
       </v-breadcrumbs>
     </v-subheader>
 
-    <v-spacer></v-spacer>
-    <v-chip-group th:if="${(vadmin?:false) || (showStage?:false)}" mandatory selected-class="text-primary" v-model="stage">
+    <v-spacer class="mr-12"></v-spacer>
+    <v-chip-group th:if="${(vadmin?:false) || (showStage?:false)}" mandatory selected-class="text-grad" v-model="stage">
       <v-chip
           filter
           variant="text"
@@ -187,21 +187,6 @@
         </v-btn>
       </template>
       <v-list :selected="lang?[lang]:[]" @update:selected="(selection)=>lang=selection[0]" mandatory :items="langList" item-title="text" item-value="value" color="primary"></v-list>
-    </v-menu>
-
-    <!-- 主题切换按钮 -->
-    <v-menu transition="slide-y-transition" z-index="1008">
-      <template v-slot:activator="{ props }">
-        <v-btn v-bind="props" icon variant="text">
-          <v-icon>mdi-theme-light-dark</v-icon>
-          <v-tooltip activator="parent" location="bottom" style="z-index:7">{{$t('主题切换')}}</v-tooltip>
-        </v-btn>
-      </template>
-      <v-list :selected="vtheme?[vtheme]:[]" @update:selected="switchTheme" mandatory color="primary">
-        <v-list-item v-for="(item, i) in [{value:'light',title:$t('浅色主题'),icon:'mdi-white-balance-sunny'},{value:'dark',title:$t('深色主题'),icon:'mdi-weather-night'}]" :key="i" :value="item.value">
-          <v-list-item-title><v-icon :icon="item.icon"></v-icon>{{item.title}}</v-list-item-title>
-        </v-list-item>
-      </v-list>
     </v-menu>
 
     <!-- 设置按钮 -->

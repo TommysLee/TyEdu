@@ -18,7 +18,7 @@
   <div id="app" v-cloak>
     <v-app>
       <!-- 顶部功能区 -->
-      <v-app-bar flat>
+      <v-app-bar flat class="bg-grad-5">
         <th:block th:replace="~{assets/include :: header(back=true)}"/>
       </v-app-bar>
 
@@ -27,7 +27,7 @@
         <!-- 主体容器 -->
         <v-container fluid class="pa-0">
           <!-- 导航菜单 -->
-          <v-app-bar flat theme="light" color="white" class="px-4">
+          <v-app-bar flat color="white" class="px-4">
             <v-menu :close-on-content-click="false" open-on-hover :open-delay="100" :close-delay="80" :width="257">
               <template v-slot:activator="{ props }">
                 <v-btn append-icon="mdi-chevron-down" color="teal" v-bind="props" size="large" variant='elevated' :width="257">
@@ -51,11 +51,11 @@
               <v-tab slim density="compact" size="large" :min-width="100" class="mx-4" v-for="item in menuList" :value="item.value">{{item.title}}</v-tab>
             </v-tabs>
             <v-spacer></v-spacer>
-            <v-btn variant='elevated' color="primary" @click="goEdit">{{$t('录题')}}</v-btn>
+            <v-btn variant='elevated' color="purple" @click="goEdit">{{$t('录题')}}</v-btn>
           </v-app-bar>
 
           <!-- 中间区域 -->
-          <v-sheet theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 104">
+          <v-sheet color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 104">
             <!-- 左侧Tree -->
             <v-navigation-drawer class="border-top-grey-bold pt-4 px-4" :width="350">
               <!-- 章节树 -->
@@ -113,7 +113,7 @@
             </v-navigation-drawer>
 
             <!-- 题目区域 -->
-            <v-card-zoom ref="qcontainer" flat tile color="grey-lighten-3" class="d-block fill-height pa-4 overflow-auto" :loading="loading">
+            <v-card-zoom ref="qcontainer" flat tile color="grey-lighten-3" class="d-block fill-height overflow-auto" :loading="loading">
               <!-- 搜索条件 -->
               <v-row class="bg-white ma-0 mb-2">
                 <v-col cols="auto" class="mt-1 pr-0 font-weight-bold">{{$t('题型')}}:</v-col>

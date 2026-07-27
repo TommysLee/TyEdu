@@ -30,7 +30,7 @@
   <div id="app" v-cloak>
     <v-app>
       <!-- 顶部功能区 -->
-      <v-app-bar flat>
+      <v-app-bar flat class="bg-grad-5">
         <th:block th:replace="~{assets/include :: header(back=true)}"/>
       </v-app-bar>
 
@@ -38,7 +38,7 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid class="pa-0">
-          <v-sheet ref="container" theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
+          <v-sheet ref="container" color="grey-lighten-3" class="v-fill-height overflow-auto px-3" :min-height="300" style="--ty-assist-height: 40">
             <v-sheet :height="64" class="mx-n3 mb-3">
               <v-row align="center" class="ma-0 fill-height">
                 <v-col class="text-center text-h4">
@@ -211,11 +211,11 @@
           </v-sheet>
 
           <!-- 抽屉窗口：作答&批阅 -->
-          <v-navigation-drawer :order="-1" theme="light" v-model="winDrawer" :persistent="!reviewed" temporary floating location="right" :width="winDrawerWidth">
+          <v-navigation-drawer :order="-1" v-model="winDrawer" :persistent="!reviewed" temporary floating location="right" :width="winDrawerWidth">
             <v-layout full-height>
               <v-container class="overflow-auto">
-                <v-app-bar flat color="indigo-darken-2">
-                  <v-toolbar-title class="text-subtitle-1 font-weight-bold">{{drawerTitle}}</v-toolbar-title>
+                <v-app-bar flat color="grad-5">
+                  <v-toolbar-title class="text-subtitle-1 font-weight-bold text-grad">{{drawerTitle}}</v-toolbar-title>
                   <v-spacer></v-spacer>
                   <v-btn icon="mdi-close" @click="closeWinDrawer"></v-btn>
                 </v-app-bar>

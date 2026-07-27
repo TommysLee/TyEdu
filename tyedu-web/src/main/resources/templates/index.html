@@ -8,9 +8,9 @@
 </head>
 <body>
   <div id="app" v-cloak>
-    <v-app>
+    <v-app class="bg-grad-5">
       <!-- 顶部功能区 -->
-      <v-app-bar flat>
+      <v-app-bar flat class="bg-grad-5">
         <th:block th:replace="~{assets/include :: header}"/>
       </v-app-bar>
 
@@ -20,26 +20,26 @@
         <v-container fluid>
           <v-row>
             <v-col cols="12" md="4">
-              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="orange-darken-1" th:href="@{/rs/que-bank/view}">
+              <v-card hover rounded="lg" :height="280" class="d-flex justify-center align-center text-h5 border-grey" color="grad-3" th:href="@{/rs/que-bank/view}">
                 <v-icon icon="mdi-bookshelf"></v-icon>
                 {{$t('题库')}}
               </v-card>
             </v-col>
             <v-col cols="12" md="4">
-              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="green-lighten-1" th:href="@{/sch/exam/view}">
+              <v-card hover rounded="lg" :height="280" class="d-flex justify-center align-center text-h5 border-grey" color="grad-4" th:href="@{/sch/exam/view}">
                 <v-icon icon="mdi-text-box-edit-outline"></v-icon>
                 {{$t('考试')}}
               </v-card>
             </v-col>
             <v-col cols="12" md="4">
-              <v-card hover :height="240" class="d-flex justify-center align-center text-h5" color="pink-accent-2" th:href="@{/sch/wrong/que-bank/view}">
+              <v-card hover rounded="lg" :height="280" class="d-flex justify-center align-center text-h5 border-grey" color="grad-3" th:href="@{/sch/wrong/que-bank/view}">
                 <v-icon icon="mdi-text-box-remove-outline"></v-icon>
                 {{$t('我的错题')}}
               </v-card>
             </v-col>
             <v-col cols="12" md="6">
               <v-hover v-slot="{ isHovering, props }">
-                <v-card v-bind="props" hover :height="260" class="d-flex justify-center align-center text-h5" color="cyan-darken-2">
+                <v-card v-bind="props" hover rounded="lg" :height="320" class="d-flex justify-center align-center text-h5 border-grey" color="grad-7">
                   <v-expand-transition>
                     <div v-if="isHovering" class="text-h4 v-card--reveal">敬请期待...</div>
                   </v-expand-transition>
@@ -50,7 +50,7 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-hover v-slot="{ isHovering, props }">
-                <v-card v-bind="props" hover :height="260" class="d-flex justify-center align-center text-h5 text-white" color="lime-darken-2">
+                <v-card v-bind="props" hover rounded="lg" :height="320" class="d-flex justify-center align-center text-h5 border-grey" color="grad-8">
                   <v-expand-transition>
                     <div v-if="isHovering" class="text-h4 v-card--reveal">敬请期待...</div>
                   </v-expand-transition>

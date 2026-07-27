@@ -9,7 +9,7 @@
   <div id="app" v-cloak>
     <v-app>
       <!-- 顶部功能区 -->
-      <v-app-bar flat>
+      <v-app-bar flat class="bg-grad-5">
         <th:block th:replace="~{assets/include :: header(back=true)}"/>
       </v-app-bar>
 
@@ -17,7 +17,7 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid class="pa-0">
-          <v-app-bar flat theme="light" border="b" color="white" class="px-4">
+          <v-app-bar flat border="b" color="white" class="px-4">
             <v-breadcrumbs :items="breadcrumbs" class="font-weight-bold"></v-breadcrumbs>
             <v-spacer></v-spacer>
             <v-btn variant='elevated' color="teal" href="https://www.latexlive.com" target="_blank">{{$t('速查公式')}}</v-btn>
@@ -25,7 +25,7 @@
 
           <!-- 中间区域（Form表单） -->
           <tform as="v-form" ref="dataForm" @submit="doSubmit" :on-invalid-submit="onInvalidSubmit">
-            <v-sheet tile theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 164">
+            <v-sheet tile color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" style="--ty-assist-height: 164">
               <tfield v-model="formData.type" name="题型" v-slot="{ field, errors }" rules="required">
                 <v-list class="mb-2">
                   <v-list-item class="font-weight-bold">
@@ -69,8 +69,8 @@
             </v-sheet>
 
             <!-- 页脚 -->
-            <v-footer app theme="light" border="t" class="justify-end">
-              <v-btn color="primary" size="large" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
+            <v-footer app border="t" class="justify-end">
+              <v-btn color="grad-9" size="large" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
             </v-footer>
           </tform>
         </v-container>

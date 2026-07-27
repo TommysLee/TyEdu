@@ -3,6 +3,7 @@ const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
+      vtheme: 'dark',
       // 查询条件
       param: {
         bname: null,

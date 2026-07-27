@@ -17,7 +17,7 @@
   <div id="app" v-cloak>
     <v-app>
       <!-- 顶部功能区 -->
-      <v-app-bar flat>
+      <v-app-bar flat class="bg-grad-5">
         <th:block th:replace="~{assets/include :: header(back=true)}"/>
       </v-app-bar>
 
@@ -25,12 +25,12 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid class="pa-0">
-          <v-app-bar flat theme="light" border="b" color="white" class="px-4 assist">
+          <v-app-bar flat border="b" color="white" class="px-4 assist">
             <v-breadcrumbs :items="breadcrumbs" class="font-weight-bold"></v-breadcrumbs>
           </v-app-bar>
 
           <!-- 题目内容 -->
-          <v-card tile flat theme="light" color="grey-lighten-3" class="pt-3 assist" :loading="loading">
+          <v-card tile flat color="grey-lighten-3" class="pt-3 assist" :loading="loading">
             <div v-katex v-html="content" class="pa-3 bg-white"></div>
             <v-row dense class="bg-white ma-0">
               <v-col cols="auto" class="px-3 mt-1 font-weight-bold">{{$t('章节标')}}:</v-col>
@@ -51,14 +51,14 @@
           </v-card>
 
           <!-- 打标区域 -->
-          <v-sheet tile theme="light" color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" :style="{'--ty-assist-height': assistHeight, '--ty-assist-gap-height': -1}">
+          <v-sheet tile color="grey-lighten-3" class="v-fill-height overflow-auto pa-3 pb-0" :min-height="300" :style="{'--ty-assist-height': assistHeight, '--ty-assist-gap-height': -1}">
             <v-row dense class="mt-0 fill-height">
               <v-col cols="12" md="6" class="py-0 fill-height overflow-auto">
                 <v-card flat class="fill-height" :loading="loading">
                   <v-card-actions class="border-b">
                     <span class="font-weight-bold">{{$t('知识点标')}}</span>
                     <v-spacer></v-spacer>
-                    <v-btn variant="elevated" color="teal" :disabled="loading" :loading="posting" @click="doSubmitKnowledgeMarked">{{$t('保存')}}</v-btn>
+                    <v-btn variant="elevated" color="grad-9" :disabled="loading" :loading="posting" @click="doSubmitKnowledgeMarked">{{$t('保存')}}</v-btn>
                   </v-card-actions>
                   <v-card-text class="fill-height-2 py-0 overflow-auto">
                     <v-treeview v-model:activated="selectedKnowledge" items-registration="props" activatable active-strategy="independent" color="teal" density="compact" item-value="kid" item-title="kname" :items="knowledgeTreeData" class="treeview-break">
@@ -71,7 +71,7 @@
                   <v-card-actions class="border-b">
                     <span class="font-weight-bold">{{$t('章节标')}}</span>
                     <v-spacer></v-spacer>
-                    <v-btn variant="elevated" color="teal" :disabled="loading" :loading="posting" @click="doSubmitChptMarked">{{$t('保存')}}</v-btn>
+                    <v-btn variant="elevated" color="grad-9" :disabled="loading" :loading="posting" @click="doSubmitChptMarked">{{$t('保存')}}</v-btn>
                   </v-card-actions>
                   <v-card-text class="fill-height-2 py-0 overflow-auto">
                     <v-treeview v-model:activated="selectedChpt" :load-children="doQueryChpts" items-registration="props" item-props activatable active-strategy="independent" color="primary" density="compact" item-value="chptId" item-title="chptName" :items="chptTreeData" class="treeview-break">

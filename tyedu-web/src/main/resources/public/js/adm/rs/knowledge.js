@@ -4,6 +4,7 @@ const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
+      vtheme: 'dark',
       knowledgeList: [],
       selectedKnowledge: [],
       // 表单数据

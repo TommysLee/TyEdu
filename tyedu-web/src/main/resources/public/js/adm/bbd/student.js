@@ -3,6 +3,7 @@ const app = Vue.createApp({
   extends: baseApp,
   data() {
     return {
+      vtheme: 'dark',
       stage: null,
       // 表单数据
       formData: {
