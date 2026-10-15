@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.content.dao.ContentEntryDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="ContentEntryMap" type="ContentEntry">
+        <result property="eid" column="eid" />
+        <result property="ctgId" column="ctg_id" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="remark" column="remark" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_contentEntry">
+        <where>
+            <if test="eid != null">
+                and t.eid=#{eid}
+            </if>
+            <if test="ctgId != null">
+                and t.ctg_id=#{ctgId}
+            </if>
+            <if test="title != null and title != ''">
+                and t.title like '%' || #{title} || '%' ESCAPE '\'
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findContentEntryCount" parameterType="ContentEntry" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_content_entry t
+        <include refid="condition_contentEntry" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findContentEntry" parameterType="ContentEntry" resultMap="ContentEntryMap">
+        SELECT
+            t.eid,
+            t.ctg_id,
+            t.title,
+            t.content,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_content_entry t
+        <include refid="condition_contentEntry" />
+        ORDER BY t.eid DESC
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findContentEntryById" parameterType="java.lang.Integer" resultMap="ContentEntryMap">
+        SELECT
+            t.eid,
+            t.ctg_id,
+            t.title,
+            t.content,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_content_entry t
+        WHERE t.eid = #{eid}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveContentEntry" parameterType="ContentEntry">
+        INSERT INTO t_content_entry
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="eid != null">eid,</if>
+            <if test="ctgId != null">ctg_id,</if>
+            <if test="title != null">title,</if>
+            <if test="content != null">content,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="eid != null">#{eid},</if>
+            <if test="ctgId != null">#{ctgId},</if>
+            <if test="title != null">#{title},</if>
+            <if test="content != null">#{content},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateContentEntry" parameterType="ContentEntry">
+        UPDATE t_content_entry
+        <set>
+            <if test="eid != null">eid=#{eid},</if>
+            <if test="ctgId != null">ctg_id=#{ctgId},</if>
+            <if test="title != null">title=#{title},</if>
+            <if test="content != null">content=#{content},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            update_time=DEFAULT
+        </set>
+        WHERE eid = #{eid}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delContentEntry" parameterType="java.lang.Integer">
+        DELETE FROM t_content_entry WHERE eid = #{eid}
+    </delete>
+</mapper>

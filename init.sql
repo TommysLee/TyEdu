@@ -12,6 +12,8 @@ DROP TABLE IF EXISTS t_student;
 DROP TABLE IF EXISTS t_wrong_que_bank_ref_knowledge;
 DROP TABLE IF EXISTS t_wrong_que_bank_ref_chapter;
 DROP TABLE IF EXISTS t_wrong_que_bank;
+DROP TABLE IF EXISTS t_content_category;
+DROP TABLE IF EXISTS t_content_entry;
 
 CREATE TABLE t_rs_book (
     bid         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -180,4 +182,26 @@ CREATE TABLE t_wrong_que_bank_ref_knowledge (
     kname       TEXT,
     PRIMARY KEY (qid, kid),
     FOREIGN KEY (qid) REFERENCES t_wrong_que_bank(qid) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE t_content_category (
+    ctg_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    ctg_name TEXT NOT NULL,    
+    seq INTEGER NOT NULL DEFAULT 0,
+    enabled INTEGER NOT NULL DEFAULT 1,    
+	remark TEXT,
+    create_time TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    update_time TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+);
+CREATE INDEX IF NOT EXISTS idx_content_category_seq ON t_content_category(seq);
+
+CREATE TABLE t_content_entry (
+    eid INTEGER PRIMARY KEY AUTOINCREMENT,
+    ctg_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    content TEXT,
+    remark TEXT,
+    create_time TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    update_time TEXT NOT NULL DEFAULT (datetime('now', 'localtime')),
+    FOREIGN KEY (ctg_id) REFERENCES t_content_category(ctg_id) ON UPDATE CASCADE
 );

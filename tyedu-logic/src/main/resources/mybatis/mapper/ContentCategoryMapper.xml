@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ty.logic.content.dao.ContentCategoryDao">
+
+    <!-- 关系映射 -->
+    <resultMap id="ContentCategoryMap" type="ContentCategory">
+        <result property="ctgId" column="ctg_id" />
+        <result property="ctgName" column="ctg_name" />
+        <result property="seq" column="seq" />
+        <result property="enabled" column="enabled" />
+        <result property="remark" column="remark" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <!-- 查询条件 -->
+    <sql id="condition_contentCategory">
+        <where>
+            <if test="ctgId != null">
+                and t.ctg_id=#{ctgId}
+            </if>
+            <if test="ctgName != null and ctgName != ''">
+                and t.ctg_name like '%' || #{ctgName} || '%' ESCAPE '\'
+            </if>
+            <if test="enabled != null">
+                and t.enabled=#{enabled}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 查询记录数 -->
+    <select id="findContentCategoryCount" parameterType="ContentCategory" resultType="java.lang.Integer">
+        SELECT count(0) FROM t_content_category t
+        <include refid="condition_contentCategory" />
+    </select>
+
+    <!-- 查询结果集 -->
+    <select id="findContentCategory" parameterType="ContentCategory" resultMap="ContentCategoryMap">
+        SELECT
+            t.ctg_id,
+            t.ctg_name,
+            t.seq,
+            t.enabled,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_content_category t
+        <include refid="condition_contentCategory" />
+        ORDER BY t.seq
+    </select>
+
+    <!-- 根据ID查询记录 -->
+    <select id="findContentCategoryById" parameterType="java.lang.Integer" resultMap="ContentCategoryMap">
+        SELECT
+            t.ctg_id,
+            t.ctg_name,
+            t.seq,
+            t.enabled,
+            t.remark,
+            t.create_time,
+            t.update_time
+        FROM
+            t_content_category t
+        WHERE t.ctg_id = #{ctgId}
+    </select>
+
+    <!-- 保存 -->
+    <insert id="saveContentCategory" parameterType="ContentCategory">
+        INSERT INTO t_content_category
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="ctgId != null">ctg_id,</if>
+            <if test="ctgName != null">ctg_name,</if>
+            <if test="seq != null">seq,</if>
+            <if test="enabled != null">enabled,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        )
+        VALUES
+        (
+        <trim suffix="" suffixOverrides=",">
+            <if test="ctgId != null">#{ctgId},</if>
+            <if test="ctgName != null">#{ctgName},</if>
+            <if test="seq != null">#{seq},</if>
+            <if test="enabled != null">#{enabled},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+        )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateContentCategory" parameterType="ContentCategory">
+        UPDATE t_content_category
+        <set>
+            <if test="ctgId != null">ctg_id=#{ctgId},</if>
+            <if test="ctgName != null">ctg_name=#{ctgName},</if>
+            <if test="seq != null">seq=#{seq},</if>
+            <if test="enabled != null">enabled=#{enabled},</if>
+            <if test="remark != null">remark=#{remark},</if>
+            update_time=DEFAULT
+        </set>
+        WHERE ctg_id = #{ctgId}
+    </update>
+
+    <!-- 删除 -->
+    <delete id="delContentCategory" parameterType="java.lang.Integer">
+        DELETE FROM t_content_category WHERE ctg_id = #{ctgId}
+    </delete>
+</mapper>
