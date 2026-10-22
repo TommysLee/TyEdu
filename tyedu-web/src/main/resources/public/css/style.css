@@ -7,6 +7,10 @@ html {
   overflow: auto;
 }
 
+body {
+  background-color: #0B1C35;
+}
+
 input:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
@@ -178,6 +182,14 @@ textarea {
   }
 }
 
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #60A5FA, #34D399);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(96, 165, 250, 0.3);
+}
+
 /*自定义树表格样式*/
 .tree-datatable a {
   color: #127ae2;
@@ -271,6 +283,89 @@ textarea {
   font-size: 1em;
 }
 
+/* 卡片 */
+.card {
+  background: rgba(13, 35, 68, 0.6);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  height: 280px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+/* 卡片顶部色条 */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+.card-blue::before { background: linear-gradient(90deg, transparent, #60A5FA, transparent); }
+.card-orange::before { background: linear-gradient(90deg, transparent, #FDBA74, transparent); }
+.card-pink::before { background: linear-gradient(90deg, transparent, #F472B6, transparent); }
+.card-green::before { background: linear-gradient(90deg, transparent, #34D399, transparent); }
+.card-purple::before { background: linear-gradient(90deg, transparent, #A78BFA, transparent); }
+/* 卡片光晕 */
+.card::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.2;
+  bottom: -80px;
+  right: -80px;
+}
+.card-blue::after { background: #60A5FA; }
+.card-orange::after { background: #FDBA74; }
+.card-pink::after { background: #F472B6; }
+.card-green::after { background: #34D399; }
+.card-purple::after { background: #A78BFA; }
+/* 卡片图标 */
+.card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  animation: iconFloat 4s ease-in-out infinite;
+}
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.card-blue .card-icon {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(59, 130, 246, 0.2));
+  box-shadow: 0 8px 24px rgba(96, 165, 250, 0.2);
+  color: #93C5FD;
+}
+.card-orange .card-icon {
+  background: linear-gradient(135deg, rgba(253, 186, 116, 0.2), rgba(249, 115, 22, 0.2));
+  box-shadow: 0 8px 24px rgba(253, 186, 116, 0.2);
+  color: #FDBA74;
+}
+.card-pink .card-icon {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(236, 72, 153, 0.2));
+  box-shadow: 0 8px 24px rgba(244, 114, 182, 0.2);
+  color: #F9A8D4;
+}
+.card-green .card-icon {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.2));
+  box-shadow: 0 8px 24px rgba(52, 211, 153, 0.2);
+  color: #6EE7B7;
+}
+.card-purple .card-icon {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(139, 92, 246, 0.2));
+  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.2);
+  color: #C4B5FD;
+}
+
 /* Button按钮组样式 */
 .btn-group>.v-btn {
   color: #1890FF !important;
@@ -328,4 +423,16 @@ textarea {
 }
 .pop-container:hover .v-popconfirm {
   visibility: visible;
+}
+
+/** 其它 **/
+.badge-green {
+  position: absolute;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.2));
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: 20px;
+  font-size: 12px;
+  color: #34D399;
+  font-weight: 500;
 }

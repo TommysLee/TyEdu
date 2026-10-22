@@ -151,21 +151,27 @@
   <!-- ########### -->
   <th:block th:fragment="header">
     <!-- 切换左侧导航菜单的显示方式 -->
-    <v-app-bar-nav-icon th:if="${vadmin}" @click.stop="toggleSysMenu"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon th:if="${vadmin}" class="mr-n4" @click.stop="toggleSysMenu"></v-app-bar-nav-icon>
 
     <!-- 产品名称 -->
-    <v-subheader class="text-grad text-h6 font-weight-bold text-truncate pl-md-2 position-absolute" @dblclick="clearAllToast">
+    <v-subheader class="text-grad-2 text-h6 font-weight-bold text-truncate" th:classappend="${vadmin}? _ : 'position-absolute'" @dblclick="clearAllToast">
       <v-breadcrumbs :items="productBreadcrumbs">
         <template v-slot:prepend>
           <v-btn th:if="${true == back}" icon small depressed class="mr-2" @click="back">
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
+          <v-icon class="logo-icon mr-1">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </v-icon>
         </template>
       </v-breadcrumbs>
     </v-subheader>
 
-    <v-spacer class="mr-12"></v-spacer>
-    <v-chip-group th:if="${(vadmin?:false) || (showStage?:false)}" mandatory selected-class="text-grad" v-model="stage">
+    <v-spacer></v-spacer>
+    <v-chip-group th:if="${(vadmin?:false) || (showStage?:false)}" mandatory selected-class="text-grad-2" v-model="stage">
       <v-chip
           filter
           variant="text"
@@ -177,6 +183,11 @@
       </v-chip>
     </v-chip-group>
     <v-spacer></v-spacer>
+
+    <!--/* 时间 */-->
+    <v-card-subtitle class="text-subtitle-1">
+      {{time}}
+    </v-card-subtitle>
 
     <!--/* 语言列表 */-->
     <v-menu open-on-hover z-index="1009">

@@ -8,9 +8,9 @@
 </head>
 <body>
   <div id="app" v-cloak>
-    <v-app class="bg-grad-5">
+    <v-app theme="dark" class="bg-grad-10">
       <!-- 顶部功能区 -->
-      <v-app-bar flat class="bg-grad-5">
+      <v-app-bar flat color="transparent" class="pl-md-4">
         <th:block th:replace="~{assets/include :: header}"/>
       </v-app-bar>
 
@@ -18,46 +18,75 @@
       <v-main>
         <!-- 主体容器 -->
         <v-container fluid>
+          <v-sheet color="transparent" class="mt-4 mb-8">
+            <v-card-title class="text-h4 font-weight-bold">
+              你好，李同学 👋
+            </v-card-title>
+            <v-card-subtitle class="text-subtitle-1">
+              同步校园教学 · AI精准分析你的学习情况
+            </v-card-subtitle>
+          </v-sheet>
           <v-row>
             <v-col cols="12" md="4">
-              <v-card hover rounded="lg" :height="280" class="d-flex justify-center align-center text-h5 border-grey" color="grad-3" th:href="@{/rs/que-bank/view}">
-                <v-icon icon="mdi-bookshelf"></v-icon>
-                {{$t('题库')}}
+              <v-card class="card card-blue d-flex justify-center align-center flex-column text-h5" th:href="@{/rs/que-bank/view}">
+                <v-icon icon="mdi-bookshelf" class="card-icon"></v-icon>
+                <v-card-title class="font-weight-bold mt-2">
+                  {{$t('题库')}}
+                </v-card-title>
+                <v-card-subtitle>
+                  同步教材知识点分类题库
+                </v-card-subtitle>
               </v-card>
             </v-col>
             <v-col cols="12" md="4">
-              <v-card hover rounded="lg" :height="280" class="d-flex justify-center align-center text-h5 border-grey" color="grad-4" th:href="@{/sch/exam/view}">
-                <v-icon icon="mdi-text-box-edit-outline"></v-icon>
-                {{$t('考试')}}
+              <v-card class="card card-orange d-flex justify-center align-center flex-column text-h5" th:href="@{/sch/exam/view}">
+                <v-icon icon="mdi-text-box-edit-outline" class="card-icon"></v-icon>
+                <v-card-title class="font-weight-bold mt-2">
+                  {{$t('考试')}}
+                </v-card-title>
+                <v-card-subtitle>
+                  学校测验/考试成绩归档
+                </v-card-subtitle>
               </v-card>
             </v-col>
             <v-col cols="12" md="4">
-              <v-card hover rounded="lg" :height="280" class="d-flex justify-center align-center text-h5 border-grey" color="grad-3" th:href="@{/sch/wrong/que-bank/view}">
-                <v-icon icon="mdi-text-box-remove-outline"></v-icon>
-                {{$t('我的错题')}}
+              <v-card class="card card-pink d-flex justify-center align-center flex-column text-h5" th:href="@{/sch/wrong/que-bank/view}">
+                <v-icon icon="mdi-text-box-remove-outline" class="card-icon"></v-icon>
+                <v-card-title class="font-weight-bold mt-2">
+                  {{$t('我的错题')}}
+                </v-card-title>
+                <v-card-subtitle>
+                  历次考试错题整理
+                </v-card-subtitle>
               </v-card>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="8">
               <v-hover v-slot="{ isHovering, props }">
-                <v-card v-bind="props" hover rounded="lg" :height="320" class="d-flex justify-center align-center text-h5 border-grey" color="grad-7">
+                <v-card v-bind="props" :height="320" class="card card-green d-flex justify-center align-center flex-column text-h5">
                   <v-expand-transition>
                     <div v-if="isHovering" class="text-h4 v-card--reveal">敬请期待...</div>
                   </v-expand-transition>
-                  <v-icon icon="mdi-chart-box-multiple-outline"></v-icon>
-                  {{$t('学情分析')}}
+                  <v-icon icon="mdi-chart-box-multiple-outline" class="card-icon"></v-icon>
+                  <v-card-title class="font-weight-bold mt-2">
+                    {{$t('AI学情分析')}}
+                  </v-card-title>
+                  <v-card-subtitle>
+                    基于在校考试数据，AI综合分析知识掌握情况，生成精准学习画像
+                  </v-card-subtitle>
+                  <span class="badge-green" style="top: 20px; right: 20px;">✨ AI智能分析</span>
                 </v-card>
               </v-hover>
             </v-col>
-            <v-col cols="12" md="6">
-              <v-hover v-slot="{ isHovering, props }">
-                <v-card v-bind="props" hover rounded="lg" :height="320" class="d-flex justify-center align-center text-h5 border-grey" color="grad-8">
-                  <v-expand-transition>
-                    <div v-if="isHovering" class="text-h4 v-card--reveal">敬请期待...</div>
-                  </v-expand-transition>
-                  <v-icon icon="mdi-library-outline"></v-icon>
+            <v-col cols="12" md="4">
+              <v-card :height="320" class="card card-purple d-flex justify-center align-center flex-column text-h5">
+                <v-icon icon="mdi-library-outline" class="card-icon"></v-icon>
+                <v-card-title class="font-weight-bold mt-2">
                   {{$t('学习知识库')}}
-                </v-card>
-              </v-hover>
+                </v-card-title>
+                <v-card-subtitle>
+                  课件资源/答题技巧/班会/日记
+                </v-card-subtitle>
+              </v-card>
             </v-col>
           </v-row>
         </v-container>
