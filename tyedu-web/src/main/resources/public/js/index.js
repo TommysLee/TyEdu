@@ -8,16 +8,16 @@ const app = Vue.createApp({
       time: null
     }
   },
-  created() {
-    this.updateTime();
-  },
   mounted() {
-    setInterval(this.updateTime, 1000)
+    setInterval(this.updateTime, 1000);
+    this.$nextTick(() => {
+      this.updateTime();
+    })
   },
   methods: {
     updateTime() {
       const d = new Date();
-      this.time = weekday[d.getDay()] + " " + d.format("MM月dd日 hh:mm:ss");
+      this.time = this.$t(weekday[d.getDay()]) + " " + d.format("MM月dd日 hh:mm:ss");
     }
   }
 });
