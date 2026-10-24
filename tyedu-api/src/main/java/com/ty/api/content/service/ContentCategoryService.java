@@ -11,5 +11,22 @@ import com.ty.api.model.content.ContentCategory;
  */
 public interface ContentCategoryService extends BaseService<ContentCategory> {
 
+    /**
+     * 获取最大排序号
+     *
+     * @return Integer
+     * @throws Exception
+     */
+    Integer maxSeq() throws Exception;
+
+    /**
+     * 交换两者的排序号
+     *
+     * @param ctgId1 知识库分类ID_1
+     * @param ctgId2 知识库分类ID_2
+     * @return boolean
+     * @throws Exception
+     */
+    boolean swapSeq(Integer ctgId1, Integer ctgId2) throws Exception;
 }
 

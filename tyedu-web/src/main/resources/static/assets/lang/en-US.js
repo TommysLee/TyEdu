@@ -36,6 +36,7 @@ loadLocaleMessages("en-US", Object.assign({
     "昨天": "Yesterday",
     "今天": "Today",
     "返回": "Back",
+    "分类": "Category",
     "首页": "Home",
     "机构": "Company",
     "关联": "Related",

@@ -28,6 +28,11 @@
         </where>
     </sql>
 
+    <!-- 获取最大排序号 -->
+    <select id="maxSeq" resultType="java.lang.Integer">
+        SELECT MAX(seq) FROM t_content_category
+    </select>
+
     <!-- 查询记录数 -->
     <select id="findContentCategoryCount" parameterType="ContentCategory" resultType="java.lang.Integer">
         SELECT count(0) FROM t_content_category t
@@ -98,7 +103,7 @@
             <if test="seq != null">seq=#{seq},</if>
             <if test="enabled != null">enabled=#{enabled},</if>
             <if test="remark != null">remark=#{remark},</if>
-            update_time=DEFAULT
+            update_time=datetime('now', 'localtime')
         </set>
         WHERE ctg_id = #{ctgId}
     </update>

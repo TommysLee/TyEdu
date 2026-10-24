@@ -98,7 +98,7 @@
             <if test="title != null">title=#{title},</if>
             <if test="content != null">content=#{content},</if>
             <if test="remark != null">remark=#{remark},</if>
-            update_time=DEFAULT
+            update_time=datetime('now', 'localtime')
         </set>
         WHERE eid = #{eid}
     </update>

@@ -2,6 +2,7 @@ package com.ty.api.model.content;
 
 import com.ty.api.model.BaseBO;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 
@@ -12,6 +13,7 @@ import java.io.Serial;
  * @Date 2026/10/15
  */
 @Data
+@Accessors(chain = true)
 public class ContentCategory extends BaseBO {
 
     @Serial
