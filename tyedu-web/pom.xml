@@ -125,6 +125,7 @@
                                 <exclude>js/lib/fluent-editor/*.js</exclude>
                                 <exclude>js/lib/katex/*.js</exclude>
                                 <exclude>js/lib/vueuse/*.js</exclude>
+                                <exclude>js/lib/embedpdf/*.js</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -168,6 +169,7 @@
                                 <include>js/lib/fluent-editor/*.js</include>
                                 <include>js/lib/katex/*.js</include>
                                 <include>js/lib/vueuse/*.js</include>
+                                <include>js/lib/embedpdf/*.js</include>
                             </includes>
                             <skipMinify>true</skipMinify>
                         </configuration>
