@@ -6,6 +6,11 @@ server:
   servlet:
     encoding:
       charset: UTF-8
+  tomcat:
+    #表单数据大小限制
+    #设置为 -1 表示不限制
+    max-http-form-post-size: -1
+
 
 #Spring配置
 spring:
@@ -27,8 +32,8 @@ spring:
   servlet:
     #文件上传配置（单文件大小限制与请求总大小限制）
     multipart:
-      max-file-size: 20MB
-      max-request-size: 25MB
+      max-file-size: 25MB
+      max-request-size: 200MB
   #数据源配置
   datasource:
     driver-class-name: org.sqlite.JDBC
