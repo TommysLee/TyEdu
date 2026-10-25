@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF阅读器</title>
+  <style>
+    html, body { overscroll-behavior: none; }
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #pdf-viewer {
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="pdf-viewer"></div>
+
+  <script type="module">
+    const params = new URLSearchParams(location.search);
+    let url = params.get('url');   // 不存在返回 null
+    if (!url) {
+      url = localStorage.getItem('url')
+    }
+
+    import EmbedPDF from './js/embedpdf.js';
+    EmbedPDF.init({
+      type: 'container',
+      target: document.getElementById('pdf-viewer'),
+      theme: { preference: 'dark' }, // Options: 'light', 'dark', or 'system' (default)
+      i18n: {
+        defaultLocale: 'zh-CN', // Start in German
+        //fallbackLocale: 'en' // Use English if a translation is missing (default)
+      },
+      src: url || null
+    });
+  </script>
+</body>
+</html>
