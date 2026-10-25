@@ -43,6 +43,7 @@ loadLocaleMessages("en-US", Object.assign({
     "编码": "Code",
     "设置": "Settings",
     "地区": "Area",
+    "详情": "Details",
     "系统管理": "Management",
     "机构管理": "Organization",
     "用户管理": "Users",

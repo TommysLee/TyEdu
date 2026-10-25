@@ -4,11 +4,22 @@ const app = Vue.createApp({
   data() {
     return {
       menuDisplayName: '学习知识库',
+      vnode: null,
       ctgList: [],
       selectedCtgId: [],
+      entryList: [],
 
       dialogTitle: '',
       ctgWinDialog: false,
+      entryWinDialog: false,
+
+      // 查询条件
+      param: {
+        ctgId: null
+      },
+
+      // 富文本编辑器对象
+      editor: null,
 
       // 分类表单数据
       ctgFormData: {
@@ -19,6 +30,19 @@ const app = Vue.createApp({
       },
 
       // 条目表单数据
+      entryFormData: {
+        eid: null,
+        ctgId: null,
+        title: null,
+        content: null,
+        remark: null
+      },
+
+      // 抽屉窗口
+      winDrawer: false,
+      winDrawerWidth: 800,
+      winDrawerTitle: '',
+      winDrawerContent: ''
     }
   },
   computed: {
@@ -36,6 +60,7 @@ const app = Vue.createApp({
   },
   mounted() {
     this.doQuery();
+    this.vnode = this.$refs.econtainer;
   },
   methods: {
     /*
@@ -70,15 +95,20 @@ const app = Vue.createApp({
      * 查询条目
      */
     doQueryEntry() {
-      console.log("查询条目", this.ctgId);
-
-      /*doAjaxGet(this.url('/content/entry/list'), null, result => {
+      this.loading = true;
+      this.param.page = this.pagination.page;
+      this.param.pageSize = this.pagination.pageSize;
+      this.param.ctgId = this.ctgId;
+      doAjaxPost(this.url('/content/entry/list'), this.param, result => {
         if (result.state) {
-          this.ctgList = result.data || [];
+          let pageData = result.data;
+          this.pagination.pageCount = pageData.pages; // 总页数
+          this.entryList = addIndexPropForArray(pageData.data, this.pagination); // 数据集合
+          this.scrollTop();
         } else {
           this.toast(result.message, 'warning');
         }
-      })*/
+      })
     },
 
     /*
@@ -103,11 +133,45 @@ const app = Vue.createApp({
     },
 
     /*
+     * 打开【条目】表单编辑画面
+     */
+    openEntryFormDialog(title, id) {
+      this.entryFormData.eid = id || null;
+      this.dialogTitle = title;
+      this.entryWinDialog = true;
+      this.initEditor();
+
+      // 查询记录详情
+      if (id) {
+        this.posting = true;
+        doAjaxGet(this.url("/content/entry/single/" + id), null, (result) => {
+          if (result.state) {
+            this.mergeValue(this.entryFormData, result.data);
+            TinyEditor.setContent(this.editor, this.entryFormData.content);
+          } else {
+            this.toast(result.message, 'warning');
+          }
+        });
+      } else {
+        this.entryFormData.ctgId = this.ctgId;
+      }
+    },
+
+    /*
      * 关闭【分类】表单编辑画面
      */
     closeCtgFormDialog() {
       this.ctgWinDialog = false;
       this.resetForm('ctgDataForm');
+    },
+
+    /*
+     * 关闭【条目】表单编辑画面
+     */
+    closeEntryFormDialog() {
+      this.entryWinDialog = false;
+      this.resetForm('entryDataForm');
+      this.editor = null;
     },
 
     /*
@@ -121,6 +185,24 @@ const app = Vue.createApp({
           this.toast("操作成功");
           this.closeCtgFormDialog();
           this.doQueryCategory();
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      });
+    },
+
+    /*
+     * 提交【条目】表单数据
+     */
+    doSubmitEntry() {
+      this.posting = true;
+      this.method = this.entryFormData.eid? "update" : "save";
+      this.entryFormData.content = this.editor.getSemanticHTML();
+      doAjaxPost(this.url("/content/entry/" + this.method), this.entryFormData, (result) => {
+        if (result.state) {
+          this.toast("操作成功");
+          this.closeEntryFormDialog();
+          this.doQueryEntry();
         } else {
           this.toast(result.message, 'warning');
         }
@@ -143,6 +225,21 @@ const app = Vue.createApp({
     },
 
     /*
+     * 删除【条目】
+     */
+    doDeleteEntry(eid) {
+      this.method = "del";
+      doAjaxGet(this.url("/content/entry/del/" + eid), null, (result) => {
+        if (result.state) {
+          this.toast("操作成功");
+          this.doQueryEntry();
+        } else {
+          this.toast(result.message, 'warning');
+        }
+      });
+    },
+
+    /*
      * 上下移动分类
      */
     moveCategory(ctgId1, ctgId2) {
@@ -154,6 +251,25 @@ const app = Vue.createApp({
           this.toast(result.message, 'warning');
         }
       });
+    },
+
+    /*
+     * 初始化编辑器
+     */
+    initEditor() {
+      this.$nextTick(() => {
+        this.editor = Vue.markRaw(TinyEditor.init('#editor'));
+      })
+    },
+
+    /*
+     * 打开抽屉窗口
+     */
+    openWinDrawer(item) {
+      this.winDrawerWidth = window.innerWidth || this.winDrawerWidth;
+      this.winDrawerTitle = item.title || '';
+      this.winDrawerContent = item.content || '';
+      this.winDrawer = true;
     }
   }
 });

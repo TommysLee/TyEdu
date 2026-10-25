@@ -99,6 +99,10 @@ input:-webkit-autofill {
   height: 350px;
 }
 
+.height-min-350 {
+  min-height: 350px;
+}
+
 .treeview-break .v-list-item-title {
   white-space: break-spaces !important;
   text-overflow: unset;

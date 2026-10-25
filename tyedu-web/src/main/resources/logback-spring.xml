@@ -22,6 +22,9 @@
     <!-- 打印sql语句 -->
     <logger name="MYBATIS_MAPPER" level="DEBUG"/>
 
+    <!-- sqlite -->
+    <logger name="org.sqlite" level="ERROR"/>
+
     <!-- 项目日志 -->
     <logger name="com.ty" level="INFO"/>
 

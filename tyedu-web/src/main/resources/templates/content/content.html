@@ -3,7 +3,7 @@
 <head>
   <!--/* 共用JS与CSS */-->
   <th:block th:replace="~{assets/include :: katex}"/>
-  <th:block th:replace="~{assets/include :: scriptcss_default('知识库')}"/>
+  <th:block th:replace="~{assets/include :: scriptcss_form_editor('知识库')}"/>
 </head>
 <body>
   <div id="app" v-cloak>
@@ -19,7 +19,7 @@
         <v-container fluid class="pa-0">
           <v-app-bar flat color="white" class="px-4">
             <v-spacer></v-spacer>
-            <v-btn variant='elevated' color="purple">
+            <v-btn variant='elevated' color="purple" :disabled="!ctgId" @click="openEntryFormDialog('新增知识库')">
               <v-icon size="small">mdi-plus</v-icon>
               {{$t('新增')}}
             </v-btn>
@@ -47,52 +47,40 @@
                       <v-btn icon="mdi-arrow-up" :disabled="!item.prev" @click="moveCategory(item.ctgId, item.prev)"></v-btn>
                       <v-btn icon="mdi-arrow-down" :disabled="!item.next" @click="moveCategory(item.ctgId, item.next)"></v-btn>
                       <v-btn icon="mdi-square-edit-outline" @click="openCtgFormDialog('编辑知识库分类', item.ctgId)"></v-btn>
-                      <v-btn icon="$error" color="red" @click="doDeleteCtg(item.ctgId)"></v-btn>
+                      <v-btn icon="mdi-delete-outline" color="pink" @click="doDeleteCtg(item.ctgId)"></v-btn>
                     </v-speed-dial>
                   </template>
                 </v-list-item>
               </v-list>
             </v-navigation-drawer>
 
-            <!-- 条目区域 -->
-            <v-card-zoom ref="qcontainer" flat tile color="grey-lighten-3" class="d-block fill-height overflow-auto" :loading="loading">
-              <!-- 题目列表 -->
-              <v-card hover class="mb-2 ql-editor ql-readonly" v-for="item in dataList" :key="item.qid">
+            <!-- 条目列表区域 -->
+            <v-card-zoom ref="econtainer" flat tile color="grey-lighten-3" class="d-block fill-height overflow-auto" :loading="loading" style="z-index: 1009">
+              <v-card hover class="mb-2" v-for="item in entryList" :key="item.eid">
                 <v-card-item>
                   <v-card-title class="mb-1 d-flex align-center">
                     <v-btn color="primary" variant="tonal" :ripple="false">{{item.index}}.</v-btn>
-                    <v-popconfirm clazz="ml-2" :data="item.qid" @confirm="doDelete">
-                      <v-btn icon="mdi-delete" variant="text" color="pink"></v-btn>
-                    </v-popconfirm>
                     <v-spacer></v-spacer>
-                    <v-icon icon="mdi-star" size="x-small" color="yellow" v-for="i in item.difficulty"></v-icon>
+                    <v-btn icon="mdi-square-edit-outline" variant="text" color="purple" @click="openEntryFormDialog('修改知识库', item.eid)"></v-btn>
+                    <v-popconfirm clazz="ml-2" :data="item.eid" @confirm="doDeleteEntry">
+                      <v-btn icon="mdi-delete-outline" variant="text" color="pink"></v-btn>
+                    </v-popconfirm>
                   </v-card-title>
-                  <v-card-subtitle>
-                    {{qtypeMap[item.type]}} <span class="px-2 opacity-40">|</span>
-                    <span v-for="k in item.ktags" :key="k.kid" class="mr-3">{{k.kname}}</span>
-                  </v-card-subtitle>
                 </v-card-item>
-                <v-card-text class="v-rich-text">
-                  <div v-katex v-html="item.stem" @click="item.show = !item.show"></div>
-                  <v-expand-transition>
-                    <div class="border-t-thin mt-4 pt-4" v-if="item.show">
-                      <p class="font-weight-bold">{{$t('答案')}}:</p>
-                      <div v-katex v-html="item.answer"></div>
-                      <div v-katex v-html="item.analysis" class="mt-4"></div>
-                    </div>
-                  </v-expand-transition>
+                <v-card-text>
+                  <div class="text-subtitle-1 font-weight-bold" v-text="item.title"></div>
+                  <v-card-subtitle class="pl-0" v-text="item.remark"></v-card-subtitle>
                 </v-card-text>
-                <v-card-actions class="justify-end border-t-thin">
+                <v-card-actions class="border-t-thin">
                   <span class="text-subtitle-2 opacity-40">{{item.updateTime}}</span>
                   <v-spacer></v-spacer>
-                  <v-btn color="teal" @click="goMarked(item.qid)">{{$t('打标')}}</v-btn>
-                  <v-btn color="teal" @click="goEdit(item.qid)">{{$t('修改')}}</v-btn>
+                  <v-btn color="teal" @click="openWinDrawer(item)">{{$t('详情')}}</v-btn>
                 </v-card-actions>
               </v-card>
-              <v-pagination class="pagebar" v-model="pagination.page" :total-visible="pagination.vp" :length="pagination.pageCount" :disabled="loading" v-show="dataList?.length > 0"></v-pagination>
+              <v-pagination class="pagebar" v-model="pagination.page" :total-visible="pagination.vp" :length="pagination.pageCount" :disabled="loading" v-show="entryList?.length > 0"></v-pagination>
 
               <!-- No Data Tips -->
-              <v-empty-state class="hm-auto height-350" :headline="noDataText" v-if="!dataList || dataList?.length === 0"></v-empty-state>
+              <v-empty-state class="hm-auto height-350" :headline="noDataText" v-if="!entryList || entryList?.length === 0"></v-empty-state>
             </v-card-zoom>
 
             <!-- 【分类】表单模态窗口 -->
@@ -123,7 +111,49 @@
                 </v-card>
               </tform>
             </v-dialog>
+
+            <!-- 【条目】表单模态窗口 -->
+            <v-dialog v-model="entryWinDialog" persistent fullscreen>
+              <tform as="v-form" ref="entryDataForm" class="fill-height" @submit="doSubmitEntry">
+                <v-card :loading="posting">
+                  <v-toolbar color="grad-5" :title="$t(dialogTitle)">
+                    <v-btn icon="mdi-close" @click="closeEntryFormDialog"></v-btn>
+                  </v-toolbar>
+                  <v-card-text class="overflow-auto d-flex flex-column">
+                    <tfield v-model.trim="entryFormData.title" name="标题" v-slot="{ field, errors }" rules="required|max:100">
+                      <v-text-field v-bind="field" :model-value="field.value" clearable v-blank type="text" :error-messages="errors" :label="$t('标题')" class="mt-1 flex-0-0"></v-text-field>
+                    </tfield>
+                    <div class="flex-fill height-min-350">
+                      <div id="editor"></div>
+                    </div>
+                    <tfield v-model.trim="entryFormData.remark" name="备注" v-slot="{ field, errors }" rules="max:500">
+                      <v-textarea v-bind="field" :model-value="field.value" clearable v-blank :error-messages="errors" :label="$t('备注')" class="mt-14 flex-0-0"></v-textarea>
+                    </tfield>
+                  </v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions>
+                    <v-btn size="large" variant="elevated" color="grad-9" type="submit" :loading="posting">{{$t('保存')}}</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </tform>
+            </v-dialog>
           </v-sheet>
+
+          <!-- 抽屉窗口：详情 -->
+          <v-navigation-drawer :order="-1" v-model="winDrawer" temporary floating location="right" :width="winDrawerWidth">
+            <v-layout full-height>
+              <v-container class="overflow-auto">
+                <v-app-bar flat color="grad-5">
+                  <v-toolbar-title class="text-subtitle-1 font-weight-bold text-grad">{{winDrawerTitle}}</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn icon="mdi-close" @click="winDrawer=false"></v-btn>
+                </v-app-bar>
+                <v-sheet class="pt-16 fill-height ql-editor ql-readonly v-rich-text">
+                  <div v-katex v-html="winDrawerContent"></div>
+                </v-sheet>
+              </v-container>
+            </v-layout>
+          </v-navigation-drawer>
         </v-container>
       </v-main>
     </v-app>
